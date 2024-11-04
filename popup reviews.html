@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Pop-Up Modal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .modal-content {
+            max-width: 700px;
+            margin: auto;
+            border-radius: 10px;
+        }
+
+        .rating-overall {
+            font-size: 3rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .rating-stars i {
+            color: #FFD700;
+        }
+
+        .review-item {
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .rating-breakdown li {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Button to open the modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reviewModal">
+        View Reviews
+    </button>
+
+    <!-- Review Modal -->
+    <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content p-4">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reviewModalLabel">Overall Rating</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Overall Rating -->
+                    <div class="rating-overall">
+                        <span>4.71</span>
+                        <div class="rating-stars ms-3">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+
+                    <!-- Breakdown of ratings -->
+                    <ul class="list-unstyled rating-breakdown mt-4">
+                        <li><span>Cleanliness</span><span>4.6</span></li>
+                        <li><span>Accuracy</span><span>4.7</span></li>
+                        <li><span>Check-in</span><span>4.9</span></li>
+                        <li><span>Communication</span><span>4.9</span></li>
+                        <li><span>Location</span><span>5.0</span></li>
+                        <li><span>Value</span><span>4.8</span></li>
+                    </ul>
+
+                    <!-- Reviews -->
+                    <div class="mt-4">
+                        <h5>17 reviews</h5>
+                        <div class="review-item">
+                            <strong>Shafiqah</strong> <span class="text-muted">- 2 weeks ago</span>
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <p>Good location and comfortable stay, but there were some drawbacks...</p>
+                        </div>
+                        <div class="review-item">
+                            <strong>Azhar</strong> <span class="text-muted">- August 2024</span>
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>Very near Batam Centre. Great location and views...</p>
+                        </div>
+                        <!-- Add more reviews as needed -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

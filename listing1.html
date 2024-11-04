@@ -23,15 +23,18 @@
         }
 
         #priceTrendChart {
-            max-width: 100%; /* Responsive width */
-            height: 300px; /* Auto height */
+            max-width: 100%;
+            /* Responsive width */
+            height: 300px;
+            /* Auto height */
             margin: 0 auto;
         }
 
         .carousel-item img {
             opacity: 1 !important;
             filter: none !important;
-            max-height: 500px; /* Limit height */
+            max-height: 500px;
+            /* Limit height */
             width: 100%;
             object-fit: cover;
         }
@@ -50,23 +53,37 @@
                 max-height: 300px;
             }
 
-            h2, h4 {
+            h2,
+            h4 {
                 font-size: 1.2rem;
             }
 
             .card img {
-                height: 150px; /* Adjust height for smaller cards */
+                height: 150px;
+                /* Adjust height for smaller cards */
             }
         }
 
         @media (max-width: 576px) {
-            h2, h4 {
+
+            h2,
+            h4 {
                 font-size: 1rem;
             }
 
             .card img {
                 height: 120px;
             }
+        }
+        
+        .rating {
+            display: flex;
+            align-items: center;
+        }
+
+        .rating i {
+            color: #FFD700;
+            /* Gold color for stars */
         }
     </style>
 </head>
@@ -76,7 +93,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Livio</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -100,8 +118,10 @@
             <!-- Property Images Carousel -->
             <div id="propertyCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
                 <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="0" class="active"
+                        aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="1"
+                        aria-label="Slide 2"></button>
                 </div>
                 <div class="carousel-inner">
                     <!-- Carousel Item 1 -->
@@ -113,21 +133,27 @@
                         <img src='images/apartment1_2.png' alt='Living Room' class='d-block rounded'>
                     </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
+                <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel"
+                    data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
+                <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel"
+                    data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
+                
+            <div id="ratingSection" class="rating mb-3">
+                <!-- JavaScript code will populate this -->
             </div>
 
             <!-- Property Details -->
             <div class="row">
                 <div class="col-md-6">
                     <h4>Description</h4>
-                    <p>This cozy apartment is located just a mile from the school, offering a comfortable living space with two bedrooms and two beds. Perfect for students looking for a peaceful environment.</p>
+                    <p>This cozy apartment is located just a mile from the school, offering a comfortable living space
+                        with two bedrooms and two beds. Perfect for students looking for a peaceful environment.</p>
 
                     <h4>Amenities</h4>
                     <ul class="list-unstyled">
@@ -155,7 +181,8 @@
             <!-- Similar Listings Section -->
             <h4 class="mt-5">Similar Listings</h4>
             <div class="card mb-3 shadow-sm">
-                <img src='images/apartment2.png' alt='Modern Studio' class='card-img-top' style='object-fit: cover; border-radius: 10px;'>
+                <img src='images/apartment2.png' alt='Modern Studio' class='card-img-top'
+                    style='object-fit: cover; border-radius: 10px;'>
                 <div class='card-body'>
                     <h5 class='card-title'>Modern Studio in Downtown</h5>
                     <p>Price: $1500/month | Rooms: 1 | Distance: 0.5 miles from train station</p>
@@ -164,7 +191,8 @@
             </div>
 
             <div class="card mb-3 shadow-sm">
-                <img src='images/apartment3.png' alt='Charming House' class='card-img-top' style='object-fit: cover; border-radius: 10px;'>
+                <img src='images/apartment3.png' alt='Charming House' class='card-img-top'
+                    style='object-fit: cover; border-radius: 10px;'>
                 <div class='card-body'>
                     <h5 class='card-title'>Charming House with Garden</h5>
                     <p>Price: $1800/month | Rooms: 3 | Distance: 1.2 miles from school</p>
@@ -184,6 +212,62 @@
             <p class="mt-2">© 2024 Livio. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Firebase and Firestore Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzWcOPasd5_KEcRodDRVtJA_wUn_-35N8",
+            authDomain: "livio-e4af5.firebaseapp.com",
+            projectId: "livio-e4af5",
+            storageBucket: "livio-e4af5.appspot.com",
+            messagingSenderId: "641180735040",
+            appId: "1:641180735040:web:b95b1bcf4f53f4d519f1a5"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Function to display property details including the rating
+        async function displayPropertyDetails() {
+            try {
+                const docRef = doc(db, "rooms", "housinglisting1"); // Replace "housinglisting1" with your actual document ID
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const propertyData = docSnap.data();
+                    const rating = propertyData.rating || 0;
+
+                    // Calculate full, half, and empty stars
+                    const fullStars = Math.floor(rating);
+                    const halfStar = rating % 1 >= 0.5;
+                    const emptyStars = 5 - Math.ceil(rating);
+
+                    // Generate star icons
+                    const starIcons = `
+                        ${'<i class="fas fa-star"></i>'.repeat(fullStars)}
+                        ${halfStar ? '<i class="fas fa-star-half-alt"></i>' : ''}
+                        ${'<i class="far fa-star"></i>'.repeat(emptyStars)}
+                    `;
+
+                    // Insert star icons and rating into the page
+                    document.getElementById("ratingSection").innerHTML = `${starIcons} (${rating.toFixed(2)})`;
+                } else {
+                    console.log("No such document!");
+                    document.getElementById("ratingSection").textContent = "No rating available";
+                }
+            } catch (error) {
+                console.error("Error fetching property details:", error);
+            }
+        }
+
+        // Call the function on page load
+        window.addEventListener("load", displayPropertyDetails);
+    </script>
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
