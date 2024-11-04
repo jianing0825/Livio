@@ -1,0 +1,60 @@
+/* Navbar for Other Pages (fixed dark blue) */
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff;
+    color: #333;
+    overflow-x: hidden;
+}
+
+
+.navbar {
+    background-color: #001F3F;
+    color: white;
+    width: 100%;
+    z-index: 1000;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.navbar .navbar-nav .nav-link,
+.navbar .navbar-brand {
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.navbar .navbar-nav .nav-link:hover,
+.navbar .navbar-brand:hover {
+    color: #f0f0f0;
+}
+/* Navbar Link Hover Effect */
+.navbar .navbar-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1); 
+    border-radius: 5px; 
+}
+
+/* Underline the Active Page Link */
+.navbar .navbar-nav .nav-link.active ,.navbar .dropdown-item.active{
+    border-bottom: 2px solid #fff; 
+    padding-bottom: 5px; 
+}
+/* Add specific styling to underline both main link and dropdown links */
+.navbar .navbar-nav .dropdown-toggle.active {
+    border-bottom: 2px solid #fff;
+    padding-bottom: 5px;
+}
+footer {
+    background-color: #001F3F;
+    color: white;
+    padding: 20px 0;
+    margin-top: 40px;
+    font-weight: 500;
+}
+
+footer .fab {
+    margin: 0 10px;
+    color: white;
+}
+
+footer .fab:hover {
+    color: #FFC107;
+}

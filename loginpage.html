@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoomMatch - Create Account</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+        }
+
+        .container {
+            display: flex;
+            height: 100%;
+        }
+
+        .left-panel {
+            flex: 1;
+            padding: 40px;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .right-panel {
+            flex: 1;
+            background-color: #2C3E50;
+            padding: 40px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Form Styles */
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .auth-form h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Input Styles */
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #dddfe2;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #1877f2;
+            outline: none;
+        }
+
+        /* Button Styles */
+        .submit-button {
+            background-color: #2C3E50;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .submit-button:hover {
+            background-color: #1F4B8E;
+        }
+
+        /* Google Button Container */
+        .google-button-container {
+            width: 100%;
+            height: 40px;
+            margin: 10px 0;
+        }
+
+        .google-button-container>div {
+            width: 100% !important;
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: #96a2b7;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #dadde1;
+        }
+
+        .divider span {
+            padding: 0 10px;
+        }
+
+        /* Toggle Link */
+        .toggle-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .toggle-container span {
+            color: #333;
+        }
+
+        .toggle-container a {
+            color: #1877f2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .toggle-container a:hover {
+            text-decoration: underline;
+        }
+
+        /* Forgot Password */
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 15px;
+        }
+
+        .forgot-password a {
+            color: #1877f2;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* Hide login form by default */
+        #loginForm {
+            display: none;
+        }
+
+        /* Carousel Styles (unchanged) */
+        .carousel {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-item {
+            flex: 0 0 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .feature-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .dot {
+            height: 10px;
+            width: 10px;
+            background-color: #bbb;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background-color: #fff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left-panel,
+            .right-panel {
+                flex: none;
+                width: 100%;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+
+            .left-panel {
+                order: 2;
+            }
+
+            .right-panel {
+                order: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <img src="images/livio_logo.jpg" alt="livio logo" style="width: 300px; align-self: center;">
+
+            <!-- Signup Form -->
+            <form id="signupForm" class="auth-form">
+                <h2>Create account</h2>
+                <div id="googleButtonContainer" class="google-button-container"></div>
+
+                <div class="divider">
+                    <span>or sign up with email</span>
+                </div>
+
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit" class="submit-button">Sign up</button>
+            </form>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form">
+                <h2>Log in</h2>
+                <div id="googleButtonContainerLogin" class="google-button-container"></div>
+
+                <div class="divider">
+                    <span>or enter your credentials</span>
+                </div>
+
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+
+                <div class="forgot-password">
+                    <a href="#">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="submit-button">Log in</button>
+            </form>
+
+            <!-- Toggle Link -->
+            <div class="toggle-container">
+                <span id="toggleText">Already have an account?</span>
+                <a href="#" id="toggleLink">Log in here</a>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <!-- Carousel content remains unchanged -->
+            <div class="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item">
+                        <img src="images/loginpage_carousel1.png" alt="Room matching interface" class="feature-image">
+                        <h2>Find your perfect room</h2>
+                        <p>It's easy to browse and match with available rooms in your area.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="images/loginpage_carousel2.png" alt="Roommate finder" class="feature-image">
+                        <h2>Meet potential roommates</h2>
+                        <p>Connect with compatible roommates based on your preferences.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="images/loginpage_carousel3.png" alt="Secure messaging" class="feature-image">
+                        <h2>Secure messaging</h2>
+                        <p>Communicate safely with potential matches through our platform.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="dots">
+                <span class="dot active" onclick="currentSlide(0)"></span>
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { db } from "./db.js";
+        import { collection, getDoc, addDoc, doc, updateDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+        import { storeUserData } from "./userStorage.js";
+
+        // Firebase write function
+        async function writeToFirebase(data) {
+            try {
+                const docRef = await addDoc(collection(db, "users"), data);
+                console.log("Document written with ID: ", docRef.id);
+                return docRef.id;
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                throw error;
+            }
+        }
+
+        // Check if user exists and return user data
+        async function getUserData(email) {
+            try {
+                const userQuery = query(collection(db, "users"), where("email", "==", email));
+                const querySnapshot = await getDocs(userQuery);
+                if (!querySnapshot.empty) {
+                    const userData = querySnapshot.docs[0].data();
+                    return { id: querySnapshot.docs[0].id, ...userData };
+                }
+                return null;
+            } catch (error) {
+                console.error("Error getting user data:", error);
+                throw error;
+            }
+        }
+
+        window.writeToFirebase = writeToFirebase;
+        window.getUserData = getUserData;
+
+        // Signup form handler
+        document.getElementById('signupForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = this.querySelector('input[type="email"]').value;
+            const password = this.querySelector('input[type="password"]').value;
+
+            try {
+                // Check if user already exists
+                const existingUser = await getUserData(email);
+                
+                if (existingUser) {
+                    alert('An account with this email already exists. Please log in instead.');
+                    // Optionally switch to login form
+                    document.getElementById('loginForm').style.display = 'block';
+                    document.getElementById('signupForm').style.display = 'none';
+                    document.getElementById('toggleText').textContent = "Don't have an account?";
+                    document.getElementById('toggleLink').textContent = " Sign up here";
+                    return;
+                }
+
+                // Create new user
+                const newUser = {
+                    email: email,
+                    password: password, // In a real application, this should be hashed
+                    createdAt: new Date().toISOString()
+                };
+
+                const userId = await writeToFirebase(newUser);
+                localStorage.setItem('userId', userId);
+                localStorage.setItem('userEmail', email);
+                window.location.href = 'initial_survey.html';
+            } catch (error) {
+                console.error("Error during signup:", error);
+                alert('Error during signup. Please try again.');
+            }
+        });
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = this.querySelector('input[type="email"]').value;
+            const password = this.querySelector('input[type="password"]').value;
+
+            try {
+                const userData = await getUserData(email);
+                
+                if (!userData) {
+                    alert('No account found with this email. Please sign up first.');
+                    return;
+                }
+
+                if (userData.password !== password) {
+                    alert('Incorrect password. Please try again.');
+                    return;
+                }
+
+                // Successful login
+                localStorage.setItem('isLoggedIn', 'true');
+                console.log("Login successful, isLoggedIn set to true"); // Debugging
+                localStorage.setItem('userId', userData.id);
+                localStorage.setItem('userEmail', email);
+                
+                // If user has firstName/lastName (Google sign-in user), store those too
+                if (userData.firstName) localStorage.setItem('userFirstName', userData.firstName);
+                if (userData.lastName) localStorage.setItem('userLastName', userData.lastName);
+                
+                window.location.href = 'newhome.html';
+            } catch (error) {
+                console.error("Error during login:", error);
+                alert('Error during login. Please try again.');
+            }
+        });
+    </script>
+
+    <script>
+        // Initialize Google Sign-In
+        window.onload = function () {
+            // Initialize Google Sign-In
+            google.accounts.id.initialize({
+                client_id: '674992558614-ijiq0ufm965jq4hlkgcit3vi7hv0d0lc.apps.googleusercontent.com',
+                callback: handleCredentialResponse,
+                auto_select: false
+            });
+
+            // Render Google buttons with consistent styling
+            ['googleButtonContainer', 'googleButtonContainerLogin'].forEach(containerId => {
+                google.accounts.id.renderButton(
+                    document.getElementById(containerId),
+                    {
+                        theme: "outline",
+                        size: "large",
+                        width: "100%",
+                        text: "signup_with"
+                    }
+                );
+            });
+
+            // Form toggle functionality
+            const toggleLink = document.getElementById('toggleLink');
+            const toggleText = document.getElementById('toggleText');
+            const signupForm = document.getElementById('signupForm');
+            const loginForm = document.getElementById('loginForm');
+
+            toggleLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                const isLoginVisible = loginForm.style.display === 'block';
+
+                signupForm.style.display = isLoginVisible ? 'block' : 'none';
+                loginForm.style.display = isLoginVisible ? 'none' : 'block';
+                toggleText.textContent = isLoginVisible ? "Already have an account?" : "Don't have an account?";
+                toggleLink.textContent = isLoginVisible ? " Log in here" : " Sign up here";
+            });
+        };
+
+        // Google Sign-In handler
+        async function handleCredentialResponse(response) {
+            if (response.credential) {
+                try {
+                    const decodedToken = JSON.parse(atob(response.credential.split('.')[1]));
+                    
+                    // Check if user exists
+                    const existingUser = await window.getUserData(decodedToken.email);
+                    
+                    if (existingUser) {
+                        if (existingUser.password) {
+                            // User exists but signed up manually before
+                            alert('This email is registered with a password. Please log in with your password.');
+                            return;
+                        }
+                        
+                        // Existing Google user - store info and redirect
+                        localStorage.setItem('userId', existingUser.id);
+                        localStorage.setItem('userEmail', decodedToken.email);
+                        localStorage.setItem('userFirstName', existingUser.firstName);
+                        localStorage.setItem('userLastName', existingUser.lastName);
+                        window.location.href = 'newhome.html';
+                    } else {
+                        // New Google user - create account
+                        const userData = {
+                            email: decodedToken.email,
+                            firstName: decodedToken.given_name,
+                            lastName: decodedToken.family_name,
+                            createdAt: new Date().toISOString(),
+                            isGoogleUser: true
+                        };
+
+                        const userId = await window.writeToFirebase(userData);
+                        
+                        localStorage.setItem('userId', userId);
+                        localStorage.setItem('userFirstName', decodedToken.given_name);
+                        localStorage.setItem('userLastName', decodedToken.family_name);
+                        localStorage.setItem('userEmail', decodedToken.email);
+                        
+                        window.location.href = 'initial_survey.html';
+                    }
+                } catch (error) {
+                    console.error("Error during Google sign-in:", error);
+                    alert('Error during Google sign-in. Please try again.');
+                }
+            }
+        }
+
+        // Carousel functionality
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.carousel-item');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(index) {
+            if (index < 0) index = slides.length - 1;
+            if (index >= slides.length) index = 0;
+
+            const carousel = document.querySelector('.carousel-inner');
+            carousel.style.transform = `translateX(-${index * 100}%)`;
+
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[index].classList.add('active');
+
+            currentSlideIndex = index;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlideIndex + 1);
+        }
+
+        function currentSlide(index) {
+            showSlide(index);
+        }
+
+        // Auto-advance slides
+        setInterval(nextSlide, 5000);
+    </script>
+</body>
+
+</html>

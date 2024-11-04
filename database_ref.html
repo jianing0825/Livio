@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Axios -->
+    <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+</head>
+
+<body>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBzWcOPasd5_KEcRodDRVtJA_wUn_-35N8",
+            authDomain: "livio-e4af5.firebaseapp.com",
+            databaseURL: "https://livio-e4af5-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "livio-e4af5",
+            storageBucket: "livio-e4af5.appspot.com",
+            messagingSenderId: "641180735040",
+            appId: "1:641180735040:web:b95b1bcf4f53f4d519f1a5"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // Import CRUD functions of Firestore
+        import { getFirestore, doc, getDoc, setDoc, collection, addDoc, updateDoc, deleteDoc, deleteField } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"
+
+        //Initialize Cloud Firestore and get a reference to the service
+        const db = getFirestore();
+
+        // Create data with Auto ID
+        async function createAutoID() {
+            const docRef = await addDoc(collection(db, "users"), {
+                first: "Ada",
+                last: "Lovelace",
+                born: 1815
+            })
+                .then(() => {
+                    alert("data added.");
+                })
+                .catch((error) => {
+                    alert("data not added. " + error);
+                });
+            console.log("Document ID: " + docRef.id);
+        }
+
+        // Create data with Custom *UNIQUE* ID
+        async function createCustomID() {
+            await setDoc(doc(db, "users", "uniqueID1"), {
+                first: "John",
+                last: "Lovelace",
+                born: 1915
+            })
+                .then(() => {
+                    alert("data added.");
+                })
+                .catch((error) => {
+                    alert("data not added. " + error);
+                })
+        }
+
+        // Read data
+        async function read() {
+            const querySnapshot = await getDoc(doc(db, "users", "uniqueID1"));
+            console.log(querySnapshot._document.data.value.mapValue.fields);
+        }
+
+        // Update
+        async function update() {
+            await updateDoc(doc(db, "users", "uniqueID1"), {
+                first: "Joshua",
+                last: "Lovelace",
+                born: 2002
+            })
+                .then(() => {
+                    alert("data updated.");
+                })
+                .catch((error) => {
+                    alert("data not updated. " + error);
+                })
+        }
+
+        // Delete
+        async function delData() {
+            var ref = doc(db, "users", "uniqueID1");
+            const querySnapshot = await getDoc(ref);
+            if (!querySnapshot.exists()) {
+                alert("Document does not exist");
+                return;
+            }
+            await deleteDoc(ref)
+            .then(()=>{
+                alert("data deleted.");
+            })
+            .catch((error)=>{
+                alert("data not deleted. " + error);
+            })
+        }
+
+        // Function to fetch and display room listings with filters
+        async function applyFilters(event) {
+        event.preventDefault(); // Prevent form from submitting
+        const listingsContainer = document.getElementById("listingsContainer");
+        listingsContainer.innerHTML = ""; // Clear previous listings
+
+        // Get filter values
+        const location = document.getElementById("location").value;
+        const maxPrice = parseFloat(document.getElementById("maxPrice").value);
+        const roommateCount = document.getElementById("roommateCount").value;
+
+        // Build Firestore query with filters
+        let listingsQuery = collection(db, "rooms");
+
+        if (location) {
+            listingsQuery = query(listingsQuery, where("location", "==", location));
+        }
+        if (!isNaN(maxPrice)) {
+            listingsQuery = query(listingsQuery, where("pricePerMonth", "<=", maxPrice));
+        }
+        if (roommateCount) {
+            const countValue = roommateCount === "3+" ? 3 : parseInt(roommateCount, 10);
+            listingsQuery = query(listingsQuery, where("roommateCount", ">=", countValue));
+        }
+
+        try {
+            const querySnapshot = await getDocs(listingsQuery);
+            if (querySnapshot.empty) {
+                listingsContainer.innerHTML = "<p>No listings match your search criteria.</p>";
+                return;
+            }
+
+            querySnapshot.forEach((doc) => {
+                const listing = doc.data();
+                const listingCard = `
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">${listing.title}</h5>
+                                <p>Number of Roommates Allowed: ${listing.roommateCount}</p>
+                                <p>Price: $${listing.pricePerMonth}/month</p>
+                                <p>Start Date: ${listing.startDate}</p>
+                                <p>End Date: ${listing.endDate}</p>
+                                <a href="#" class="btn btn-outline-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                listingsContainer.insertAdjacentHTML("beforeend", listingCard);
+            });
+        } catch (error) {
+            console.error("Error fetching room listings:", error);
+            listingsContainer.innerHTML = "<p>Unable to load listings at this time.</p>";
+        }
+    }
+    // Initial fetch without filters
+    window.addEventListener("load", async () => {
+        await populateLocationDropdown();
+        applyFilters(new Event('submit'));
+    });
+
+
+
+    </script>
+    <!-- Bootstrap JS bundle to be placed before the closing </body> tag -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

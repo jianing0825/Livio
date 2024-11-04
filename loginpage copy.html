@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoomMatch - Create Account</title>
+
+    <!-- Load Google Sign-In SDK -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        #loginForm {
+            display: none;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+        }
+
+        .container {
+            display: flex;
+            height: 100%;
+        }
+
+        .left-panel {
+            flex: 1;
+            padding: 40px;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .right-panel {
+            flex: 1;
+            /* background: linear-gradient(135deg, #4158D0, #C850C0, #FFCC70); */
+            background-color: #2C3E50;
+            padding: 40px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #2C3E50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1F4B8E;
+        }
+
+        .login-link {
+            margin-top: 15px;
+        }
+
+        .login-link a {
+            color: #3949AB;
+            text-decoration: none;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-item {
+            flex: 0 0 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .feature-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .dot {
+            height: 10px;
+            width: 10px;
+            background-color: #bbb;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background-color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left-panel,
+            .right-panel {
+                flex: none;
+                width: 100%;
+                padding: 20px;
+                box-sizing: border-box;
+            }
+
+            .left-panel {
+                order: 2;
+            }
+
+            .right-panel {
+                order: 1;
+            }
+
+            h1 {
+                font-size: 20px;
+                text-align: center;
+            }
+
+            .carousel {
+                padding: 10px;
+            }
+
+            .carousel-item {
+                padding: 10px;
+            }
+
+            .carousel-item h2 {
+                font-size: 18px;
+            }
+
+            .carousel-item p {
+                font-size: 14px;
+            }
+
+            .feature-image {
+                max-height: 200px;
+                object-fit: cover;
+            }
+        }
+
+        /* Google button styles */
+        .google-button {
+            min-height: 40px;
+            margin: 10px 0;
+            background: none !important;
+            padding: 0 !important;
+            border: none !important;
+        }
+
+        .google-button>div {
+            width: 100% !important;
+        }
+
+        /* login buttons */
+        .social-button {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: white;
+            background-color: #333;
+            transition: background-color 0.3s;
+        }
+
+        .social-button:hover {
+            opacity: 0.9;
+        }
+
+        .social-button img {
+            width: 45px;
+            height: 45px;
+            margin-right: 15px;
+        }
+
+        .google-button {
+            background-color: #333;
+        }
+
+        .facebook-button {
+            background-color: #333;
+        }
+
+        .apple-button {
+            background-color: #333;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: #96a2b7;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #dadde1;
+        }
+
+        .divider span {
+            padding: 0 10px;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #dddfe2;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #1877f2;
+            outline: none;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .forgot-password a {
+            color: #1877f2;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <img src="images/livio_logo.jpg" alt="livio logo" style="width: 300px; align-self: center;">
+            <form id="signupForm">
+                <h2 id="formTitle">Create account</h2>
+                <input type="email" placeholder="Email" value="" required>
+                <input type="password" placeholder="Password" value="" required>
+                <button type="submit" id="submitButton">Sign up</button>
+            </form>
+
+            <!-- login form  -->
+            <form id="loginForm" class="login-form">
+                <h2>Log in</h2>
+                <!-- social buttons -->
+
+                <button type="button" class="social-button google-button">
+                    <div id="googleButtonContainer" class="google-button"></div>
+                </button>
+                <div class="divider">
+                    <span>or enter your credentials</span>
+                </div>
+                <!-- social buttons -->
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <div class="forgot-password">
+                    <a href="#">Forgot password</a>
+                </div>
+                <button type="submit" id="loginButton">LOG IN</button>
+            </form>
+            <!--  -->
+
+            <div class="login-link">
+                <span id="toggleText">Already have an account?</span><a href="#" id="toggleLink"> Log in here</a>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item">
+                        <img src="images/loginpage_carousel1.png" alt="Room matching interface" class="feature-image">
+                        <h2>Find your perfect room</h2>
+                        <p>It's easy to browse and match with available rooms in your area.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="images/loginpage_carousel2.png" alt="Roommate finder" class="feature-image">
+                        <h2>Meet potential roommates</h2>
+                        <p>Connect with compatible roommates based on your preferences.</p>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="images/loginpage_carousel3.png" alt="Secure messaging" class="feature-image">
+                        <h2>Secure messaging</h2>
+                        <p>Communicate safely with potential matches through our platform.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="dots">
+                <span class="dot active" onclick="currentSlide(0)"></span>
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.carousel-item');
+        const dots = document.querySelectorAll('.dot');
+        
+
+        function showSlide(index) {
+            if (index < 0) index = slides.length - 1;
+            if (index >= slides.length) index = 0;
+
+            const carousel = document.querySelector('.carousel-inner');
+            carousel.style.transform = `translateX(-${index * 100}%)`;
+
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[index].classList.add('active');
+
+            currentSlideIndex = index;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlideIndex + 1);
+        }
+
+        function currentSlide(index) {
+            showSlide(index);
+        }
+
+        // Auto-advance slides every 5 seconds
+        setInterval(nextSlide, 5000);
+
+
+        // google sign in 
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: '674992558614-ijiq0ufm965jq4hlkgcit3vi7hv0d0lc.apps.googleusercontent.com', // You need to replace this with your actual Google Client ID
+                callback: handleCredentialResponse
+            });
+            google.accounts.id.renderButton(
+                document.getElementById("googleButtonContainer"),
+                { theme: "outline", size: "large", width: "100%" }
+            );
+        }
+
+        function handleCredentialResponse(response) {
+            if (response.credential) {
+                // Decode the JWT token to get user info
+                const decodedToken = JSON.parse(atob(response.credential.split('.')[1]));
+
+                // Clear any existing user data
+                localStorage.clear();
+
+                // Store the Google user's info
+                localStorage.setItem('userFirstName', decodedToken.given_name);
+                localStorage.setItem('userLastName', decodedToken.family_name);
+                localStorage.setItem('userEmail', decodedToken.email);
+                localStorage.setItem('isGoogleUser', 'true');
+
+                // Redirect to newhome.html
+                window.location.href = 'newhome.html';
+            }
+        }
+
+       
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent default form submission
+
+            // Here would normally validate the credentials
+            // For now, we'll just redirect
+            window.location.href = 'newhome.html';
+        });
+
+        // login/signup toggle
+        const signupForm = document.getElementById('signupForm');
+        const loginForm = document.getElementById('loginForm');
+        const formTitle = document.getElementById('formTitle');
+        const submitButton = document.getElementById('submitButton');
+        const toggleLink = document.getElementById('toggleLink');
+        const toggleText = document.getElementById('toggleText');
+
+        let isSignUp = true;
+
+        toggleLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            isSignUp = !isSignUp;
+
+            if (isSignUp) {
+                signupForm.style.display = 'flex';
+                loginForm.style.display = 'none';
+                formTitle.textContent = 'Create account';
+                submitButton.textContent = 'Sign up';
+                toggleText.textContent = 'Already have an account? ';
+                toggleLink.textContent = 'Log in here';
+            } else {
+                signupForm.style.display = 'none';
+                loginForm.style.display = 'flex';
+                formTitle.textContent = 'Log in';
+                submitButton.textContent = 'Log in';
+                toggleText.textContent = "Don't have an account? ";
+                toggleLink.textContent = 'Sign up here';
+            }
+        });
+
+
+        // sign up part
+        document.getElementById('signupForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent default form submission
+
+            // Get the email and password values
+            const email = this.querySelector('input[type="email"]').value;
+            const password = this.querySelector('input[type="password"]').value;
+
+            // Here would normally validate the credentials and create an account
+            // For now, we'll just redirect to the initial survey page
+            window.location.href = 'initial_survey.html';
+        })
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Clear all stored user data when returning to login page
+            // if (!localStorage.getItem('isGoogleUser')) {
+            localStorage.clear();
+            // }
+        });
+    </script>
+
+
+</body>
+
+</html>

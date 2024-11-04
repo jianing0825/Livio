@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Housing Listings - Livio</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts for modern typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/home.css">
+    <link rel="stylesheet" href="styles/feedback.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            overflow-x: hidden;
+            padding-top: 60px;
+            /* Add padding to the top to account for the fixed navbar */
+        }
+
+        .navbar {
+            background-color: #1E3A8A;
+            padding: 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            /* Make sure it stays on top of the content */
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #FFC107 !important;
+            text-decoration: underline;
+        }
+
+        #search-section {
+            background-color: #F1F5F9;
+            padding: 60px 0;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(250, 250, 250, 0.5));
+        }
+
+        h2 {
+            font-weight: 600;
+            color: #1E3A8A;
+            text-align: center;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid #1E3A8A;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            box-shadow: 0 0 8px rgba(30, 58, 138, 0.3);
+        }
+
+        .btn-primary {
+            background-color: #1E3A8A;
+            border-color: #1E3A8A;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-primary:hover {
+            background-color: #FFC107;
+            border-color: #FFC107;
+            color: black;
+        }
+
+        .card {
+            transition: all 0.4s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: #1E3A8A;
+            font-weight: 600;
+        }
+
+        .card-img-top {
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .btn-outline-primary {
+            color: #1E3A8A;
+            border-color: #1E3A8A;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #1E3A8A;
+            color: white;
+        }
+
+        footer {
+            background-color: #1E3A8A;
+            color: white;
+            padding: 20px 0;
+            margin-top: 40px;
+            font-weight: 500;
+        }
+
+        footer .fab {
+            margin: 0 10px;
+            color: white;
+        }
+
+        footer .fab:hover {
+            color: #FFC107;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Livio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="newhome.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="housinglisting.html">Housing Listing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="findaroommate.html">Find A Roommate</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <!-- Listing Section -->
+        <div class="listing">
+            <div class="images">
+                <img src="images\apartment3.png" alt="image 1">
+                <img src="images\apartment3.png" alt="image 2">
+                <img src="images\apartment3.png" alt="image 3">
+                <img src="images\apartment3.png" alt="image 4">
+                <img src="images\apartment3.png" alt="image 5">
+                <img src="images\apartment3.png" alt="image 6">
+            </div>
+            <div class="details">
+                <h3>Entire condo in Berlin, Germany</h3>
+                <p>2 guests · Studio · 2 beds · 1 bath</p>
+                <div class="rating">
+                    <span>⭐ 4.63</span> · 244 reviews
+                </div>
+            </div>
+        </div>
+
+        <!-- Accommodation Review Section -->
+        <div class="section">
+            <h2>Accommodation Review</h2>
+            <div class="stars">
+                <div class="star-box">
+                    <p>Cleanliness</p>
+                    <div class="star-rating" data-rating="0">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+                <div class="star-box">
+                    <p>Accuracy</p>
+                    <div class="star-rating" data-rating="0">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+                <div class="star-box">
+                    <p>Check-In</p>
+                    <div class="star-rating" data-rating="0">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+                <div class="star-box">
+                    <p>Location</p>
+                    <div class="star-rating" data-rating="0">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+                <div class="star-box">
+                    <p>Value</p>
+                    <div class="star-rating" data-rating="0">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+                <div class="star-box">
+                    <p>Communication</p>
+                    <div class="star-rating" data-rating="0">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+            </div>
+            <div class="review-text">
+                <textarea rows="4" cols="50" placeholder="Write your review here..."></textarea>
+            </div>
+        </div>
+
+        <!-- Roommate Review Section -->
+        <div class="section">
+            <h2>Roommate Review</h2>
+            <div class="roommate-review">
+                <img src="images\profile2.jpg" alt="Roommate Profile Picture">
+                <div class="roommate-details">
+                    <p><strong>John Doberman</strong></p>
+                    <p class="roommate-rating">⭐ 4.33 · 4 reviews</p>
+                </div>
+            </div>
+            <div class="stars">
+                <div class="star-box">
+                    <p>Cleanliness</p>
+                    <div class="star-rating" data-rating="0">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+                <div class="star-box">
+                    <p>Respectful</p>
+                    <div class="star-rating" data-rating="0">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+                <div class="star-box">
+                    <p>Accountability</p>
+                    <div class="star-rating" data-rating="0">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+                <div class="star-box">
+                    <p>Trustworthiness</p>
+                    <div class="star-rating" data-rating="0">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+                <div class="star-box">
+                    <p>Felxibility</p>
+                    <div class="star-rating" data-rating="0">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+                <div class="star-box">
+                    <p>Communication</p>
+                    <div class="star-rating" data-rating="0">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+                <div class="review-text">
+                    <textarea rows="4" cols="50" placeholder="Write your review here..."></textarea>
+                </div>
+                </div>
+
+        <!-- Submit Button -->
+        <button class="submit-btn">Submit</button>
+    </div>
+
+    <script>
+
+        // JavaScript to handle star clicks and selection
+        document.querySelectorAll('.star-rating').forEach(starRating => {
+            starRating.addEventListener('click', function (e) {
+                if (e.target.classList.contains('star')) {
+                    const selectedValue = e.target.getAttribute('data-value');
+                    const stars = e.target.parentNode.querySelectorAll('.star');
+                    stars.forEach(star => {
+                        star.classList.remove('selected');
+                        if (star.getAttribute('data-value') <= selectedValue) {
+                            star.classList.add('selected');
+                        }
+                    });
+                    // Set the data-rating attribute on the star-rating div
+                    starRating.setAttribute('data-rating', selectedValue);
+                }
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>

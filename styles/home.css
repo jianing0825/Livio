@@ -1,0 +1,397 @@
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+/* Navbar for Home Page (transparent with white text) */
+.navbar {
+    background: transparent;
+    color: white;
+    z-index: 1000;
+    position: fixed;
+    width: 100%;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.navbar .navbar-nav .nav-link,
+.navbar .navbar-brand {
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.navbar .navbar-nav .nav-link:hover,
+.navbar .navbar-brand:hover {
+    text-decoration: underline;
+    color: #f0f0f0;
+}
+
+/* Navbar color on scroll for Home Page */
+.navbar.scrolled {
+    background-color: #001F3F; /* Dark blue */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar.scrolled .navbar-nav .nav-link,
+.navbar.scrolled .navbar-brand {
+    color: white;
+}
+
+
+/* Adjust the carousel background to be brighter */
+.carousel-item.active:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    /* Slight dim to make the text readable while keeping the image bright */
+
+    z-index: 1;
+}
+
+/* Centering the text */
+.carousel-caption {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    background-color: transparent;
+    padding: 20px;
+    text-align: center;
+    width: 70%;
+    /* Set the caption width to be wider */
+}
+
+.carousel-caption h1 {
+    font-size: 70px;
+    /* Larger and bolder */
+    font-weight: bold;
+    color: white;
+    /* Ensure it's readable */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    /* Add subtle shadow to make text stand out */
+}
+
+.carousel-caption p {
+    font-size: 1.2rem;
+    /* Make the subtitle larger and more readable */
+    color: white;
+    margin-top: 10px;
+}
+
+.carousel-caption .btn {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    padding: 10px 25px;
+}
+
+.carousel-item {
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+
+.feature-section {
+    padding: 50px 0;
+}
+
+.form-section {
+    background-color: #f1f1f1;
+    padding: 50px;
+    border-radius: 10px;
+}
+
+.footer {
+    background-color: #001F3F;
+    color: white;
+    padding: 30px 0;
+    text-align: center;
+}
+
+footer .fab {
+    margin: 0 10px;
+    color: white;
+}
+.feature-card:hover {
+    transform: translateY(-10px);
+    transition: 0.3s ease-in-out;
+}
+
+.about-section {
+    padding: 50px 0;
+    background-color: #f9f9f9;
+}
+
+.how-it-works-section {
+    padding: 50px 0;
+}
+
+.testimonial-section {
+    background-color: #f8f9fa;
+    padding: 50px 0;
+}
+
+.cta-section {
+    padding: 50px 0;
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.testimonial-icon {
+    width: 60px;
+    height: 60px;
+}
+
+.social-icons a {
+    color: #6c757d;
+    font-size: 1.2rem;
+}
+
+.social-icons a:hover {
+    color: #007bff;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.social-icons a {
+    color: #6c757d;
+    font-size: 1.2rem;
+}
+
+.social-icons a:hover {
+    color: #007bff;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+.roadmap-horizontal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.roadmap-step {
+    text-align: center;
+    width: 25%;
+    position: relative;
+    margin: 0 10px;
+}
+
+.roadmap-icon {
+    background-color: #497174;
+    color: #fff;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 15px auto;
+}
+
+.roadmap-step h4 {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #497174;
+    margin-bottom: 5px;
+}
+
+.roadmap-step h5 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.roadmap-step p {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.roadmap-arrow {
+    margin: 0 10px;
+}
+
+.roadmap-arrow i {
+    color: #497174;
+}
+
+.testimonial-card {
+    display: flex;
+    /* Aligns the image and content side by side */
+    align-items: center;
+    /* Vertically centers the content */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    /* Optional: Soft shadow for depth */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    /* Subtle outline */
+    border-radius: 15px;
+    /* Rounded corners */
+    background-color: #fff;
+    /* Ensure a white background */
+    padding: 20px;
+    /* Padding inside the card */
+    margin: 20px auto;
+    /* Space around the testimonial card */
+    transition: box-shadow 0.3s ease-in-out;
+    /* Smooth transition on hover */
+}
+
+.testimonial-image img {
+    width: 180px;
+    /* Adjust the image size */
+    height: 180px;
+    border-radius: 50%;
+    /* Makes the image circular */
+    object-fit: cover;
+    /* Ensures the image fits well in the circle */
+}
+
+.testimonial-content {
+    margin-left: 20px;
+    /* Adds space between the image and the content */
+    flex-grow: 1;
+    /* Allows the content to take up the remaining space */
+}
+
+.testimonial-card p {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.testimonial-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    /* Slightly stronger shadow on hover */
+}
+
+
+.testimonial-card p {
+    font-size: 1.5rem;
+    /* Increase the font size for testimonials */
+    line-height: 1.6;
+    /* Improve readability */
+    color: #333;
+    /* Darken the text for better contrast */
+}
+
+.testimonial-card .testimonial-icon {
+    width: 80px;
+    /* Increase the icon size */
+    height: 80px;
+    /* Increase the icon size */
+}
+
+.testimonial-section h2 {
+    font-size: 2.5rem;
+    /* Make the heading bigger */
+    color: #333;
+    /* Darker color for more contrast */
+    margin-bottom: 40px;
+    /* Add spacing below the heading */
+}
+
+.testimonial-section .carousel-control-prev-icon,
+.testimonial-section .carousel-control-next-icon {
+    filter: none;
+    /* Remove dimming from carousel control icons */
+}
+
+/* Remove dimming from testimonial carousel */
+.testimonial-section .carousel-item.active:after {
+    content: none;
+    /* Remove the dimming overlay */
+}
+
+.testimonial-section .carousel-item {
+    height: auto;
+    /* Let the content determine the height */
+    min-height: 300px;
+    /* Set a minimum height */
+    max-height: 500px;
+    /* Optional: Limit the maximum height if needed */
+    background: none;
+    /* Ensure no background is inherited */
+}
+/* Style the carousel indicators to look like underscores */
+.carousel-indicators [data-bs-target] {
+    width: 30px; /* Length to make it look like an underscore */
+    height: 4px;  /* Make the height small to create the underscore look */
+    background-color: lightgray; /* Color of the underscores */
+    border-radius: 0; /* Remove border-radius to avoid rounded dots */
+    margin: 5px; /* Space between indicators */
+}
+
+/* Style for the active indicator */
+.carousel-indicators .active {
+    background-color: black; /* Highlight the active underscore */
+}
+
+@media (max-width: 768px) {
+    .roadmap-horizontal {
+        flex-direction: column;
+    }
+
+    .roadmap-step {
+        width: 100%;
+        margin-bottom: 40px;
+    }
+
+    .roadmap-arrow {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-caption {
+        width: 90%;
+        /* Make the caption nearly full-width on smaller screens */
+    }
+
+    .carousel-caption h1 {
+        font-size: 2rem;
+        /* Adjust the heading size for smaller screens */
+    }
+
+    .carousel-caption p {
+        font-size: 1rem;
+        /* Adjust the paragraph size for smaller screens */
+    }
+}

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exchange Student Roommate Finder</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles/home.css">
+
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js"></script>
+    <!-- Firebase Firestore SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js"></script>
+    <script src="src/firebase.js"></script>
+
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Livio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="newhome.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="housinglisting.html">Housing Listing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="findaroommate.html">Find A Roommate</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="expense.html">Expenses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Carousel -->
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active"
+                style="background-image: url('images/homecarousel1.jpg'); position: relative;">
+                <div class="carousel-caption" class="welcome-section">
+                    <h1 class="welcome-message">Welcome to Livio</h1>
+                    <p>Find Your Perfect Roommate Abroad</p>
+                    <a href="loginpage.html" class="btn btn-primary btn-lg">Get Started</a>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('images/homecarousel2.jpg');">
+                <div class="carousel-caption">
+                    <h1>Browse Housing Listings</h1>
+                    <p>Explore available housing options near universities in real-time.</p>
+                </div>
+            </div>
+            <div class="carousel-item" style="background-image: url('images/homecarousel3.jpg');">
+                <div class="carousel-caption">
+                    <h1>Connect with Other Students</h1>
+                    <p>Build your community while studying abroad through our platform.</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- About Us Section -->
+    <section class="about-section py-5 bg-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Image on the left -->
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <video autoplay loop muted playsinline class="img-fluid rounded shadow-sm"
+                        style="width: 100%; height: auto;">
+                        <source src="libo.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <!-- About Us text on the right -->
+                <div class="col-md-6 text-start">
+                    <h2 class="display-4 fw-bold" style="color: #001F3F;">Who We Are</h2>
+                    <p class="lead text-muted mt-4">
+                        At <strong>Livio</strong>, we are committed to connecting exchange students with like-minded
+                        roommates, creating a seamless and stress-free experience for those embarking on their studies
+                        abroad.
+                    </p>
+                    <p class="lead text-muted mt-3">
+                        Our platform simplifies the housing process, offering personalized roommate matches and access
+                        to curated housing options near universities worldwide. By blending technology with a human
+                        touch, we create communities where students can thrive, collaborate, and feel at home.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section (Horizontal Roadmap with Arrows and Step Labels) -->
+    <section class="how-it-works-section py-5 bg-light">
+        <div class="container">
+            <h2 class="display-6 fw-bold text-center p-2" style="color:#001F3F">How It Works</h2>
+            <div class="roadmap-horizontal">
+                <!-- Step 1: Create a Profile -->
+                <div class="roadmap-step">
+                    <div class="roadmap-icon">
+                        <i class="fas fa-user-plus fa-2x"></i>
+                    </div>
+                    <h4>Step 1</h4>
+                    <h5>Create a Profile</h5>
+                    <p>Sign up and share what you're looking for in a roommate.</p>
+                </div>
+                <!-- Arrow between Step 1 and Step 2 -->
+                <div class="roadmap-arrow">
+                    <i class="fas fa-arrow-right fa-2x"></i>
+                </div>
+                <!-- Step 2: Find a Roommate -->
+                <div class="roadmap-step">
+                    <div class="roadmap-icon">
+                        <i class="fas fa-search fa-2x"></i>
+                    </div>
+                    <h4>Step 2</h4>
+                    <h5>Find a Roommate</h5>
+                    <p>Use our algorithm to find the best match for you.</p>
+                </div>
+                <!-- Arrow between Step 2 and Step 3 -->
+                <div class="roadmap-arrow">
+                    <i class="fas fa-arrow-right fa-2x"></i>
+                </div>
+                <!-- Step 3: Chat and Connect -->
+                <div class="roadmap-step">
+                    <div class="roadmap-icon">
+                        <i class="fas fa-comments fa-2x"></i>
+                    </div>
+                    <h4>Step 3</h4>
+                    <h5>Chat and Connect</h5>
+                    <p>Connect with potential roommates through our chat system.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonial-section text-center py-5 bg-white">
+        <div class="container">
+            <h2 class="display-4 fw-bold" style="color: #001F3F;">What Our Users Say</h2>
+            <p class="text-muted mb-5">See what our exchange students have experienced...</p>
+
+            <!-- Carousel -->
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+
+                <!-- Indicators (Pagination) -->
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active"
+                        aria-current="true"></button>
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1"></button>
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2"></button>
+                </div>
+
+                <div class="carousel-inner">
+                    <!-- Testimonial 1 -->
+                    <div class="carousel-item active">
+                        <div class="testimonial-card position-relative p-4 shadow-sm d-flex align-items-center">
+                            <!-- Person's Image on the Left -->
+                            <div class="testimonial-image">
+                                <img src="images/profile1.jpg" alt="Sophia's Photo" class="rounded-circle">
+                            </div>
+                            <!-- Testimonial Content on the Right -->
+                            <div class="testimonial-content ms-4">
+                                <p>"Roommate Finder helped me find a great roommate while studying abroad in Paris!"</p>
+                                <footer class="blockquote-footer mt-3">Sophia</footer>
+                                <small class="text-muted">University Exchange Student</small>
+                                <div class="social-icons mt-3">
+                                    <a href="#"><i class="fab fa-facebook-f mx-2"></i></a>
+                                    <a href="#"><i class="fab fa-twitter mx-2"></i></a>
+                                    <a href="#"><i class="fab fa-linkedin mx-2"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="carousel-item">
+                        <div class="testimonial-card position-relative p-4 shadow-sm d-flex align-items-center">
+                            <!-- Person's Image on the Left -->
+                            <div class="testimonial-image">
+                                <img src="images/profile2.jpg" alt="Sophia's Photo" class="rounded-circle">
+                            </div>
+                            <!-- Testimonial Content on the Right -->
+                            <div class="testimonial-content ms-4">
+                                <p>"Roommate Finder helped me find a great roommate while studying abroad in Paris!"</p>
+                                <footer class="blockquote-footer mt-3">Sophia</footer>
+                                <small class="text-muted">University Exchange Student</small>
+                                <div class="social-icons mt-3">
+                                    <a href="#"><i class="fab fa-facebook-f mx-2"></i></a>
+                                    <a href="#"><i class="fab fa-twitter mx-2"></i></a>
+                                    <a href="#"><i class="fab fa-linkedin mx-2"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 3 -->
+                    <div class="carousel-item">
+                        <div class="testimonial-card position-relative p-4 shadow-sm d-flex align-items-center">
+                            <!-- Person's Image on the Left -->
+                            <div class="testimonial-image">
+                                <img src="images/profile3.jpg" alt="Sophia's Photo" class="rounded-circle">
+                            </div>
+                            <!-- Testimonial Content on the Right -->
+                            <div class="testimonial-content ms-4">
+                                <p>"Roommate Finder helped me find a great roommate while studying abroad in Paris!"</p>
+                                <footer class="blockquote-footer mt-3">Sophia</footer>
+                                <small class="text-muted">University Exchange Student</small>
+                                <div class="social-icons mt-3">
+                                    <a href="#"><i class="fab fa-facebook-f mx-2"></i></a>
+                                    <a href="#"><i class="fab fa-twitter mx-2"></i></a>
+                                    <a href="#"><i class="fab fa-linkedin mx-2"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Carousel Controls -->
+                <button class="carousel-control-prev slim-control" type="button" data-bs-target="#testimonialCarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next slim-control" type="button" data-bs-target="#testimonialCarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+    <!-- Footer -->
+    <footer class=" footer text-center" style="background-color: #001F3F;">
+        <div>&copy; 2024 Livio. All Rights Reserved.</div>
+        <div class="social mt-3">
+            <a href="#" class="fab fa-facebook-f"></a>
+            <a href="#" class="fab fa-twitter"></a>
+            <a href="#" class="fab fa-instagram"></a>
+            <a href="#" class="fab fa-linkedin"></a>
+        </div>
+    </footer>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+    </script>
+
+    <!-- ChatBot -->
+    <script src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js" async></script>
+
+    <!-- username to stay  -->
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', function () {
+            const firstName = localStorage.getItem('userFirstName');
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            
+            console.log("isLoggedIn status in newhome.html:", isLoggedIn); // Debugging
+    
+            if (isLoggedIn) {
+                const navbar = document.querySelector('#navbarNav ul');
+                navbar.innerHTML = `
+                    <li class="nav-item">
+                        <a class="nav-link active" href="newhome.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="housinglisting.html">Housing Listing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="findaroommate.html">Find A Roommate</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="expense.html">Expenses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logoutBtn">Logout</a>
+                    </li>
+                `;
+    
+                // Add logout functionality
+                document.getElementById('logoutBtn').addEventListener('click', function () {
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userId');
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userFirstName');
+                    localStorage.removeItem('userLastName');
+                    window.location.href = 'loginpage.html';
+                });
+            } else {
+                console.log("User is not logged in, displaying default navbar"); // Debugging
+            }
+        });
+    </script>
+    
+    
+</body>
+
+</html>

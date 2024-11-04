@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Axios -->
+    <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- css -->
+    <link href="styles/placeslisting.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Livio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="newhome.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="housinglisting.html">Housing Listing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="findaroommate.html">Find A Roommate</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Expenses
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
+                            <li><a class="dropdown-item " href="expense.html">Expenses</a></li>
+                            <li><a class="dropdown-item" href="allexpenses.html">All Expenses</a></li>
+                            <li><a class="dropdown-item" href="splitexpense.html">Split Expense</a></li>
+                            <li><a class="dropdown-item" href="paypending.html">Pay Pending Payments</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="places.html">Places</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- None  <576px, sm  ≥576px, md  ≥768px, lg  ≥992px, xl  ≥1200px, xxl  ≥1400px -->
+
+    <div id="app">
+        <title>{{result.name}}</title>
+        <div class='container w-50'>
+            <div class='row'>
+                <div class="mx-auto box">
+                    <!-- BS carousel: start -->
+                    <div v-if="result.photos" id="carousel" class="carousel slide mb-3" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button v-for="n in result.photos.length" type="button" data-bs-target="#carousel"
+                                :data-bs-slide-to="n-1" :class="{active : n == 1}"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div v-for="(photo,index) in result.photos"
+                                :class="['carousel-item',{active : index == 0}]">
+                                <img :src="photo.getUrl()" class="d-block w-100" alt="image of place">
+                            </div>
+
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carousel"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                    <!-- BS carousel: end -->
+                    <img v-else id="placeholder" src="https://placehold.co/400" class="d-block rounded-3 mx-auto" height="500px" width="850px" alt="placeholder image">
+                </div>
+            </div> <!-- row -->
+            <div class="row">
+                <h1 class="display-5 fw-bold">{{result.name}}</h1>
+                <h5 class="text-body-secondary">{{result.formatted_address}}</h5>
+                <h5 v-if="result.rating"><i class="fas fa-star"></i> {{result.rating}} ∙ {{result.user_ratings_total}}
+                    reviews</h5>
+                <h5 v-else>No reviews</h5>
+                <h5 class="text-success" v-if="open == true">OPEN</h5>
+                <h5 class="text-danger" v-if="open == false">CLOSED</h5>
+                <span class="mb-4"></span>
+                <hr>
+                <h2 class="display-6 mb-5 fw-bold">Opening Hours</h2>
+                <table class="table table-hover table-bordered text-center mb-5" v-if="result.opening_hours">
+                    <tbody>
+                        <tr v-for="(time,day) in formattedOpeningHours">
+                            <th scope="row">{{day}}</td>
+                            <td>{{time}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h5 class="mb-5" v-else>Opening hours not provided.</h5>
+                <hr>
+
+            </div>
+            <div class="row">
+                <h2 class="display-6 mb-5 fw-bold">Reviews</h2>
+                <div v-if="result.reviews" v-for="review in result.reviews" class="col-12 mb-5 review-card">
+                    <img src="images/pfp.png" width="50px" height="50px">
+                    <h5 class="fw-bold d-inline">&nbsp;{{review.author_name}}</h5>
+                    <br><br>
+                    <h6><i class="fas fa-star"></i> {{result.rating}} ∙ {{review.relative_time_description}}</h6>
+                    <p>{{review.text}}</p>
+                </div>
+                <h5 class="mb-5" v-else>No reviews found.</h5>
+                <hr>
+            </div>
+            <div class="row">
+                <h2 class="display-6 mb-4 fw-bold">Location</h2>
+                <div id="map" class="mb-3 ms-3"></div>
+                <a :href="result.url" target="_blank" class="btn btn-primary mb-5 ms-3">Open in Maps</a>
+                <hr>
+                <h2 class="display-6 mb-4 fw-bold">Contact Us</h2>
+                <h5 v-if="result.international_phone_number">Tel: {{result.international_phone_number}}</h6>
+                    <a v-else-if="result.website" :href="result.website" target="_blank" class="mb-5">
+                        <h5>{{result.website}}</h6>
+                    </a>
+                    <h5 v-else>Contact details not found.</h5>
+
+
+            </div>
+        </div> <!-- container -->
+    </div>
+
+    <!-- Footer -->
+    <footer class='footer text-center'>
+        <div>&copy; 2024 Livio. All Rights Reserved.</div>
+        <div class="social mt-3">
+            <a href="#" class="fab fa-facebook-f"></a>
+            <a href="#" class="fab fa-twitter"></a>
+            <a href="#" class="fab fa-instagram"></a>
+            <a href="#" class="fab fa-linkedin"></a>
+        </div>
+    </footer>
+
+    <!-- google places api -->
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBh1l_C0xGRtQOqyrSddKqI1_YW4kCLDbY&loading=async&libraries=places&callback=doPlaceSearch"></script>
+
+    <!-- script -->
+    <script src="scripts/placeslisting.js"></script>
+
+    <!-- ChatBot -->
+    <script src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js" async></script>
+
+    <!-- Bootstrap JS bundle to be placed before the closing </body> tag -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

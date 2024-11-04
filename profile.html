@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livio Profile</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9ff;
+            padding-top: 70px;
+        }
+
+        /* Navigation styles */
+        .navbar {
+            background-color: #0A2647;
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-link:hover {
+            opacity: 0.8;
+        }
+
+        .nav-link.active {
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        /* Profile Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-image {
+            width: 92px;
+            height: 92px;
+            background-color: #eee;
+            border-radius: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ddd;
+        }
+
+        .camera-icon {
+            width: 24px;
+            height: 24px;
+            color: #666;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            border: 2px solid white;
+        }
+
+        .profile-info h1 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .tag {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .badge {
+            background-color: #7c3aed;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+        }
+
+        .bio {
+            color: #666;
+            font-size: 0.875rem;
+        }
+
+        /* Profile Content */
+        .profile-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: #7c3aed;
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            color: #333;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .info-item:hover {
+            color: #7c3aed;
+        }
+
+        .interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .interest-tag {
+            background-color: #f3f4f6;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="#" class="navbar-brand">Livio</a>
+        <ul class="nav-links" id="navbarLinks">
+            <li><a href="newhome.html" class="nav-link">Home</a></li>
+            <li><a href="housinglisting.html" class="nav-link">Housing Listing</a></li>
+            <li><a href="findaroommate.html" class="nav-link">Find A Roommate</a></li>
+            <li><a href="expense.html" class="nav-link">Expenses</a></li>
+            <li><a href="profile.html" class="nav-link active">Profile</a></li>
+            <li><a href="loginpage.html" class="nav-link">Login</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-image">
+                <svg class="camera-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <div class="status-indicator"></div>
+            </div>
+            <div class="profile-info">
+                <h1>
+                    jane lee
+                    <span class="tag">female</span>
+                    <span class="badge">Looking for roommate</span>
+                </h1>
+                <p class="bio">hello, i am a girl</p>
+            </div>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="profile-content">
+            <!-- Contact Section -->
+            <div class="section">
+                <h2 class="section-title">Contact</h2>
+                <a href="mailto:jane.lee@email.com" class="info-item">
+                    <span>📧</span>
+                    jane.lee@email.com
+                </a>
+                <a href="tel:+15550123456" class="info-item">
+                    <span>📞</span>
+                    +1 555 0123456
+                </a>
+                <a href="https://janelee.com" class="info-item">
+                    <span>🌐</span>
+                    janelee.com
+                </a>
+            </div>
+
+            <!-- Details Section -->
+            <div class="section">
+                <h2 class="section-title">Details</h2>
+                <div class="info-item">
+                    <span>🎓</span>
+                    Graduate Student
+                </div>
+                <div class="info-item">
+                    <span>📍</span>
+                    Boston, MA
+                </div>
+                <div class="info-item">
+                    <span>🗣️</span>
+                    Speaks: English, Mandarin
+                </div>
+            </div>
+
+            <!-- Interests Section -->
+            <div class="section">
+                <h2 class="section-title">Interests</h2>
+                <div class="interests">
+                    <span class="interest-tag">Sports</span>
+                    <span class="interest-tag">Music</span>
+                    <span class="interest-tag">Art</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript to modify navbar based on login status -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const navbarLinks = document.getElementById('navbarLinks');
+
+            if (isLoggedIn) {
+                navbarLinks.innerHTML = `
+                    <li><a href="newhome.html" class="nav-link">Home</a></li>
+                    <li><a href="housinglisting.html" class="nav-link">Housing Listing</a></li>
+                    <li><a href="findaroommate.html" class="nav-link">Find A Roommate</a></li>
+                    <li><a href="expense.html" class="nav-link">Expenses</a></li>
+                    <li><a href="profile.html" class="nav-link active">Profile</a></li>
+                    <li><a href="#" id="logoutBtn" class="nav-link">Logout</a></li>
+                `;
+
+                document.getElementById('logoutBtn').addEventListener('click', function () {
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userId');
+                    localStorage.removeItem('userEmail');
+                    localStorage.removeItem('userFirstName');
+                    localStorage.removeItem('userLastName');
+                    window.location.href = 'loginpage.html';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

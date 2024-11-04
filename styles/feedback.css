@@ -1,0 +1,166 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 50px;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f5f5f5;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.listing {
+    display: flex;
+    gap: 10px;
+}
+
+.images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.images img {
+    width: 300px;
+    height: 300px;
+    background-color: #ccc;
+    border-radius: 5px;
+}
+
+.details {
+    flex-grow: 1;
+}
+
+.details h3 {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.details p {
+    margin: 5px 0;
+    color: #777;
+}
+
+.rating {
+    margin-top: 10px;
+    font-size: 1.2em;
+}
+
+.rating span {
+    color: #ffcc00;
+}
+
+.section {
+    margin-top: 30px;
+}
+
+.section h2 {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    text-align: center; /* Center the section title */
+}
+
+/* Updated Stars Section for Centered Lines */
+.stars {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the star ratings section horizontally */
+    gap: 20px; /* Adds space between each star rating row */
+    margin-bottom: 15px;
+}
+
+.star-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ensure the label and stars are separated */
+    gap: 20px;
+    width: 50%; /* Set width to center the star box */
+    max-width: 600px; /* Control max width for better alignment */
+}
+
+.star-box p {
+    margin: 0;
+    font-weight: bold;
+    width: 150px; /* Width to align labels */
+    text-align: right; /* Right-align the labels */
+}
+
+/* New Star Rating for Clickable Stars */
+.star-rating {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.star {
+    font-size: 30px;
+    color: lightgray;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.star:hover,
+.star.selected,
+.star:hover ~ .star {
+    color: #FFC107;
+}
+
+.review-text {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center; /* Center the review text box */
+}
+
+.roommate-review {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    gap: 15px;
+}
+
+.roommate-review img {
+    width: 15%;
+    height: 15%;
+    border-radius: 50%;
+    background-color: #000;
+}
+
+.roommate-details p {
+    margin: 0;
+}
+
+.roommate-details strong {
+    font-size: 1.1em;
+}
+
+.roommate-rating {
+    font-size: 1.2em;
+    color: #ffcc00;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 30px;
+}
+
+.submit-btn:hover {
+    background-color: #555;
+}

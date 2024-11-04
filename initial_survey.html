@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Livio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4285F4;
+            --secondary-color: #34A853;
+            --text-color: #333333;
+            --light-gray: #F8F9FA;
+            --white: #FFFFFF;
+        }
+
+        body,
+        html {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            color: var(--text-color);
+        }
+
+        .full-height {
+            height: 100vh;
+        }
+
+        .bg-image {
+            background-image: url('images/roommatecreateprofilepage.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .form-container {
+            background-color: var(--white);
+            border-radius: 0 20px 20px 0;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: var(--light-gray);
+            margin-bottom: 30px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            border: 2px solid var(--light-gray);
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(66, 133, 244, 0.25);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 12px 24px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #3367D6;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            border: none;
+            padding: 12px 24px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #E9ECEF;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .choice-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            background-color: var(--white);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .choice-btn:hover,
+        .choice-btn.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        .choice-btn i {
+            margin-right: 10px;
+        }
+
+        .animate-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row full-height">
+            <div class="col-lg-6 d-none d-lg-block bg-image">
+                <div class="overlay d-flex flex-column justify-content-center align-items-center h-100 text-white">
+                    <h2 class="display-4 mb-4">Find Your Perfect Match</h2>
+                    <p class="lead">Connect with like-minded roommates for your study abroad adventure</p>
+                </div>
+            </div>
+            <div class="col-lg-6 form-container d-flex align-items-center">
+                <div class="w-100">
+                    <h1>Welcome to Livio</h1>
+                    <div class="progress-bar">
+                        <div class="progress" id="progress-bar"></div>
+                    </div>
+                    <form id="onboarding-form">
+                        <div class="step active animate-in" data-step="1">
+                            <h3>Create Your Profile</h3>
+                            <p>Tell us a little bit about yourself. This will help your potential roommates get to know
+                                you.</p>
+                            <div class="mb-3">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="age" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="form-select" id="gender" required>
+                                    <option value="">Select gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="non-binary">Non-binary</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="step" data-step="2">
+                            <h3>Your Preferences</h3>
+                            <p>Let us know what you're looking for in a roommate and living situation.</p>
+                            <div class="mb-3">
+                                <label class="form-label">Preferred Roommate Gender</label>
+                                <div>
+                                    <button type="button" class="choice-btn" data-value="male"><i
+                                            class="fas fa-mars"></i> Male</button>
+                                    <button type="button" class="choice-btn" data-value="female"><i
+                                            class="fas fa-venus"></i> Female</button>
+                                    <button type="button" class="choice-btn" data-value="any"><i
+                                            class="fas fa-users"></i> Any</button>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="budget" class="form-label">Monthly Budget (USD)</label>
+                                <input type="number" class="form-control" id="budget" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="moveInDate" class="form-label">Preferred Move-in Date</label>
+                                <input type="date" class="form-control" id="moveInDate" required>
+                            </div>
+                        </div>
+
+                        <div class="step" data-step="3">
+                            <h3>Your Interests</h3>
+                            <p>Select your interests to help us match you with compatible roommates.</p>
+                            <div class="mb-3">
+                                <label class="form-label">Interests (Choose multiple)</label>
+                                <div>
+                                    <button type="button" class="choice-btn" data-value="sports"><i
+                                            class="fas fa-futbol"></i> Sports</button>
+                                    <button type="button" class="choice-btn" data-value="music"><i
+                                            class="fas fa-music"></i> Music</button>
+                                    <button type="button" class="choice-btn" data-value="art"><i
+                                            class="fas fa-palette"></i> Art</button>
+                                    <button type="button" class="choice-btn" data-value="technology"><i
+                                            class="fas fa-laptop-code"></i> Technology</button>
+                                    <button type="button" class="choice-btn" data-value="travel"><i
+                                            class="fas fa-plane"></i> Travel</button>
+                                    <button type="button" class="choice-btn" data-value="cooking"><i
+                                            class="fas fa-utensils"></i> Cooking</button>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="bio" class="form-label">Short Bio</label>
+                                <textarea class="form-control" id="bio" rows="3"
+                                    placeholder="Tell potential roommates a bit about yourself..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="step" data-step="4">
+                            <h3>You're All Set!</h3>
+                            <p>Thank you for completing your profile. We're excited to help you find the perfect
+                                roommate for your study abroad adventure!</p>
+                            <p>Next steps:</p>
+                            <ul>
+                                <li>Browse potential roommates</li>
+                                <li>Set up your housing preferences</li>
+                                <li>Start connecting with other students</li>
+                            </ul>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-secondary" id="prev-btn"
+                                style="display: none;">Previous</button>
+                            <button type="button" class="btn btn-primary" id="next-btn">Next</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script> -->
+    <script type="module">
+        import { db } from "./db.js";
+        import { storeUserData } from "./userStorage.js";
+        import { collection, getDoc, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('onboarding-form');
+            const steps = form.querySelectorAll('.step');
+            const nextBtn = document.getElementById('next-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const progressBar = document.getElementById('progress-bar');
+            let currentStep = 1;
+
+            function showStep(stepNumber) {
+                steps.forEach(step => {
+                    step.classList.remove('active');
+                    step.classList.remove('animate-in');
+                });
+                steps[stepNumber - 1].classList.add('active');
+                setTimeout(() => {
+                    steps[stepNumber - 1].classList.add('animate-in');
+                }, 50);
+
+                progressBar.style.width = `${((stepNumber - 1) / (steps.length - 1)) * 100}%`;
+
+                if (stepNumber === 1) {
+                    prevBtn.style.display = 'none';
+                } else {
+                    prevBtn.style.display = 'block';
+                }
+
+                if (stepNumber === steps.length) {
+                    nextBtn.textContent = 'Finish';
+                } else {
+                    nextBtn.textContent = 'Next';
+                }
+            }
+
+            nextBtn.addEventListener('click', async function () {
+                if (currentStep < steps.length) {
+                    currentStep++;
+                    showStep(currentStep);
+                } else {
+                    // Get roommate gender preference from step 2
+                    const roommateGenderBtn = document.querySelector('.step[data-step="2"] .choice-btn.active');
+                    const roommateGender = roommateGenderBtn ? roommateGenderBtn.getAttribute('data-value') : '';
+
+                    // Get interests from step 3
+                    const interestButtons = document.querySelectorAll('.step[data-step="3"] .choice-btn.active');
+                    const interests = Array.from(interestButtons).map(btn => btn.getAttribute('data-value'));
+
+                
+
+                    const userData = {
+                        firstName: document.getElementById('firstName').value,
+                        lastName: document.getElementById('lastName').value,
+                        age: document.getElementById('age').value,
+                        gender: document.getElementById('gender').value,
+                        roommateGender: roommateGender,
+                        budget: document.getElementById('budget').value,
+                        moveInDate: document.getElementById('moveInDate').value,
+                        interests: interests,
+                        bio: document.getElementById('bio').value,
+                        email: localStorage.getItem('userEmail')
+                    };
+
+                    console.log('Submitting user data:', userData); // For debugging
+
+                    try {
+                        const userId = localStorage.getItem('userId');
+                        await updateDoc(doc(db, "users", userId), {
+                            firstName: userData.firstName,
+                            lastName: userData.lastName,
+                            age: userData.age,
+                            gender: userData.gender,
+                            roommateGender: userData.roommateGender,
+                            budget: userData.budget,
+                            moveInDate: userData.moveInDate,
+                            interests: userData.interests,
+                            bio: userData.bio,
+                        });
+                        localStorage.setItem('userFirstName', userData.firstName);
+                        localStorage.setItem('userLastName', userData.lastName);
+                        window.location.href = 'newhome.html';
+                    } catch (error) {
+                        console.error('Error during profile creation:', error);
+                    }
+                }
+            });
+
+            prevBtn.addEventListener('click', function () {
+                if (currentStep > 1) {
+                    currentStep--;
+                    showStep(currentStep);
+                }
+            });
+
+            // Handle choice buttons
+            const choiceBtns = document.querySelectorAll('.choice-btn');
+            choiceBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const parentStep = this.closest('.step');
+
+                    // If this is in step 2 (roommate gender)
+                    if (parentStep.getAttribute('data-step') === '2') {
+                        // Single selection for roommate gender
+                        parentStep.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                    } else {
+                        // Multiple selection for interests
+                        this.classList.toggle('active');
+                    }
+                });
+            });
+
+            // Initialize
+            showStep(currentStep);
+        });
+    </script>
+</body>
+
+</html>

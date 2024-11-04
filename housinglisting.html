@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Housing Listings - Livio</title>
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <!-- Bootstrap and other styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/nav.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        #search-section {
+            background-color: #F1F5F9;
+            padding: 60px 0;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(250, 250, 250, 0.5));
+        }
+
+        h2 {
+            font-weight: 600;
+            color: #1E3A8A;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid #1E3A8A;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            box-shadow: 0 0 8px rgba(30, 58, 138, 0.3);
+        }
+
+        .btn-primary {
+            background-color: #1E3A8A;
+            border-color: #1E3A8A;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .card {
+            transition: all 0.4s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: #1E3A8A;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Livio</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link active" href="newhome.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="housinglisting.html">Housing Listing</a></li>
+                        <li class="nav-item"><a class="nav-link" href="findaroommate.html">Find A Roommate</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#profile">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact">Login</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Search Section -->
+        <section id="search-section" class="py-5">
+            <div class="container">
+                <h2 class="text-center">Search Housing Listings</h2>
+                <form class="row g-3 justify-content-center mt-4" @submit.prevent="filterListings">
+                    <div class="col-md-4">
+                        <select v-model="filters.location" class="form-select">
+                            <option selected value="">Select Location</option>
+                            <option v-for="location in uniqueLocations" :key="location" :value="location">
+                                {{ location }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" v-model="filters.maxPrice" class="form-control" placeholder="Max Price">
+                    </div>
+                    <div class="col-md-4">
+                        <select v-model="filters.roommateCount" class="form-select">
+                            <option selected value="">Number of Roommates Allowed</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3+</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Listings Section -->
+        <section id="listings" class="py-5 bg-white">
+            <div class="container">
+                <h2 class="text-center">Available Listings</h2>
+                <div class="row mt-4 justify-content-center">
+                    <div v-if="filteredResults.length" v-for="listing in filteredResults" :key="listing.id" class="col-md-4 mb-4">
+                        <div class="card">
+                            <img :src="listing.imageUrl || 'default-image.jpg'" class="card-img-top" alt="Listing Image">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ listing.title }}</h5>
+                                <p>Number of Roommates Allowed: {{ listing.roommateCount }}</p>
+                                <p>Price: ${{ listing.pricePerMonth }}/month</p>
+                                <p>Start Date: {{ listing.startDate }}</p>
+                                <p>End Date: {{ listing.endDate }}</p>
+                                <a :href="listing.linkUrl" class="btn btn-outline-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                    <p v-if="!filteredResults.length">No listings match your search criteria.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Vue.js Script -->
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                listings: [
+                    // Example data; replace with data fetched from your Firebase database.
+                    { id: 1, title: 'Modern 2-Bedroom Apartment with City View', location: 'Downtown', pricePerMonth: 1800, roommateCount: 1, startDate: '2024-01-01', endDate: '2024-12-31', imageUrl: 'https://firebasestorage.googleapis.com/v0/b/livio-e4af5.appspot.com/o/apartment2.png?alt=media&token=1ec99a1b-2087-4c0a-b98c-b973b558e7b1', linkUrl: 'listing2.html' },
+                    { id: 2, title: '"Cozy 1-Bedroom Near the Park', location: 'Uptown', pricePerMonth: 1200, roommateCount: 0, startDate: '2024-02-01', endDate: '2024-08-31', imageUrl: 'https://firebasestorage.googleapis.com/v0/b/livio-e4af5.appspot.com/o/apartment3.png?alt=media&token=3b9807dd-47e5-474f-9acb-7132d9a5b6b2', linkUrl: 'listing3.html' },
+                    { id: 3, title: 'Spacious 4-Bedroom House with Backyard', location: 'Suburbs', pricePerMonth: 2500, roommateCount: 3, startDate: '2024-03-01', endDate: '2024-11-30', imageUrl: 'https://firebasestorage.googleapis.com/v0/b/livio-e4af5.appspot.com/o/apartment4.png?alt=media&token=6811e91d-3797-48d4-8c77-ad481b12ccd6', linkUrl: 'listing4.html' },
+                    { id: 4, title: 'Spacious 4-Bedroom Apartment with Seaview in Central', location: 'Central', pricePerMonth: 2000, roommateCount: 2, startDate: '2024-03-01', endDate: '2024-11-30', imageUrl: 'https://firebasestorage.googleapis.com/v0/b/livio-e4af5.appspot.com/o/apartment1.png?alt=media&token=a48bca20-5abb-4d8e-98f2-c3eaf252fc2c', linkUrl: 'listing1.html' },
+                    // Add more sample data or replace with database data
+                ],
+                filters: {
+                    location: '',
+                    maxPrice: '',
+                    roommateCount: ''
+                }
+            },
+            computed: {
+                uniqueLocations() {
+                    const locations = new Set(this.listings.map(listing => listing.location));
+                    return Array.from(locations);
+                },
+                filteredResults() {
+                    return this.listings.filter(listing => {
+                        const matchesLocation = this.filters.location ? listing.location === this.filters.location : true;
+                        const matchesPrice = this.filters.maxPrice ? listing.pricePerMonth <= this.filters.maxPrice : true;
+                        const matchesRoommateCount = this.filters.roommateCount ? 
+                            (this.filters.roommateCount === '3+' ? listing.roommateCount >= 3 : listing.roommateCount == this.filters.roommateCount) : true;
+                        return matchesLocation && matchesPrice && matchesRoommateCount;
+                    });
+                }
+            },
+            methods: {
+                filterListings() {
+                    // The filtering is handled reactively by Vue, so no extra code is needed here.
+                }
+            }
+        });
+    </script>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const navbar = document.querySelector('#navbarNav ul');
+
+        if (isLoggedIn) {
+            navbar.innerHTML = `
+                <li class="nav-item"><a class="nav-link" href="newhome.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="housinglisting.html">Housing Listing</a></li>
+                <li class="nav-item"><a class="nav-link" href="findaroommate.html">Find A Roommate</a></li>
+                <li class="nav-item"><a class="nav-link" href="#profile">Profile</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" id="logoutBtn">Logout</a></li>
+            `;
+
+            document.getElementById('logoutBtn').addEventListener('click', function () {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userId');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userFirstName');
+                localStorage.removeItem('userLastName');
+                window.location.href = 'loginpage.html';
+            });
+        }
+
+        // Activate current page link
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+        navLinks.forEach(link => {
+            if (link.getAttribute("href") === currentPath) {
+                link.classList.add("active");
+            }
+        });
+    });
+</script>
+
+</body>
+
+
+</html>
