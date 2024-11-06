@@ -406,7 +406,7 @@
                 if (userData.firstName) localStorage.setItem('userFirstName', userData.firstName);
                 if (userData.lastName) localStorage.setItem('userLastName', userData.lastName);
                 
-                window.location.href = 'newhome.html';
+                window.location.href = 'index.html';
             } catch (error) {
                 console.error("Error during login:", error);
                 alert('Error during login. Please try again.');
@@ -475,7 +475,7 @@
                         localStorage.setItem('userEmail', decodedToken.email);
                         localStorage.setItem('userFirstName', existingUser.firstName);
                         localStorage.setItem('userLastName', existingUser.lastName);
-                        window.location.href = 'newhome.html';
+                        window.location.href = 'index.html';
                     } else {
                         // New Google user - create account
                         const userData = {
