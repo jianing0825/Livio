@@ -487,6 +487,31 @@
         .confirm-button:hover {
             background: #1e40af;
         }
+
+        .choose-button.chosen {
+            background-color: #6c757d;
+            cursor: pointer;
+        }
+
+        .choose-button.chosen:hover {
+            background-color: #5a6268;
+        }
+
+        .choose-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Add this to the top of your CSS to show the selection limit */
+        .selection-limit {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            font-size: 14px;
+        }
     </style>
 </head>
 
@@ -581,6 +606,8 @@
     <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Add this at the beginning of your script
+        let selectedRoommates = new Set(); // Track selected roommates
         // Sample roommate data
         const roommates = [
             {
@@ -616,7 +643,7 @@
         // Get modal elements
         const profileModal = document.getElementById('profileModal');
         const confirmationModal = document.getElementById('confirmationModal');
-        const modalClose = document.querySelectorAll('.modal-close');
+        const modalClose = document.querySelectorAll('.modal-close, .cancel-button');
 
         // Function to show profile modal
         function showProfileModal(roommate) {
@@ -632,34 +659,64 @@
 
             modal.classList.add('show');
 
-            // Setup confirm button
+            // Setup buttons
             const confirmButton = modal.querySelector('.confirm-button');
+            const cancelButton = modal.querySelector('.cancel-button');
+
             confirmButton.onclick = () => {
                 modal.classList.remove('show');
                 showConfirmationModal(roommate);
+            };
+
+            cancelButton.onclick = () => {
+                modal.classList.remove('show');
             };
         }
 
         // Function to show confirmation modal
         function showConfirmationModal(roommate) {
             const modal = document.getElementById('confirmationModal');
-            const roommateSpan = modal.querySelector('.chosen-roommate');
-            roommateSpan.textContent = roommate.name;
+            const modalTitle = modal.querySelector('.modal-title');
+            const modalBody = modal.querySelector('.modal-body');
+            const confirmButton = modal.querySelector('.confirm-button');
+
+            modalTitle.textContent = 'Confirmation';
+            modalBody.innerHTML = `<p>You have successfully chosen ${roommate.name} as your roommate!</p>`;
+            confirmButton.textContent = 'OK';
+
             modal.classList.add('show');
+            selectedRoommates.add(roommate.id);
 
-            // Only disable the chosen roommate's button
-            const chosenButton = document.querySelector(`.choose-button[data-id="${roommate.id}"]`);
-            if (chosenButton) {
-                chosenButton.disabled = true;
-                chosenButton.textContent = 'Chosen';
-                chosenButton.style.backgroundColor = '#6c757d';
-            }
-
-            // Add click handler for OK button
-            const okButton = modal.querySelector('.confirm-button');
-            okButton.onclick = () => {
+            confirmButton.onclick = () => {
                 modal.classList.remove('show');
+                renderChooseList();
             };
+        }
+
+        // Add function to update all choose buttons
+        function updateAllChooseButtons() {
+            document.querySelectorAll('.choose-button').forEach((button) => {
+                const roommateId = parseInt(button.getAttribute('data-id'));
+                const isSelected = selectedRoommates.has(roommateId);
+
+                if (isSelected) {
+                    button.textContent = 'Unchosen';
+                    button.classList.add('chosen');
+                    button.style.backgroundColor = '#6c757d';
+                } else {
+                    button.textContent = 'Choose';
+                    button.classList.remove('chosen');
+                    button.style.backgroundColor = '#28a745';
+                }
+
+                // Disable all unselected buttons if max limit reached
+                if (!isSelected && selectedRoommates.size >= 3) {
+                    button.disabled = true;
+                    button.style.backgroundColor = '#a9a9a9';
+                } else {
+                    button.disabled = false;
+                }
+            });
         }
 
         // Close modal functionality
@@ -687,28 +744,93 @@
         // Function to render choose list
         function renderChooseList() {
             const chooseList = document.querySelector('.choose-list');
-            chooseList.innerHTML = roommates.map(roommate => `
-                <div class="choose-item">
-                    <div class="choose-profile">
-                        <img src="${roommate.img}" alt="${roommate.name}" class="choose-avatar">
-                        <div class="choose-info">
-                            <div class="choose-name">${roommate.name}</div>
-                            <div class="choose-traits">${roommate.traits.split('\n')[0]}</div>
-                        </div>
+            chooseList.innerHTML = roommates.map(roommate => {
+                const isSelected = selectedRoommates.has(roommate.id);
+                return `
+            <div class="choose-item">
+                <div class="choose-profile">
+                    <img src="${roommate.img}" alt="${roommate.name}" class="choose-avatar">
+                    <div class="choose-info">
+                        <div class="choose-name">${roommate.name}</div>
+                        <div class="choose-traits">${roommate.traits.split('\n')[0]}</div>
                     </div>
-                    <button class="choose-button" data-id="${roommate.id}">Choose</button>
                 </div>
-            `).join('');
+                <div class="button-group">
+                    ${isSelected ?
+                        `<button class="remove-button" data-id="${roommate.id}">
+                            <i class="fas fa-times"></i> Remove
+                        </button>`
+                        :
+                        `<button class="choose-button" data-id="${roommate.id}"
+                            ${selectedRoommates.size >= 3 ? 'disabled' : ''}>
+                            Choose
+                        </button>`
+                    }
+                </div>
+            </div>
+        `;
+            }).join('');
 
             // Add click handlers for choose buttons
             document.querySelectorAll('.choose-button').forEach((button) => {
                 button.addEventListener('click', () => {
+                    if (selectedRoommates.size < 3) {
+                        const roommateId = parseInt(button.getAttribute('data-id'));
+                        const roommate = roommates.find(r => r.id === roommateId);
+                        showProfileModal(roommate);
+                    }
+                });
+            });
+
+            // Add click handlers for remove buttons
+            document.querySelectorAll('.remove-button').forEach((button) => {
+                button.addEventListener('click', () => {
                     const roommateId = parseInt(button.getAttribute('data-id'));
                     const roommate = roommates.find(r => r.id === roommateId);
-                    showProfileModal(roommate);
+
+                    // Show confirmation before removing
+                    showRemoveConfirmationModal(roommate);
                 });
             });
         }
+
+        // Add new function for remove confirmation
+        function showRemoveConfirmationModal(roommate) {
+            const modal = document.getElementById('confirmationModal');
+            const modalTitle = modal.querySelector('.modal-title');
+            const modalBody = modal.querySelector('.modal-body');
+            const confirmButton = modal.querySelector('.confirm-button');
+
+            modalTitle.textContent = 'Remove Roommate';
+            modalBody.innerHTML = `<p>Are you sure you want to remove ${roommate.name} from your selected roommates?</p>`;
+            confirmButton.textContent = 'Remove';
+
+            modal.classList.add('show');
+
+            confirmButton.onclick = () => {
+                selectedRoommates.delete(roommate.id);
+                modal.classList.remove('show');
+                renderChooseList();
+
+                // Show feedback message
+                showFeedbackMessage(`${roommate.name} has been removed from your selected roommates`);
+            };
+        }
+
+        // Add function for feedback messages
+        function showFeedbackMessage(message) {
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = 'feedback-message';
+            feedbackDiv.textContent = message;
+
+            document.querySelector('.choose-list').prepend(feedbackDiv);
+
+            // Remove the message after 3 seconds
+            setTimeout(() => {
+                feedbackDiv.remove();
+            }, 3000);
+        }
+
 
         // Navigation functionality
         document.querySelectorAll('.sub-nav-item').forEach(item => {
@@ -754,7 +876,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const navbar = document.querySelector('#navbarNav ul');
-    
+
             if (isLoggedIn) {
                 navbar.innerHTML = `
                     <li class="nav-item"><a class="nav-link" href="newhome.html">Home</a></li>
@@ -763,7 +885,7 @@
                     <li class="nav-item"><a class="nav-link" href="#profile">Profile</a></li>
                     <li class="nav-item"><a class="nav-link" href="#" id="logoutBtn">Logout</a></li>
                 `;
-    
+
                 document.getElementById('logoutBtn').addEventListener('click', function () {
                     localStorage.removeItem('isLoggedIn');
                     localStorage.removeItem('userId');
@@ -773,7 +895,7 @@
                     window.location.href = 'loginpage.html';
                 });
             }
-    
+
             // Activate current page link
             const currentPath = window.location.pathname;
             const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
@@ -784,7 +906,7 @@
             });
         });
     </script>
-    
+
 </body>
 
 </html>
