@@ -287,10 +287,8 @@
     <!-- <script src="https://kit.fontawesome.com/your-fontawesome-kit.js"></script> -->
     <script type="module">
         import { db } from "./db.js";
-        import { storeUserData } from "./userStorage.js";
         import { collection, getDoc, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-        
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('onboarding-form');
             const steps = form.querySelectorAll('.step');
@@ -324,37 +322,70 @@
                 }
             }
 
+            // Store user's gender when it changes
+            const genderSelect = document.getElementById('gender');
+            genderSelect.addEventListener('change', function () {
+                const selectedGender = this.value;
+                localStorage.setItem('userGender', selectedGender);
+                console.log('User gender stored:', selectedGender);
+            });
+
+            // Enhanced choice button handler
+            const choiceBtns = document.querySelectorAll('.choice-btn');
+            choiceBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const parentStep = this.closest('.step');
+                    const value = this.getAttribute('data-value');
+
+                    // If this is step 2 (roommate gender preference)
+                    if (parentStep.getAttribute('data-step') === '2') {
+                        // Remove active class from all buttons in this step
+                        parentStep.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
+                        // Add active class to clicked button
+                        this.classList.add('active');
+
+                        // Store roommate gender preference
+                        localStorage.setItem('preferredRoommateGender', value);
+                        console.log('Stored preferred roommate gender:', value);
+                    } else {
+                        // Handle other choice buttons (interests)
+                        this.classList.toggle('active');
+                    }
+                });
+            });
+
+
+            // Handle next button clicks
             nextBtn.addEventListener('click', async function () {
-                if (currentStep < steps.length) {
-                    currentStep++;
-                    showStep(currentStep);
+                if (currentStep === 2) {
+                    const activeGenderBtn = document.querySelector('.step[data-step="2"] .choice-btn.active');
+                    if (activeGenderBtn) {
+                        const preferredGender = activeGenderBtn.getAttribute('data-value');
+                        localStorage.setItem('preferredRoommateGender', preferredGender);
+                        // Also store it in the form data for database submission
+                        formData.roommateGender = preferredGender;
+                    }
                 } else {
-                    // Get roommate gender preference from step 2
-                    const roommateGenderBtn = document.querySelector('.step[data-step="2"] .choice-btn.active');
-                    const roommateGender = roommateGenderBtn ? roommateGenderBtn.getAttribute('data-value') : '';
-
-                    // Get interests from step 3
-                    const interestButtons = document.querySelectorAll('.step[data-step="3"] .choice-btn.active');
-                    const interests = Array.from(interestButtons).map(btn => btn.getAttribute('data-value'));
-
-                
-
-                    const userData = {
-                        firstName: document.getElementById('firstName').value,
-                        lastName: document.getElementById('lastName').value,
-                        age: document.getElementById('age').value,
-                        gender: document.getElementById('gender').value,
-                        roommateGender: roommateGender,
-                        budget: document.getElementById('budget').value,
-                        moveInDate: document.getElementById('moveInDate').value,
-                        interests: interests,
-                        bio: document.getElementById('bio').value,
-                        email: localStorage.getItem('userEmail')
-                    };
-
-                    console.log('Submitting user data:', userData); // For debugging
-
                     try {
+                        // Get interests from step 3
+                        const interestButtons = document.querySelectorAll('.step[data-step="3"] .choice-btn.active');
+                        const interests = Array.from(interestButtons).map(btn => btn.getAttribute('data-value'));
+
+                        // Prepare user data using stored values
+                        const userData = {
+                            firstName: document.getElementById('firstName').value,
+                            lastName: document.getElementById('lastName').value,
+                            age: document.getElementById('age').value,
+                            gender: localStorage.getItem('userGender'),
+                            roommateGender: localStorage.getItem('preferredRoommateGender'),
+                            budget: document.getElementById('budget').value,
+                            moveInDate: document.getElementById('moveInDate').value,
+                            interests: interests,
+                            bio: document.getElementById('bio').value,
+                            email: localStorage.getItem('userEmail')
+                        };
+
+                        // Update Firestore
                         const userId = localStorage.getItem('userId');
                         await updateDoc(doc(db, "users", userId), {
                             firstName: userData.firstName,
@@ -367,38 +398,32 @@
                             interests: userData.interests,
                             bio: userData.bio,
                         });
+
+                        // Store final values in localStorage
                         localStorage.setItem('userFirstName', userData.firstName);
                         localStorage.setItem('userLastName', userData.lastName);
+                        localStorage.setItem('userAge', userData.age);
+
+                        // Log final stored values
+                        console.log('Final stored values:', {
+                            userGender: localStorage.getItem('userGender'),
+                            preferredRoommateGender: localStorage.getItem('preferredRoommateGender')
+                        });
+
                         window.location.href = 'newhome.html';
                     } catch (error) {
                         console.error('Error during profile creation:', error);
+                        alert('Error creating profile. Please try again.');
                     }
                 }
             });
 
+            // Previous button handler
             prevBtn.addEventListener('click', function () {
                 if (currentStep > 1) {
                     currentStep--;
                     showStep(currentStep);
                 }
-            });
-
-            // Handle choice buttons
-            const choiceBtns = document.querySelectorAll('.choice-btn');
-            choiceBtns.forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const parentStep = this.closest('.step');
-
-                    // If this is in step 2 (roommate gender)
-                    if (parentStep.getAttribute('data-step') === '2') {
-                        // Single selection for roommate gender
-                        parentStep.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
-                        this.classList.add('active');
-                    } else {
-                        // Multiple selection for interests
-                        this.classList.toggle('active');
-                    }
-                });
             });
 
             // Initialize

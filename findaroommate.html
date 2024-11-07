@@ -56,21 +56,52 @@
             background-image: url('images/exchange.png');
             background-size: cover;
             background-position: center;
-            height: 500px;
+            height: 100vh;
+            /* Adjusted for full viewport height */
             display: flex;
+            flex-direction: column;
+            /* Ensures elements stack vertically */
             align-items: center;
             justify-content: center;
             color: white;
             text-align: center;
+            padding: 0 20px;
+            /* Adds padding for better responsiveness */
+            position: relative;
+            /* Position adjustment to allow layering if needed */
+        }
+
+        /* Overlay for improved text visibility on the background image */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            /* Semi-transparent overlay */
+            z-index: 1;
+            /* Places overlay behind text */
         }
 
         .hero-section h1 {
-            font-size: 36px;
+            font-size: 48px;
+            /* Increased for a stronger headline */
             margin-bottom: 16px;
+            z-index: 2;
+            /* Keeps text above the overlay */
         }
 
         .hero-section p {
-            font-size: 18px;
+            font-size: 20px;
+            /* Slightly larger for readability */
+            z-index: 2;
+            /* Keeps text above the overlay */
+            max-width: 800px;
+            /* Limits text width for better readability */
+            margin: 0 20px;
+            /* Adds margin to prevent overflow */
         }
 
         /* Sub Navigation */
@@ -488,6 +519,7 @@
             background: #1e40af;
         }
 
+        /*  */
         .choose-button.chosen {
             background-color: #6c757d;
             cursor: pointer;
@@ -512,6 +544,21 @@
             border-radius: 4px;
             font-size: 14px;
         }
+
+        /* gender */
+        .gender-badge {
+            transition: all 0.2s ease;
+        }
+
+        .gender-badge:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Adjust spacing for better layout */
+        .roommate-traits {
+            margin-top: 12px;
+        }
     </style>
 </head>
 
@@ -520,11 +567,11 @@
     <nav class="top-nav">
         <a href="#" class="brand">Livio</a>
         <div class="top-nav-links">
-            <a href="#">Home</a>
-            <a href="#">Housing Listing</a>
-            <a href="#">Find A Roommate</a>
-            <a href="#">Profile</a>
-            <a href="#">Login</a>
+            <a href="newhome.html">Home</a>
+            <a href="housinglisting.html">Housing Listing</a>
+            <a href="findaroommate.html">Find A Roommate</a>
+            <a href="profile.html">Profile</a>
+            <a href="loginpage.html">Login</a>
         </div>
     </nav>
 
@@ -606,13 +653,15 @@
     <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Add this at the beginning of your script
-        let selectedRoommates = new Set(); // Track selected roommates
-        // Sample roommate data
+        // Track selected roommates
+        let selectedRoommates = new Set();
+
+        // Sample roommate data with gender information
         const roommates = [
             {
                 id: 1,
                 name: 'Lisa Chen',
+                gender: 'female',
                 traits: 'Student, Clean, Early bird\nLooking for roommate in downtown area\nPrefers quiet environment',
                 img: '/api/placeholder/300/200',
                 details: 'Exchange student from China\nStudying Business Administration\nHobbies: Yoga, Reading\nPreferred lease: 6 months'
@@ -620,6 +669,7 @@
             {
                 id: 2,
                 name: 'Mark Johnson',
+                gender: 'male',
                 traits: 'Professional, Quiet, Night owl\nAvailable from September\nBudget: $800-1200/month',
                 img: '/api/placeholder/300/200',
                 details: 'Software Engineer\nWorking remotely\nHobbies: Gaming, Music\nPreferred lease: 12 months'
@@ -627,6 +677,7 @@
             {
                 id: 3,
                 name: 'Sarah Smith',
+                gender: 'female',
                 traits: 'Graduate, Social, Pet-friendly\nExchange student from Germany\nLoves cooking and outdoor activities',
                 img: '/api/placeholder/300/200',
                 details: 'PhD Student in Biology\nHas a friendly cat\nHobbies: Hiking, Cooking\nPreferred lease: 12+ months'
@@ -634,16 +685,77 @@
             {
                 id: 4,
                 name: 'David Kim',
+                gender: 'male',
                 traits: 'Undergraduate, Athletic, Early riser\nStudying Computer Science\nLooking for long-term roommate',
                 img: '/api/placeholder/300/200',
                 details: 'Computer Science Major\nGym enthusiast\nHobbies: Basketball, Coding\nPreferred lease: 12 months'
             }
         ];
 
+        // Function to filter roommates based on preference
+        function filterRoommates() {
+            const preferredGender = localStorage.getItem('preferredRoommateGender');
+            console.log('Filtering by preferred gender:', preferredGender);
+
+            if (!preferredGender || preferredGender === 'any') {
+                console.log('Showing all roommates');
+                return roommates;
+            }
+
+            const filtered = roommates.filter(roommate => roommate.gender === preferredGender);
+            console.log('Filtered roommates:', filtered);
+            return filtered;
+        }
+
+        // Function to capitalize first letter
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        // Updated function to render roommate cards
+        function renderRoommateCards() {
+            const grid = document.querySelector('.roommate-grid');
+            const filteredRoommates = filterRoommates();
+
+            if (filteredRoommates.length === 0) {
+                grid.innerHTML = '<div class="no-results">No roommates match your preferences.</div>';
+                return;
+            }
+
+            grid.innerHTML = filteredRoommates.map(roommate => `
+        <div class="roommate-card">
+            <img src="${roommate.img}" alt="Profile photo" class="profile-photo">
+            <div class="roommate-info">
+                <h3 class="roommate-name">${roommate.name}</h3>
+                
+                <!-- Gender badge -->
+                <div class="gender-badge" style="
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 4px 12px;
+                    background-color: #EBF5FF;
+                    color: #1E40AF;
+                    border-radius: 9999px;
+                    font-size: 14px;
+                    margin: 8px 0;
+                    font-weight: 500;
+                ">
+                    <i class="fas fa-user" style="margin-right: 6px;"></i>
+                    ${capitalizeFirstLetter(roommate.gender)}
+                </div>
+
+                <p class="roommate-traits">${roommate.traits.split('\n').join('<br>')}</p>
+                <button class="chat-button">Chat</button>
+            </div>
+        </div>
+    `).join('');
+        }
+
         // Get modal elements
         const profileModal = document.getElementById('profileModal');
         const confirmationModal = document.getElementById('confirmationModal');
         const modalClose = document.querySelectorAll('.modal-close, .cancel-button');
+
 
         // Function to show profile modal
         function showProfileModal(roommate) {
@@ -651,56 +763,120 @@
             const profileImage = modal.querySelector('.profile-image');
             const profileName = modal.querySelector('.profile-info h3');
             const profileTraits = modal.querySelector('.profile-info .traits');
+            const confirmButton = modal.querySelector('.confirm-button');
 
+            // Set modal content
             profileImage.src = roommate.img;
             profileImage.alt = roommate.name;
-            profileName.textContent = roommate.name;
+            profileName.innerHTML = `
+        ${roommate.name}
+        <div class="gender-badge" style="
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            background-color: #EBF5FF;
+            color: #1E40AF;
+            border-radius: 9999px;
+            font-size: 14px;
+            margin-left: 12px;
+            font-weight: 500;
+        ">
+            <i class="fas fa-user" style="margin-right: 6px;"></i>
+            ${capitalizeFirstLetter(roommate.gender)}
+        </div>
+    `;
             profileTraits.innerHTML = `${roommate.traits}<br><br>${roommate.details}`.replace(/\n/g, '<br>');
 
+            // Show modal
             modal.classList.add('show');
 
-            // Setup buttons
-            const confirmButton = modal.querySelector('.confirm-button');
-            const cancelButton = modal.querySelector('.cancel-button');
-
+            // Setup confirm button
             confirmButton.onclick = () => {
                 modal.classList.remove('show');
                 showConfirmationModal(roommate);
             };
 
-            cancelButton.onclick = () => {
+            // Setup cancel button
+            modal.querySelector('.cancel-button').onclick = () => {
+                modal.classList.remove('show');
+            };
+
+            // Setup close button
+            modal.querySelector('.modal-close').onclick = () => {
                 modal.classList.remove('show');
             };
         }
 
         // Function to show confirmation modal
-        function showConfirmationModal(roommate) {
+        function showConfirmationModal(roommate, isDeselecting = false) {
             const modal = document.getElementById('confirmationModal');
             const modalTitle = modal.querySelector('.modal-title');
             const modalBody = modal.querySelector('.modal-body');
             const confirmButton = modal.querySelector('.confirm-button');
 
-            modalTitle.textContent = 'Confirmation';
-            modalBody.innerHTML = `<p>You have successfully chosen ${roommate.name} as your roommate!</p>`;
-            confirmButton.textContent = 'OK';
+            if (isDeselecting) {
+                modalTitle.textContent = 'Confirm Deselection';
+                modalBody.innerHTML = `<p>Are you sure you want to remove ${roommate.name} as your roommate?</p>`;
+                confirmButton.textContent = 'Confirm';
+            } else {
+                modalTitle.textContent = 'Confirmation';
+                modalBody.innerHTML = `<p>You have successfully chosen ${roommate.name} as your roommate!</p>`;
+                confirmButton.textContent = 'OK';
+            }
 
             modal.classList.add('show');
-            selectedRoommates.add(roommate.id);
 
+            // Add click handler for confirmation button
             confirmButton.onclick = () => {
+                if (isDeselecting) {
+                    selectedRoommates.delete(roommate.id);
+                } else {
+                    selectedRoommates.add(roommate.id);
+                }
                 modal.classList.remove('show');
+                updateAllChooseButtons();
                 renderChooseList();
+                renderSelectionLimit();
+            };
+
+            // Setup close button
+            modal.querySelector('.modal-close').onclick = () => {
+                modal.classList.remove('show');
             };
         }
 
-        // Add function to update all choose buttons
+
+        // // Function to show confirmation modal
+        // function showConfirmationModal(roommate) {
+        //     const modal = document.getElementById('confirmationModal');
+        //     const modalTitle = modal.querySelector('.modal-title');
+        //     const modalBody = modal.querySelector('.modal-body');
+        //     const confirmButton = modal.querySelector('.confirm-button');
+
+        //     modalTitle.textContent = 'Confirmation';
+        //     modalBody.innerHTML = `<p>You have successfully chosen ${roommate.name} as your roommate!</p>`;
+        //     confirmButton.textContent = 'OK';
+
+        //     modal.classList.add('show');
+        //     selectedRoommates.add(roommate.id);
+
+        //     // Add click handler for OK button
+        //     confirmButton.onclick = () => {
+        //         modal.classList.remove('show');
+        //         updateAllChooseButtons();
+        //         renderChooseList();
+        //     };
+        // }
+
+        // Function to update all choose buttons
+
         function updateAllChooseButtons() {
             document.querySelectorAll('.choose-button').forEach((button) => {
                 const roommateId = parseInt(button.getAttribute('data-id'));
                 const isSelected = selectedRoommates.has(roommateId);
 
                 if (isSelected) {
-                    button.textContent = 'Unchosen';
+                    button.textContent = 'Remove';
                     button.classList.add('chosen');
                     button.style.backgroundColor = '#6c757d';
                 } else {
@@ -709,7 +885,7 @@
                     button.style.backgroundColor = '#28a745';
                 }
 
-                // Disable all unselected buttons if max limit reached
+                // Only disable unselected buttons if max limit reached
                 if (!isSelected && selectedRoommates.size >= 3) {
                     button.disabled = true;
                     button.style.backgroundColor = '#a9a9a9';
@@ -719,6 +895,7 @@
             });
         }
 
+
         // Close modal functionality
         modalClose.forEach(button => {
             button.addEventListener('click', () => {
@@ -726,47 +903,68 @@
             });
         });
 
-        // Function to render roommate cards
-        function renderRoommateCards() {
-            const grid = document.querySelector('.roommate-grid');
-            grid.innerHTML = roommates.map(roommate => `
-                <div class="roommate-card">
-                    <img src="${roommate.img}" alt="${roommate.name}">
-                    <div class="roommate-info">
-                        <h3 class="roommate-name">${roommate.name}</h3>
-                        <p class="roommate-traits">${roommate.traits.split('\n').join('<br>')}</p>
-                        <button class="chat-button">Chat</button>
-                    </div>
-                </div>
-            `).join('');
+
+        // Add selection limit display
+        function renderSelectionLimit() {
+            const chooseList = document.querySelector('.choose-list');
+            const limitDisplay = document.createElement('div');
+            limitDisplay.className = 'selection-limit';
+            limitDisplay.textContent = `Selected: ${selectedRoommates.size}/3 roommates`;
+
+            // Remove existing limit display if present
+            const existingLimit = chooseList.querySelector('.selection-limit');
+            if (existingLimit) {
+                existingLimit.remove();
+            }
+
+            chooseList.insertBefore(limitDisplay, chooseList.firstChild);
         }
 
         // Function to render choose list
+        // Function to render choose list with fixed implementation
         function renderChooseList() {
             const chooseList = document.querySelector('.choose-list');
-            chooseList.innerHTML = roommates.map(roommate => {
+            const filteredRoommates = filterRoommates();
+
+            // Clear existing content first
+            chooseList.innerHTML = '';
+
+            // Add selection limit display
+            renderSelectionLimit();
+
+            // Add roommate items
+            chooseList.innerHTML += filteredRoommates.map(roommate => {
                 const isSelected = selectedRoommates.has(roommate.id);
                 return `
             <div class="choose-item">
                 <div class="choose-profile">
                     <img src="${roommate.img}" alt="${roommate.name}" class="choose-avatar">
                     <div class="choose-info">
-                        <div class="choose-name">${roommate.name}</div>
+                        <div class="choose-name">
+                            ${roommate.name}
+                            <div class="gender-badge" style="
+                                display: inline-flex;
+                                align-items: center;
+                                padding: 2px 8px;
+                                background-color: #EBF5FF;
+                                color: #1E40AF;
+                                border-radius: 9999px;
+                                font-size: 12px;
+                                margin-left: 8px;
+                                font-weight: 500;
+                            ">
+                                <i class="fas fa-user" style="margin-right: 4px;"></i>
+                                ${capitalizeFirstLetter(roommate.gender)}
+                            </div>
+                        </div>
                         <div class="choose-traits">${roommate.traits.split('\n')[0]}</div>
                     </div>
                 </div>
-                <div class="button-group">
-                    ${isSelected ?
-                        `<button class="remove-button" data-id="${roommate.id}">
-                            <i class="fas fa-times"></i> Remove
-                        </button>`
-                        :
-                        `<button class="choose-button" data-id="${roommate.id}"
-                            ${selectedRoommates.size >= 3 ? 'disabled' : ''}>
-                            Choose
-                        </button>`
-                    }
-                </div>
+                <button class="choose-button ${isSelected ? 'chosen' : ''}" 
+                        data-id="${roommate.id}"
+                        ${selectedRoommates.size >= 3 && !isSelected ? 'disabled' : ''}>
+                    ${isSelected ? 'Remove' : 'Choose'}
+                </button>
             </div>
         `;
             }).join('');
@@ -774,63 +972,37 @@
             // Add click handlers for choose buttons
             document.querySelectorAll('.choose-button').forEach((button) => {
                 button.addEventListener('click', () => {
-                    if (selectedRoommates.size < 3) {
-                        const roommateId = parseInt(button.getAttribute('data-id'));
-                        const roommate = roommates.find(r => r.id === roommateId);
+                    const roommateId = parseInt(button.getAttribute('data-id'));
+                    const roommate = roommates.find(r => r.id === roommateId);
+                    const isSelected = selectedRoommates.has(roommateId);
+
+                    if (isSelected) {
+                        // If already selected, show deselection confirmation
+                        showConfirmationModal(roommate, true);
+                    } else if (selectedRoommates.size < 3) {
+                        // If not selected and under limit, show selection confirmation
                         showProfileModal(roommate);
                     }
                 });
             });
-
-            // Add click handlers for remove buttons
-            document.querySelectorAll('.remove-button').forEach((button) => {
-                button.addEventListener('click', () => {
-                    const roommateId = parseInt(button.getAttribute('data-id'));
-                    const roommate = roommates.find(r => r.id === roommateId);
-
-                    // Show confirmation before removing
-                    showRemoveConfirmationModal(roommate);
-                });
-            });
         }
 
-        // Add new function for remove confirmation
-        function showRemoveConfirmationModal(roommate) {
-            const modal = document.getElementById('confirmationModal');
-            const modalTitle = modal.querySelector('.modal-title');
-            const modalBody = modal.querySelector('.modal-body');
-            const confirmButton = modal.querySelector('.confirm-button');
 
-            modalTitle.textContent = 'Remove Roommate';
-            modalBody.innerHTML = `<p>Are you sure you want to remove ${roommate.name} from your selected roommates?</p>`;
-            confirmButton.textContent = 'Remove';
+        // Function to render chat list
+        function renderChatList() {
+            const chatList = document.querySelector('.chat-list');
+            const filteredRoommates = filterRoommates();
 
-            modal.classList.add('show');
-
-            confirmButton.onclick = () => {
-                selectedRoommates.delete(roommate.id);
-                modal.classList.remove('show');
-                renderChooseList();
-
-                // Show feedback message
-                showFeedbackMessage(`${roommate.name} has been removed from your selected roommates`);
-            };
+            chatList.innerHTML = filteredRoommates.map(roommate => `
+        <div class="chat-item">
+            <img src="${roommate.img}" alt="${roommate.name}" class="chat-avatar">
+            <div class="chat-info">
+                <div class="chat-name">${roommate.name}</div>
+                <div class="chat-preview">Click to continue chat</div>
+            </div>
+        </div>
+    `).join('');
         }
-
-        // Add function for feedback messages
-        function showFeedbackMessage(message) {
-            const feedbackDiv = document.createElement('div');
-            feedbackDiv.className = 'feedback-message';
-            feedbackDiv.textContent = message;
-
-            document.querySelector('.choose-list').prepend(feedbackDiv);
-
-            // Remove the message after 3 seconds
-            setTimeout(() => {
-                feedbackDiv.remove();
-            }, 3000);
-        }
-
 
         // Navigation functionality
         document.querySelectorAll('.sub-nav-item').forEach(item => {
@@ -845,20 +1017,6 @@
             });
         });
 
-        // Function to render chat list
-        function renderChatList() {
-            const chatList = document.querySelector('.chat-list');
-            chatList.innerHTML = roommates.map(roommate => `
-                <div class="chat-item">
-                    <img src="${roommate.img}" alt="${roommate.name}" class="chat-avatar">
-                    <div class="chat-info">
-                        <div class="chat-name">${roommate.name}</div>
-                        <div class="chat-preview">Click to continue chat</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
         // Close modals when clicking outside
         window.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal')) {
@@ -866,44 +1024,19 @@
             }
         });
 
-        // Initial render
-        renderRoommateCards();
-        renderChatList();
-        renderChooseList();
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const navbar = document.querySelector('#navbarNav ul');
-
-            if (isLoggedIn) {
-                navbar.innerHTML = `
-                    <li class="nav-item"><a class="nav-link" href="newhome.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="housinglisting.html">Housing Listing</a></li>
-                    <li class="nav-item"><a class="nav-link" href="findaroommate.html">Find A Roommate</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#profile">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" id="logoutBtn">Logout</a></li>
-                `;
-
-                document.getElementById('logoutBtn').addEventListener('click', function () {
-                    localStorage.removeItem('isLoggedIn');
-                    localStorage.removeItem('userId');
-                    localStorage.removeItem('userEmail');
-                    localStorage.removeItem('userFirstName');
-                    localStorage.removeItem('userLastName');
-                    window.location.href = 'loginpage.html';
-                });
-            }
-
-            // Activate current page link
-            const currentPath = window.location.pathname;
-            const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
-            navLinks.forEach(link => {
-                if (link.getAttribute("href") === currentPath) {
-                    link.classList.add("active");
-                }
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('Initializing with preferences:', {
+                userGender: localStorage.getItem('userGender'),
+                preferredRoommateGender: localStorage.getItem('preferredRoommateGender')
             });
+
+            // Initial render with filters
+            renderRoommateCards();
+            renderChooseList();
+            renderChatList();
+            renderSelectionLimit(); // Add this line
+
         });
     </script>
 
