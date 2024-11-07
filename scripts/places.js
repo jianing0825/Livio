@@ -80,3 +80,13 @@ function callback(results, status) {
 let select = document.getElementsByTagName("select")[0];
 if (sessionStorage.category) vm.category = sessionStorage.category;
 if (sessionStorage.input) document.getElementById("autocomplete").value = sessionStorage.input;
+
+// Add logout functionality
+document.getElementById('logoutBtn').addEventListener('click', function () {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userFirstName');
+    localStorage.removeItem('userLastName');
+    window.location.href = 'loginpage.html';
+});
