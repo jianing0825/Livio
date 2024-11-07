@@ -248,10 +248,20 @@ $(document).ready(async function () {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false, 
       plugins: {
+        title: {
+          display: true,
+          text: 'Expense Breakdown by Category' 
+      },
         legend: {
-          position: "top",
+          position: "right",
+          labels: {
+            
+            usePointStyle: true, // Use a dot instead of a box for legend items
+        }
         },
+        
       },
     },
   });
@@ -274,6 +284,14 @@ $(document).ready(async function () {
       ],
     },
     options: {
+      plugins:{
+        title: {
+          display: true,
+          text: ' Total Spending by Month' 
+      },
+      },
+      maintainAspectRatio: false, 
+
       responsive: true,
       scales: {
         y: {
@@ -301,6 +319,13 @@ $(document).ready(async function () {
       ],
     },
     options: {
+      maintainAspectRatio: false, 
+      plugins:{
+        title: {
+          display: true,
+          text: ' Cumulative Spending Over the Week' 
+      },
+      },
       responsive: true,
       scales: {
         y: {
@@ -331,9 +356,16 @@ $(document).ready(async function () {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false, 
       plugins: {
+        title: {
+          display: true,
+          text: ' Spent vs. Remaining Budget' 
+      },
         legend: {
-          position: "top",
+          position: "right",
+          usePointStyle: true, // Use dot instead of box
+
         },
       },
     },
