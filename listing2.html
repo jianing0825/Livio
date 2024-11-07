@@ -23,15 +23,18 @@
         }
 
         #priceTrendChart {
-            max-width: 100%; /* Responsive width */
-            height: 300px; /* Auto height */
+            max-width: 100%;
+            /* Responsive width */
+            height: 300px;
+            /* Auto height */
             margin: 0 auto;
         }
 
         .carousel-item img {
             opacity: 1 !important;
             filter: none !important;
-            max-height: 500px; /* Limit height */
+            max-height: 500px;
+            /* Limit height */
             width: 100%;
             object-fit: cover;
         }
@@ -43,6 +46,9 @@
             padding: 5px;
             background-color: #1E3A8A;
         }
+        .h4problem {
+            margin-bottom: -50px;
+        }
 
         /* Media queries for smaller screens */
         @media (max-width: 768px) {
@@ -50,23 +56,87 @@
                 max-height: 300px;
             }
 
-            h2, h4 {
+            h2,
+            h4 {
                 font-size: 1.2rem;
             }
 
             .card img {
-                height: 150px; /* Adjust height for smaller cards */
+                height: 150px;
+                /* Adjust height for smaller cards */
             }
         }
 
         @media (max-width: 576px) {
-            h2, h4 {
+
+            h2,
+            h4 {
                 font-size: 1rem;
             }
 
             .card img {
                 height: 120px;
             }
+        }
+        .rating {
+            display: inline-flex;
+            align-items: center;
+            margin-top: -40px;
+        }
+
+        .rating i {
+            color: #FFD700;
+            /* Gold color for stars */
+        }
+
+        .modal-content {
+            max-width: 700px;
+            margin: auto;
+            border-radius: 10px;
+        }
+
+        .rating-overall {
+            font-size: 3rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .rating-stars i {
+            color: #FFD700;
+        }
+
+        .review-item {
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .rating-breakdown li {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        .progress {
+            flex-grow: 1;
+            margin: 0 10px;
+            height: 8px;
+        }
+        .popup{
+            margin-top: -50px;
+        }
+
+        .popup1{
+            margin-top: -140px;
+            margin-left: 130px;
+            background-color: #1E3A8A;
         }
     </style>
 </head>
@@ -122,9 +192,42 @@
                     <span class="visually-hidden">Next</span>
                 </button>
             </div>
-
+            <div id="overallStarsMain" class="rating mb-3 d-flex align-items-center"></div>
+            <div class="container mt-5">
+                <button type="button" class="btn btn-primary popup1" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                    View Reviews
+                </button>
+        
+                <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content p-4">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="reviewModalLabel">Overall Rating</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="rating-overall">
+                                    <span id="overallRating">0.0</span>
+                                    <div class="rating-stars ms-3" id="overallStars"></div>
+                                </div>
+        
+                                <ul class="list-unstyled rating-breakdown mt-4" id="ratingBreakdown">
+                                    <!-- Rating breakdown will be populated here -->
+                                </ul>
+        
+                                <div class="mt-4">
+                                    <h5 id="reviewCount">Loading reviews...</h5>
+                                    <div id="reviewsContainer">
+                                        <!-- Reviews will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Property Details -->
-            <div class="row">
+            <div class="row popup">
                 <div class="col-md-6">
                     <h4>Description</h4>
                     <p>This stylish city loft is perfect for professionals and students seeking a modern living experience. Located in the heart of downtown, it boasts an open-concept design with floor-to-ceiling windows that provide stunning city views. The unit features a contemporary kitchen with stainless steel appliances and a cozy living area for relaxation.</p>
@@ -185,7 +288,207 @@
             <p class="mt-2">© 2024 Livio. All rights reserved.</p>
         </div>
     </footer>
+    <script type="module">
+        import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+        import { getFirestore, collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
+    
+        // Check if Firebase has already been initialized
+        let app;
+        if (!getApps().length) {
+            const firebaseConfig = {
+                apiKey: "AIzaSyBzWcOPasd5_KEcRodDRVtJA_wUn_-35N8",
+                authDomain: "livio-e4af5.firebaseapp.com",
+                projectId: "livio-e4af5",
+                storageBucket: "livio-e4af5.appspot.com",
+                messagingSenderId: "641180735040",
+                appId: "1:641180735040:web:b95b1bcf4f53f4d519f1a5"
+            };
+    
+            app = initializeApp(firebaseConfig);
+        } else {
+            app = getApps()[0];
+        }
+    
+        // Initialize Firestore
+        const db = getFirestore(app);
 
+        // Function to render stars
+        function renderStars(rating) {
+            let starsHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    starsHTML += '<i class="fas fa-star"></i>';
+                } else if (i - 0.5 <= rating) {
+                    starsHTML += '<i class="fas fa-star-half-alt"></i>';
+                } else {
+                    starsHTML += '<i class="far fa-star"></i>';
+                }
+            }
+            return starsHTML;
+        }
+
+        async function displayOverallStarRating() {
+        try {
+            const feedbackQuery = query(
+                collection(db, 'feedbacks', 'feedback', 'houselisting2'),
+                orderBy('timestamp', 'desc')
+            );
+            const querySnapshot = await getDocs(feedbackQuery);
+
+            let totalRating = 0;
+            let count = 0;
+
+            querySnapshot.forEach(doc => {
+                const feedback = doc.data();
+                if (feedback.rating) {
+                    totalRating += feedback.rating;
+                    count++;
+                }
+            });
+
+            const averageRating = count > 0 ? totalRating / count : 0;
+
+            // Update the main star rating container
+            const mainStarRatingSection = document.getElementById('overallStarsMain');
+            mainStarRatingSection.innerHTML = `
+                ${renderStars(averageRating)} (${averageRating.toFixed(2)})
+            `;
+
+            // Update the modal star rating container
+            const modalStarRatingSection = document.getElementById('overallStars');
+            if (modalStarRatingSection) {
+                modalStarRatingSection.innerHTML = renderStars(averageRating);
+            }
+        } catch (error) {
+            console.error('Error fetching overall star rating:', error);
+        }
+    }
+
+    // Call the function to display the overall star rating on page load
+    window.addEventListener('load', displayOverallStarRating);
+
+        // Function to format timestamp
+        function formatDate(timestamp) {
+            if (!timestamp) return 'N/A';
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Function to calculate rating statistics
+        function calculateRatingStats(reviews) {
+            const stats = {
+                average: 0,
+                breakdown: Array(5).fill(0),
+                total: reviews.length
+            };
+
+            if (reviews.length === 0) return stats;
+
+            let sum = 0;
+            reviews.forEach(review => {
+                const rating = Math.round(review.rating);
+                sum += review.rating;
+                if (rating > 0 && rating <= 5) {
+                    stats.breakdown[rating - 1]++;
+                }
+            });
+
+            stats.average = sum / reviews.length;
+            return stats;
+        }
+
+        // Function to update rating breakdown UI
+        function updateRatingBreakdown(stats) {
+            const breakdownContainer = document.getElementById('ratingBreakdown');
+            breakdownContainer.innerHTML = '';
+
+            for (let i = 5; i >= 1; i--) {
+                const count = stats.breakdown[i - 1];
+                const percentage = (count / stats.total * 100) || 0;
+                
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${i} stars</span>
+                    <div class="progress">
+                        <div class="progress-bar bg-warning" role="progressbar" 
+                             style="width: ${percentage}%" 
+                             aria-valuenow="${percentage}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                        </div>
+                    </div>
+                    <span>${count}</span>
+                `;
+                breakdownContainer.appendChild(li);
+            }
+
+            // Update overall rating
+            const overallRating = document.getElementById('overallRating');
+            const overallStars = document.getElementById('overallStars');
+            overallRating.textContent = stats.average.toFixed(2);
+            overallStars.innerHTML = renderStars(stats.average);
+        }
+
+        // Main function to fetch and display reviews
+        async function fetchAndDisplayReviews() {
+            try {
+                const reviewsQuery = query(
+                    collection(db, 'feedbacks','feedback','houselisting2'),
+                    orderBy('timestamp', 'desc')
+                );
+                
+                const querySnapshot = await getDocs(reviewsQuery);
+                const reviews = [];
+                
+                querySnapshot.forEach((doc) => {
+                    reviews.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                // Calculate and update statistics
+                const stats = calculateRatingStats(reviews);
+                updateRatingBreakdown(stats);
+
+                // Update review count
+                const reviewCount = document.getElementById('reviewCount');
+                reviewCount.textContent = `${reviews.length} reviews`;
+
+                // Display reviews
+                const reviewsContainer = document.getElementById('reviewsContainer');
+                reviewsContainer.innerHTML = '';
+
+                reviews.forEach(review => {
+                    const reviewElement = document.createElement('div');
+                    reviewElement.classList.add('review-item');
+                    reviewElement.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong>${review.userName || 'Anonymous'}</strong>
+                            <span class="text-muted">${formatDate(review.timestamp)}</span>
+                        </div>
+                        <div class="rating-stars my-2">
+                            ${renderStars(review.rating)}
+                        </div>
+                        <p class="mb-0">${review.reviewText || 'No comment provided'}</p>
+                    `;
+                    reviewsContainer.appendChild(reviewElement);
+                });
+
+            } catch (error) {
+                console.error('Error fetching reviews:', error);
+                document.getElementById('reviewCount').textContent = 'Error loading reviews';
+            }
+        }
+
+        // Initialize when the modal is shown
+        const reviewModal = document.getElementById('reviewModal');
+        reviewModal.addEventListener('show.bs.modal', fetchAndDisplayReviews);
+    </script>
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -217,6 +520,9 @@
             }
         });
     </script>
+
+    <!-- ChatBot -->
+    <script src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js" async></script>
 </body>
 
 </html>

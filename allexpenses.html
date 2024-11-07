@@ -111,56 +111,70 @@
   </style>
 </head>
 
-<body id="app">
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Livio</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="newhome.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="housinglisting.html">Housing Listing</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="findaroommate.html">Find A Roommate</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              Expenses
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
-              <li>
-                <a class="dropdown-item" href="expense.html">Expenses</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="allexpenses.html">All Expenses</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="splitexpense.html">Split Expense</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="paypending.html">Pay Pending Payments</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#profile">Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#contact">Login</a>
-          </li>
-        </ul>
+  <body id="app">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Livio</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="newhome.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="housinglisting.html">Housing Listing</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="findaroommate.html">Find A Roommate</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="expensesDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Expenses
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
+                <li>
+                  <a class="dropdown-item" href="expense.html">Expenses</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="allexpenses.html"
+                    >All Expenses</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="splitexpense.html"
+                    >Split Expense</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#profile">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Login</a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
   <!-- Main Content Area -->
   <div class="main-content container">
@@ -272,22 +286,21 @@
       // Get the dropdown toggle link
       let expensesDropdown = document.getElementById("expensesDropdown");
 
-      // Change the dropdown title based on current page
-      if (currentPath.includes("allexpenses.html")) {
-        expensesDropdown.textContent = "All Expenses";
-      } else if (currentPath.includes("splitexpense.html")) {
-        expensesDropdown.textContent = "Split Expense";
-      } else if (currentPath.includes("paypending.html")) {
-        expensesDropdown.textContent = "Pay Pending Payments";
-      } else {
-        expensesDropdown.textContent = "Expenses";
+        // Change the dropdown title based on current page
+        if (currentPath.includes("allexpenses.html")) {
+          expensesDropdown.textContent = "All Expenses";
+        } else if (currentPath.includes("splitexpense.html")) {
+          expensesDropdown.textContent = "Split Expense";
+        } else if (currentPath.includes("paypending.html")) {
+          expensesDropdown.textContent = "Pay Pending Payments";
+        } else {
+          expensesDropdown.textContent = "Expenses";
+        }
+      });
+      // Example function for 'Set Budget' button
+      function setBudget() {
+        window.location.href = "changeBudget.html";
       }
-    });
-    // Example function for 'Set Budget' button
-    function setBudget() {
-      window.location.href = "changeBudget.html";
-    }
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>

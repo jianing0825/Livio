@@ -64,3 +64,13 @@ function createMarker(place) {
 
     });
 }
+
+// Add logout functionality
+document.getElementById('logoutBtn').addEventListener('click', function () {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userFirstName');
+    localStorage.removeItem('userLastName');
+    window.location.href = 'loginpage.html';
+});
