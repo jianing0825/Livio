@@ -1,3 +1,6 @@
+// check if logged in
+if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
+
 const app = Vue.createApp({
     data() {
         return {

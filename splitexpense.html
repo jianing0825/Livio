@@ -132,10 +132,13 @@
                 </ul>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#profile">Profile</a>
+                <a class="nav-link" href="places.html">Places</a>
+            </li>
+              <li class="nav-item">
+                <a class="nav-link" href="profile.html">Profile</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#contact">Login</a>
+                <a class="nav-link" href="#" id="logoutBtn">Logout</a>
               </li>
             </ul>
           </div>
@@ -363,6 +366,19 @@
     <script src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js" async></script>
 
     <script>
+      // check if logged in
+      if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
+
+      // Add logout functionality
+      document.getElementById('logoutBtn').addEventListener('click', function () {
+          localStorage.removeItem('isLoggedIn');
+          localStorage.removeItem('userId');
+          localStorage.removeItem('userEmail');
+          localStorage.removeItem('userFirstName');
+          localStorage.removeItem('userLastName');
+          window.location.href = 'loginpage.html';
+      });
+
       $(document).ready(function () {
         // Initialize Select2 for the participants dropdown
         $("#participants").select2({

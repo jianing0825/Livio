@@ -1,3 +1,6 @@
+// check if logged in
+if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
+
 var place_id = new URLSearchParams(window.location.search).get("id");
 // <div id='app'></div>
 const app = Vue.createApp({
