@@ -406,7 +406,7 @@
                 if (userData.firstName) localStorage.setItem('userFirstName', userData.firstName);
                 if (userData.lastName) localStorage.setItem('userLastName', userData.lastName);
                 
-                window.location.href = 'newhome.html';
+                window.location.href = 'index.html';
             } catch (error) {
                 console.error("Error during login:", error);
                 alert('Error during login. Please try again.');
@@ -475,7 +475,7 @@
                         localStorage.setItem('userEmail', decodedToken.email);
                         localStorage.setItem('userFirstName', existingUser.firstName);
                         localStorage.setItem('userLastName', existingUser.lastName);
-                        window.location.href = 'newhome.html';
+                        window.location.href = 'index.html';
                     } else {
                         // New Google user - create account
                         const userData = {
@@ -531,6 +531,9 @@
         // Auto-advance slides
         setInterval(nextSlide, 5000);
     </script>
+
+    <!-- ChatBot -->
+    <script src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js" async></script>
 </body>
 
 </html>

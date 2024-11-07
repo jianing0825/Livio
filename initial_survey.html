@@ -402,15 +402,7 @@
                         // Store final values in localStorage
                         localStorage.setItem('userFirstName', userData.firstName);
                         localStorage.setItem('userLastName', userData.lastName);
-                        localStorage.setItem('userAge', userData.age);
-
-                        // Log final stored values
-                        console.log('Final stored values:', {
-                            userGender: localStorage.getItem('userGender'),
-                            preferredRoommateGender: localStorage.getItem('preferredRoommateGender')
-                        });
-
-                        window.location.href = 'newhome.html';
+                        window.location.href = 'index.html';
                     } catch (error) {
                         console.error('Error during profile creation:', error);
                         alert('Error creating profile. Please try again.');
@@ -430,6 +422,9 @@
             showStep(currentStep);
         });
     </script>
+
+    <!-- ChatBot -->
+    <script src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js" async></script>
 </body>
 
 </html>

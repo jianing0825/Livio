@@ -130,9 +130,13 @@
             height: 8px;
         }
         .popup{
+            margin-top: -50px;
+        }
+
+        .popup1{
+            margin-top: -140px;
             margin-left: 130px;
-            margin-top: -150px;
-            padding: 2px;
+            background-color: #1E3A8A;
         }
     </style>
 </head>
@@ -148,7 +152,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="newhome.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="housinglisting.html">Housing Listing</a></li>
                     <li class="nav-item"><a class="nav-link" href="findaroommate.html">Find A Roommate</a></li>
                     <li class="nav-item"><a class="nav-link" href="#profile">Profile</a></li>
@@ -198,7 +202,7 @@
             
             <div id="overallStarsMain" class="rating mb-3 d-flex align-items-center"></div>
             <div class="container mt-5">
-                <button type="button" class="btn btn-primary popup" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                <button type="button" class="btn btn-primary popup1" data-bs-toggle="modal" data-bs-target="#reviewModal">
                     View Reviews
                 </button>
         
@@ -233,7 +237,7 @@
             
 
             <!-- Property Details -->
-            <div class="row">
+            <div class="row popup">
                 <div class="col-md-6">
                     <h4>Description</h4>
                     <p>This cozy apartment is located just a mile from the school, offering a comfortable living space
@@ -266,7 +270,7 @@
             <h4 class="mt-5">Similar Listings</h4>
             <div class="card mb-3 shadow-sm">
                 <img src='images/apartment2.png' alt='Modern Studio' class='card-img-top'
-                    style='object-fit: cover; border-radius: 10px;'>
+                    style='object-fit: cover; border-radius: 10px; height: 300px;'>
                 <div class='card-body'>
                     <h5 class='card-title'>Modern Studio in Downtown</h5>
                     <p>Price: $1500/month | Rooms: 1 | Distance: 0.5 miles from train station</p>
@@ -276,7 +280,7 @@
 
             <div class="card mb-3 shadow-sm">
                 <img src='images/apartment3.png' alt='Charming House' class='card-img-top'
-                    style='object-fit: cover; border-radius: 10px;'>
+                    style='object-fit: cover; border-radius: 10px; height: 300px;'>
                 <div class='card-body'>
                     <h5 class='card-title'>Charming House with Garden</h5>
                     <p>Price: $1800/month | Rooms: 3 | Distance: 1.2 miles from school</p>
@@ -530,6 +534,9 @@
             }
         });
     </script>
+
+    <!-- ChatBot -->
+    <script src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js" async></script>
 </body>
 
 </html>
