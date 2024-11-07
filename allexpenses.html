@@ -166,10 +166,13 @@
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#profile">Profile</a>
+              <a class="nav-link" href="places.html">Places</a>
+          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="profile.html">Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#contact">Login</a>
+              <a class="nav-link" href="#" id="logoutBtn">Logout</a>
             </li>
           </ul>
         </div>
@@ -278,6 +281,17 @@
   <script src="./scripts/allexpenses.js" type="module"></script>
   <!-- Initialize Chart.js for Dashboard -->
   <script>
+      // check if logged in
+      if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
+      // Add logout functionality
+      document.getElementById('logoutBtn').addEventListener('click', function () {
+          localStorage.removeItem('isLoggedIn');
+          localStorage.removeItem('userId');
+          localStorage.removeItem('userEmail');
+          localStorage.removeItem('userFirstName');
+          localStorage.removeItem('userLastName');
+          window.location.href = 'loginpage.html';
+      });
     // JavaScript to change the navbar title dynamically
     document.addEventListener("DOMContentLoaded", function () {
       // Get the current URL path

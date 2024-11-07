@@ -88,10 +88,13 @@
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#profile">Profile</a>
+              <a class="nav-link" href="places.html">Places</a>
+          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="profile.html">Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#contact">Login</a>
+              <a class="nav-link" href="#" id="logoutBtn">Logout</a>
             </li>
           </ul>
         </div>
@@ -121,6 +124,19 @@
     <div class="loaderContainer" v-else>
       <span class="loaderr"></span>
     </div>
+    <script>
+      // check if logged in
+      if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
+      // Add logout functionality
+      document.getElementById('logoutBtn').addEventListener('click', function () {
+          localStorage.removeItem('isLoggedIn');
+          localStorage.removeItem('userId');
+          localStorage.removeItem('userEmail');
+          localStorage.removeItem('userFirstName');
+          localStorage.removeItem('userLastName');
+          window.location.href = 'loginpage.html';
+      });
+    </script>
     <script src="./scripts/changeBudget.js" type="module"></script>
 
     <!-- ChatBot -->

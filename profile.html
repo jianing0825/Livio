@@ -194,6 +194,9 @@
             <li><a href="housinglisting.html" class="nav-link">Housing Listing</a></li>
             <li><a href="findaroommate.html" class="nav-link">Find A Roommate</a></li>
             <li><a href="expense.html" class="nav-link">Expenses</a></li>
+            <li class="nav-item">
+                <a class="nav-link" href="places.html">Places</a>
+            </li>
             <li><a href="profile.html" class="nav-link active">Profile</a></li>
             <li><a href="loginpage.html" class="nav-link">Login</a></li>
         </ul>
@@ -269,6 +272,9 @@
 
     <!-- JavaScript to modify navbar based on login status -->
     <script>
+        // check if logged in
+        if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
+
         document.addEventListener("DOMContentLoaded", function () {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             const navbarLinks = document.getElementById('navbarLinks');
@@ -279,6 +285,9 @@
                     <li><a href="housinglisting.html" class="nav-link">Housing Listing</a></li>
                     <li><a href="findaroommate.html" class="nav-link">Find A Roommate</a></li>
                     <li><a href="expense.html" class="nav-link">Expenses</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="places.html">Places</a>
+                    </li>
                     <li><a href="profile.html" class="nav-link active">Profile</a></li>
                     <li><a href="#" id="logoutBtn" class="nav-link">Logout</a></li>
                 `;
