@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Housing Listings - Livio</title>
     <!-- Firebase and Firestore -->
-    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"></script>
+    <!-- <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"></script> -->
+    
     <!-- Bootstrap and other styles -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -182,9 +183,10 @@
 
     <!-- Firebase Initialization and Firestore Functions -->
     <script type="module">
+
         // check if logged in
         if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
-        
+
         // Add logout functionality
         document.getElementById('logoutBtn').addEventListener('click', function () {
             localStorage.removeItem('isLoggedIn');
@@ -194,10 +196,20 @@
             localStorage.removeItem('userLastName');
             window.location.href = 'loginpage.html';
         });
-        
+
         // Import Firebase functions
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import {
+            getFirestore,
+            collection,
+            getDocs,
+            query,
+            where,
+            orderBy,
+            doc,
+            getDoc
+        } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
 
         // Firebase configuration
         const firebaseConfig = {
@@ -213,6 +225,7 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
 
         // Populate location dropdown function remains the same
         async function populateLocationDropdown() {
@@ -239,9 +252,10 @@
 
         // Function to render stars based on rating
         function renderStars(rating) {
+            rating = parseFloat(rating);
             let starsHTML = '';
             for (let i = 1; i <= 5; i++) {
-                if (i <= rating) {
+                if (i <= Math.floor(rating)) {
                     starsHTML += '<i class="fas fa-star"></i>';
                 } else if (i - 0.5 <= rating) {
                     starsHTML += '<i class="fas fa-star-half-alt"></i>';
@@ -255,118 +269,145 @@
         // Function to fetch ratings for a specific listing
         async function fetchRatingForListing(listingNumber) {
             try {
-                // Get reference to the feedbacks/feedback/houselisting{number} collection
-                const feedbackQuery = query(
-                    collection(db, 'feedbacks', 'feedback', `houselisting${listingNumber}`),
-                    orderBy('timestamp', 'desc')
-                );
+                console.log(`Fetching ratings for houselisting${listingNumber}`);
+                // Get ratings from the correct path: /feedbacks/feedback/houselisting{n}
+                const ratingsRef = collection(db, 'feedbacks', 'feedback', `houselisting${listingNumber}`);
+                const querySnapshot = await getDocs(ratingsRef);
 
-                const querySnapshot = await getDocs(feedbackQuery);
+                if (querySnapshot.empty) {
+                    console.log(`No ratings found for houselisting${listingNumber}`);
+                    return 0;
+                }
+
                 let totalRating = 0;
                 let count = 0;
 
                 querySnapshot.forEach(doc => {
-                    const feedback = doc.data();
-                    if (feedback.rating) {
-                        totalRating += feedback.rating;
+                    const feedbackData = doc.data();
+                    console.log('Rating data:', feedbackData);
+                    if (feedbackData.rating) {
+                        totalRating += parseFloat(feedbackData.rating);
                         count++;
                     }
                 });
 
-                return count > 0 ? totalRating / count : 0;
+                if (count === 0) {
+                    console.log('No valid ratings found in the documents');
+                    return 0;
+                }
+
+                const averageRating = totalRating / count;
+                console.log(`Calculated average rating: ${averageRating.toFixed(2)}`);
+                return averageRating.toFixed(2);
             } catch (error) {
-                console.error(`Error fetching rating for houselisting${listingNumber}:`, error);
+                console.error(`Error fetching ratings:`, error);
+                console.error('Error details:', error.message);
                 return 0;
             }
         }
 
-        // Function to apply filters and display listings
+
         async function applyFilters(event) {
             event.preventDefault();
             const listingsContainer = document.getElementById("listingsContainer");
             listingsContainer.innerHTML = "";
 
-            // Get filter values
-            const location = document.getElementById("location").value;
-            const maxPrice = parseFloat(document.getElementById("maxPrice").value);
-            const roommateCount = document.getElementById("roommateCount").value;
-
             try {
-                let conditions = [];
-                if (location) {
-                    conditions.push(where("location", "==", location));
-                }
-                if (!isNaN(maxPrice)) {
-                    conditions.push(where("pricePerMonth", "<=", maxPrice));
-                }
-                if (roommateCount) {
-                    const countValue = roommateCount === "3+" ? 3 : parseInt(roommateCount, 10);
-                    conditions.push(where("roommateCount", ">=", countValue));
-                }
+                // Get reference to rooms collection
+                const roomsRef = collection(db, "rooms");
+                console.log("Fetching room listings...");
 
-                let listingsQuery = collection(db, "rooms");
-                if (conditions.length > 0) {
-                    listingsQuery = query(listingsQuery, ...conditions);
-                }
-
-                const querySnapshot = await getDocs(listingsQuery);
+                const querySnapshot = await getDocs(roomsRef);
+                console.log(`Found ${querySnapshot.size} listings`);
 
                 if (querySnapshot.empty) {
-                    listingsContainer.innerHTML = "<p>No listings match your search criteria.</p>";
+                    listingsContainer.innerHTML = "<p>No listings available.</p>";
                     return;
                 }
 
-                // Process each document once
-                for (const doc of querySnapshot.docs) {
-                    const listing = doc.data();
-                    const imageUrl = listing.imageUrl && listing.imageUrl.trim() ? listing.imageUrl : 'default-image.jpg';
+                // Apply filters
+                const location = document.getElementById("location").value;
+                const maxPrice = parseFloat(document.getElementById("maxPrice").value);
+                const roommateCount = document.getElementById("roommateCount").value;
 
-                    // Create a mapping based on some unique property in your listing data
-                    // This example assumes each listing has a 'title' that includes the house number
-                    // Adjust this logic based on how you can identify which listing corresponds to which houselisting number
-                    let houseNumber;
-                    if (listing.title.includes("houselisting1")) {
-                        houseNumber = "1";
-                    } else if (listing.title.includes("houselisting2")) {
-                        houseNumber = "2";
-                    } else if (listing.title.includes("houselisting3")) {
-                        houseNumber = "3";
-                    } else if (listing.title.includes("houselisting4")) {
-                        houseNumber = "4";
+                // Process each listing
+                for (const doc of querySnapshot.docs) {
+                    const listing = { ...doc.data(), id: doc.id };
+                    console.log("Processing listing:", listing);
+
+                    // Skip if filters don't match
+                    if (location && listing.location !== location) continue;
+                    if (!isNaN(maxPrice) && listing.pricePerMonth > maxPrice) continue;
+                    if (roommateCount) {
+                        const countValue = roommateCount === "3+" ? 3 : parseInt(roommateCount);
+                        if (listing.roommateCount < countValue) continue;
                     }
 
+                    // Extract house number
+                    let houseNumber;
+                    if (listing.linkUrl) {
+                        if (listing.linkUrl.includes('listing1.html')) houseNumber = '1';
+                        else if (listing.linkUrl.includes('listing2.html')) houseNumber = '2';
+                        else if (listing.linkUrl.includes('listing3.html')) houseNumber = '3';
+                        else if (listing.linkUrl.includes('listing4.html')) houseNumber = '4';
+                    }
+
+                    if (houseNumber) {
+                        console.log(`Found house number ${houseNumber} from linkUrl:`, listing.linkUrl);
+                    } else {
+                        console.log("No house number found in linkUrl:", listing.linkUrl);
+                    }
+
+
                     const rating = await fetchRatingForListing(houseNumber);
-                    const starIcons = renderStars(rating);
+                    const starRating = renderStars(parseFloat(rating));
+                    const imageUrl = listing.imageUrl?.trim() || 'default-image.jpg';
+
                     const listingCard = `
-                                <div class="col-md-4 mb-4">
-                                    <div class="card">
-                                        <img src="${imageUrl}" class="card-img-top" alt="Listing Image">
-                                        <div class="card-body">
-                                            <h5 class="card-title">${listing.title}</h5>
-                                            <div class="rating mb-2">${starIcons} (${rating.toFixed(2) || 'N/A'})</div>
-                                            <p>Number of Roommates Allowed: ${listing.roommateCount}</p>
-                                            <p>Price: $${listing.pricePerMonth}/month</p>
-                                            <p>Start Date: ${listing.startDate}</p>
-                                            <p>End Date: ${listing.endDate}</p>
-                                            <a href="${listing.linkUrl}" class="btn btn-outline-primary">View Details</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="${imageUrl}" class="card-img-top" alt="Listing Image" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">${listing.title}</h5>
+                            <div class="rating mb-2">
+                                ${starRating} 
+                                <span class="ms-2">(${rating})</span>
+                            </div>
+                            <p>Location: ${listing.location || 'Not specified'}</p>
+                            <p>Number of Roommates Allowed: ${listing.roommateCount || 'Not specified'}</p>
+                            <p>Price: $${listing.pricePerMonth || 0}/month</p>
+                            <p>Start Date: ${listing.startDate || 'Not specified'}</p>
+                            <p>End Date: ${listing.endDate || 'Not specified'}</p>
+                            <a href="${listing.linkUrl || '#'}" class="btn btn-outline-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            `;
                     listingsContainer.insertAdjacentHTML("beforeend", listingCard);
+                    console.log("Added listing card for:", listing.title);
                 }
+
+                // If no listings were displayed after filtering
+                if (listingsContainer.children.length === 0) {
+                    listingsContainer.innerHTML = "<p>No listings match your search criteria.</p>";
+                }
+
             } catch (error) {
                 console.error("Error fetching room listings:", error);
-                listingsContainer.innerHTML = "<p>Unable to load listings at this time.</p>";
+                listingsContainer.innerHTML = "<p>Error loading listings. Please try again later.</p>";
             }
         }
 
-        // Add event listeners and initial load
+        // Add event listeners
         document.getElementById('search-form').addEventListener('submit', applyFilters);
         window.addEventListener("load", () => {
             populateLocationDropdown();
             applyFilters(new Event('submit'));
         });
+
+
+        console.log("Full listing data:", JSON.stringify(listing, null, 2));
+
     </script>
 
     <!-- ChatBot -->
