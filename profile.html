@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Livio Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
-        /* Reset and base styles */
         * {
             margin: 0;
             padding: 0;
@@ -61,33 +63,6 @@
             border-radius: 4px;
         }
 
-        /* Profile Container */
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        /* Profile Header */
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .profile-image {
-            width: 92px;
-            height: 92px;
-            background-color: #eee;
-            border-radius: 8px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #ddd;
-        }
-
         .camera-icon {
             width: 24px;
             height: 24px;
@@ -119,63 +94,10 @@
             color: #666;
         }
 
-        .badge {
-            background-color: #7c3aed;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 100px;
-            font-size: 0.875rem;
-        }
 
         .bio {
             color: #666;
             font-size: 0.875rem;
-        }
-
-        /* Profile Content */
-        .profile-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .section {
-            margin-bottom: 2rem;
-        }
-
-        .section-title {
-            color: #7c3aed;
-            font-size: 1.125rem;
-            margin-bottom: 1rem;
-            font-weight: 500;
-        }
-
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-            color: #333;
-            text-decoration: none;
-            font-size: 0.875rem;
-        }
-
-        .info-item:hover {
-            color: #7c3aed;
-        }
-
-        .interests {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .interest-tag {
-            background-color: #f3f4f6;
-            padding: 0.5rem 1rem;
-            border-radius: 100px;
-            font-size: 0.875rem;
-            color: #333;
         }
 
         @media (max-width: 768px) {
@@ -183,8 +105,188 @@
                 display: none;
             }
         }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(124, 58, 237, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(124, 58, 237, 0);
+            }
+        }
+
+        /* Enhanced Profile Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Enhanced Profile Header */
+        .profile-header {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-image:hover {
+            transform: scale(1.05);
+        }
+
+        .status-indicator {
+            animation: pulseGlow 2s infinite;
+        }
+
+        /* Enhanced Section Cards */
+        .profile-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            position: relative;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: #7c3aed;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .section:hover .section-title:after {
+            width: 60px;
+        }
+
+        /* Enhanced Info Items */
+        .info-item {
+            padding: 0.8rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: #f8f9ff;
+            margin-bottom: 1rem;
+        }
+
+        .info-item:hover {
+            background: #f0f1ff;
+            transform: translateX(5px);
+        }
+
+        /* Enhanced Interest Tags */
+        .interest-tag {
+            background: linear-gradient(135deg, #7c3aed11 0%, #7c3aed22 100%);
+            border: 1px solid #7c3aed33;
+            padding: 0.6rem 1.2rem;
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .interest-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
+            background: linear-gradient(135deg, #7c3aed22 0%, #7c3aed33 100%);
+        }
+
+        /* Enhanced Badge */
+        .badge {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            padding: 0.6rem 1.2rem;
+            border-radius: 100px;
+            box-shadow: 0 4px 12px rgb(255, 254, 255);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Loading State Animation */
+        @keyframes pulse {
+            0% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.6;
+            }
+        }
+
+        .loading {
+            animation: pulse 1.5s infinite ease-in-out;
+            background: #f0f1ff;
+            border-radius: 4px;
+            height: 1em;
+            width: 200px;
+            display: inline-block;
+        }
     </style>
+    
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar">
@@ -206,9 +308,12 @@
         <!-- Profile Header -->
         <div class="profile-header">
             <div class="profile-image">
-                <svg class="camera-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                <svg class="camera-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 <div class="status-indicator"></div>
             </div>
@@ -222,22 +327,15 @@
             </div>
         </div>
 
+    
         <!-- Profile Content -->
         <div class="profile-content">
             <!-- Contact Section -->
             <div class="section">
                 <h2 class="section-title">Contact</h2>
-                <a href="mailto:jane.lee@email.com" class="info-item">
+                <a href="mailto:email" class="info-item" id="userEmail">
                     <span>📧</span>
-                    jane.lee@email.com
-                </a>
-                <a href="tel:+15550123456" class="info-item">
-                    <span>📞</span>
-                    +1 555 0123456
-                </a>
-                <a href="https://janelee.com" class="info-item">
-                    <span>🌐</span>
-                    janelee.com
+                    Loading...
                 </a>
             </div>
 
@@ -246,65 +344,193 @@
                 <h2 class="section-title">Details</h2>
                 <div class="info-item">
                     <span>🎓</span>
-                    Graduate Student
+                    <span id="userAge">Loading...</span>
                 </div>
                 <div class="info-item">
-                    <span>📍</span>
-                    Boston, MA
+                    <span>👥</span>
+                    <span id="preferredRoommate">Loading...</span>
                 </div>
                 <div class="info-item">
-                    <span>🗣️</span>
-                    Speaks: English, Mandarin
+                    <span>💰</span>
+                    <span id="userBudget">Loading...</span>
+                </div>
+                <div class="info-item">
+                    <span>📅</span>
+                    <span id="moveInDate">Loading...</span>
                 </div>
             </div>
 
             <!-- Interests Section -->
             <div class="section">
                 <h2 class="section-title">Interests</h2>
-                <div class="interests">
-                    <span class="interest-tag">Sports</span>
-                    <span class="interest-tag">Music</span>
-                    <span class="interest-tag">Art</span>
+                <div class="interests" id="interestsList">
+                    Loading...
                 </div>
             </div>
         </div>
     </div>
 
     <!-- JavaScript to modify navbar based on login status -->
-    <script>
-        // check if logged in
-        if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
+    <script type="module">
+        import { db } from "./db.js";
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const navbarLinks = document.getElementById('navbarLinks');
+        // Helper function to capitalize first letter
+        function capitalizeFirstLetter(string) {
+            if (!string) return '';
+            return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+        }
 
-            if (isLoggedIn) {
-                navbarLinks.innerHTML = `
+        // Function to load user profile
+        async function loadUserProfile() {
+            function showLoadingState() {
+                document.querySelectorAll('.section').forEach((section, index) => {
+                    section.style.animationDelay = `${index * 0.2}s`;
+                });
+
+                const loadingElements = document.querySelectorAll('[id]');
+                loadingElements.forEach(element => {
+                    element.innerHTML = '<span class="loading"></span>';
+                });
+            }
+            try {
+                const userId = localStorage.getItem('userId');
+                if (!userId) {
+                    console.log('No userId found, redirecting to login');
+                    window.location.href = "loginpage.html";
+                    return;
+                }
+
+                console.log('Fetching user data for ID:', userId);
+                const userDoc = await getDoc(doc(db, "users", userId));
+
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    console.log('User data retrieved:', userData);
+
+                    // Update profile header
+                    const profileHeader = document.querySelector('.profile-info h1');
+                    if (profileHeader) {
+                        profileHeader.innerHTML = `
+                        ${userData.firstName || ''} ${userData.lastName || ''}
+                        <span class="tag">${userData.gender || 'not specified'}</span>
+                        <span class="badge">Looking for roommate</span>
+                    `;
+                    }
+
+                    // Update bio
+                    const bioElement = document.querySelector('.profile-info .bio');
+                    if (bioElement) {
+                        bioElement.textContent = userData.bio || 'No bio provided';
+                    }
+
+                    // Update contact section
+                    const emailLink = document.querySelector('a[href^="mailto"]');
+                    if (emailLink && userData.email) {
+                        emailLink.textContent = userData.email;
+                        emailLink.href = `mailto:${userData.email}`;
+                    }
+
+                    // Update details section
+                    const detailsSection = document.querySelector('.section:nth-child(2)');
+                    if (detailsSection) {
+                        detailsSection.innerHTML = `
+                        <h2 class="section-title">Details</h2>
+                        <div class="info-item">
+                            <span>🎓</span>
+                            ${userData.age ? userData.age + ' years old' : 'Age not specified'}
+                        </div>
+                        <div class="info-item">
+                            <span>👥</span>
+                            Preferred Roommate: ${capitalizeFirstLetter(userData.roommateGender || 'Any')}
+                        </div>
+                        <div class="info-item">
+                            <span>💰</span>
+                            Budget: $${userData.budget || 'Not specified'}/month
+                        </div>
+                        <div class="info-item">
+                            <span>📅</span>
+                            Move-in Date: ${userData.moveInDate || 'Not specified'}
+                        </div>
+                    `;
+                    }
+
+                    // Update interests section
+                    const interestsSection = document.querySelector('.interests');
+                    if (interestsSection) {
+                        if (userData.interests && userData.interests.length > 0) {
+                            interestsSection.innerHTML = userData.interests
+                                .map(interest => `<span class="interest-tag">${capitalizeFirstLetter(interest)}</span>`)
+                                .join('');
+                        } else {
+                            interestsSection.innerHTML = '<span class="interest-tag">No interests specified</span>';
+                        }
+                    }
+
+                    console.log('Profile loaded successfully');
+                } else {
+                    console.log('No user data found');
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                // Show error state
+                document.querySelectorAll('[id]').forEach(element => {
+                    element.innerHTML = '<span style="color: #ef4444;">Failed to load</span>';
+                });
+            }
+        }
+
+        // Main initialization
+        async function initializePage() {
+            try {
+                const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+                if (!isLoggedIn) {
+                    console.log('Not logged in, redirecting');
+                    window.location.href = "loginpage.html";
+                    return;
+                }
+
+                // Load user profile data
+                await loadUserProfile();
+
+                // Setup navigation
+                const navbarLinks = document.getElementById('navbarLinks');
+                if (navbarLinks) {
+                    navbarLinks.innerHTML = `
                     <li><a href="index.html" class="nav-link">Home</a></li>
                     <li><a href="housinglisting.html" class="nav-link">Housing Listing</a></li>
                     <li><a href="findaroommate.html" class="nav-link">Find A Roommate</a></li>
                     <li><a href="expense.html" class="nav-link">Expenses</a></li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="places.html">Places</a>
-                    </li>
+                    <li><a href="places.html" class="nav-link">Places</a></li>
                     <li><a href="profile.html" class="nav-link active">Profile</a></li>
                     <li><a href="#" id="logoutBtn" class="nav-link">Logout</a></li>
                 `;
 
-                document.getElementById('logoutBtn').addEventListener('click', function () {
-                    localStorage.removeItem('isLoggedIn');
-                    localStorage.removeItem('userId');
-                    localStorage.removeItem('userEmail');
-                    localStorage.removeItem('userFirstName');
-                    localStorage.removeItem('userLastName');
-                    window.location.href = 'loginpage.html';
-                });
+                    // Add logout handler
+                    const logoutBtn = document.getElementById('logoutBtn');
+                    if (logoutBtn) {
+                        logoutBtn.addEventListener('click', function () {
+                            localStorage.clear();
+                            window.location.href = 'loginpage.html';
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error initializing page:', error);
             }
-        });
+        }
+
+        // Check login status immediately
+        if (localStorage.getItem("isLoggedIn") === null) {
+            window.location.href = "loginpage.html";
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener("DOMContentLoaded", initializePage);
     </script>
 
     <!-- ChatBot -->
     <script src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js" async></script>
 </body>
+
 </html>
