@@ -8,7 +8,7 @@
     <!-- Firebase and Firestore -->
     <!-- <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"></script> -->
-    
+
     <!-- Bootstrap and other styles -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -99,6 +99,47 @@
         .rating i {
             color: #FFD700;
         }
+
+
+        /* rent button */
+        .btn-rent {
+            background-color: #4CAF50;
+            color: white;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-rent:hover {
+            background-color: #45a049;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .modal-header {
+            background-color: #1E3A8A;
+            color: white;
+        }
+
+        .modal-title {
+            font-weight: 600;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        .text-primary {
+            color: #1E3A8A !important;
+        }
+
+        .invalid-feedback {
+            font-size: 0.875rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #dee2e6;
+            padding: 1rem;
+        }
     </style>
 </head>
 
@@ -181,7 +222,73 @@
         </div>
     </section>
 
-    <!-- Firebase Initialization and Firestore Functions -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Pet details toggle
+            const hasPetsSelect = document.getElementById('hasPets');
+            if (hasPetsSelect) {
+                hasPetsSelect.addEventListener('change', function () {
+                    const petDetailsField = document.getElementById('petDetailsField');
+                    if (petDetailsField) {
+                        petDetailsField.style.display = this.value === 'yes' ? 'block' : 'none';
+                        if (this.value === 'no') {
+                            const petDetails = document.getElementById('petDetails');
+                            if (petDetails) {
+                                petDetails.value = '';
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Dynamic roommate fields
+            const numberOfRoommates = document.getElementById('numberOfRoommates');
+            if (numberOfRoommates) {
+                numberOfRoommates.addEventListener('change', function () {
+                    const roommateFields = document.getElementById('roommateFields');
+                    if (roommateFields) {
+                        roommateFields.innerHTML = ''; // Clear existing fields
+
+                        const count = parseInt(this.value);
+                        if (!isNaN(count)) {
+                            for (let i = 1; i <= count; i++) {
+                                const html = `
+                            <div class="row g-3 mb-3">
+                                <h6 class="text-secondary">Roommate ${i}</h6>
+                                <div class="col-md-6">
+                                    <label for="roommateName${i}" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="roommateName${i}" required>
+                                    <div class="invalid-feedback">Please provide roommate's name.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="roommatePhone${i}" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="roommatePhone${i}" required>
+                                    <div class="invalid-feedback">Please provide roommate's phone number.</div>
+                                </div>
+                            </div>
+                        `;
+                                roommateFields.insertAdjacentHTML('beforeend', html);
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Form validation
+            const rentalForm = document.getElementById('rentalForm');
+            if (rentalForm) {
+                rentalForm.addEventListener('submit', function (event) {
+                    if (!this.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    this.classList.add('was-validated');
+                });
+            }
+        })
+    </script>
+
     <script type="module">
 
         // check if logged in
@@ -207,7 +314,8 @@
             where,
             orderBy,
             doc,
-            getDoc
+            getDoc,
+            addDoc
         } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 
@@ -226,6 +334,170 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        //update the openRentalForm function to include error handling
+        window.openRentalForm = function (listingId) {
+            try {
+                const listingIdInput = document.getElementById('listingId');
+                const modalElement = document.getElementById('rentalFormModal');
+
+                if (!listingIdInput || !modalElement) {
+                    throw new Error('Required modal elements not found');
+                }
+
+                listingIdInput.value = listingId;
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show();
+            } catch (error) {
+                console.error('Error opening rental form:', error);
+                alert('There was an error opening the rental form. Please try again.');
+            }
+        };
+
+        window.submitRentalForm = async function (event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            const form = document.getElementById('rentalForm');
+            if (!form || !form.checkValidity()) {
+                if (form) {
+                    form.classList.add('was-validated');
+                }
+                return;
+            }
+
+            try {
+                // Get all required form elements and check if they exist
+                const elements = {
+                    listingId: document.getElementById('listingId'),
+                    firstName: document.getElementById('firstName'),
+                    lastName: document.getElementById('lastName'),
+                    email: document.getElementById('email'),
+                    phone: document.getElementById('phone'),
+                    numberOfRoommates: document.getElementById('numberOfRoommates'),
+                    moveInDate: document.getElementById('moveInDate'),
+                    leaseDuration: document.getElementById('leaseDuration'),
+                    hasPets: document.getElementById('hasPets'),
+                    lifestyle: document.getElementById('lifestyle'),
+                    cleaningPreferences: document.getElementById('cleaningPreferences'),
+                    comments: document.getElementById('comments')
+                };
+
+                // Check if all required elements exist
+                for (const [key, element] of Object.entries(elements)) {
+                    if (!element) {
+                        throw new Error(`Required form element ${key} not found`);
+                    }
+                }
+
+                // Collect roommate data safely
+                const numberOfRoommates = parseInt(elements.numberOfRoommates.value) || 0;
+                const roommates = [];
+                for (let i = 1; i <= numberOfRoommates; i++) {
+                    const nameField = document.getElementById(`roommateName${i}`);
+                    const phoneField = document.getElementById(`roommatePhone${i}`);
+                    if (nameField && phoneField && nameField.value && phoneField.value) {
+                        roommates.push({
+                            name: nameField.value,
+                            phone: phoneField.value
+                        });
+                    }
+                }
+
+                // Create form data object with null checks
+                const formData = {
+                    // Basic Information
+                    listingId: elements.listingId.value || '',
+                    firstName: elements.firstName.value || '',
+                    lastName: elements.lastName.value || '',
+                    email: elements.email.value || '',
+                    phone: elements.phone.value || '',
+
+                    // Shared Parties Information
+                    numberOfRoommates,
+                    roommates,
+                    moveInDate: elements.moveInDate.value || '',
+                    leaseDuration: elements.leaseDuration.value || '',
+
+                    // Additional Details
+                    hasPets: elements.hasPets.value || 'no',
+                    petDetails: elements.hasPets.value === 'yes' ?
+                        (document.getElementById('petDetails')?.value || '') : null,
+                    lifestyle: elements.lifestyle.value || '',
+                    cleaningPreferences: elements.cleaningPreferences.value || '',
+
+                    // Metadata
+                    timestamp: new Date(),
+                    status: 'pending',
+                    comments: elements.comments.value || ''
+                };
+
+                // Validate critical fields
+                if (!formData.listingId || !formData.firstName || !formData.email) {
+                    throw new Error('Required fields are missing');
+                }
+
+                // Add to Firestore
+                const rentalApplicationsRef = collection(db, 'rentalApplications');
+                await addDoc(rentalApplicationsRef, formData);
+
+                // Show success message
+                alert('Your rental application has been submitted successfully!');
+
+                // Close modal and reset form
+                const modal = bootstrap.Modal.getInstance(document.getElementById('rentalFormModal'));
+                if (modal) {
+                    modal.hide();
+                }
+
+                // Reset the form
+                form.reset();
+                form.classList.remove('was-validated');
+
+                // Clear dynamic fields
+                const roommateFields = document.getElementById('roommateFields');
+                if (roommateFields) {
+                    roommateFields.innerHTML = '';
+                }
+
+                const petDetailsField = document.getElementById('petDetailsField');
+                if (petDetailsField) {
+                    petDetailsField.style.display = 'none';
+                }
+
+            } catch (error) {
+                console.error('Error submitting rental application:', error);
+                alert('There was an error submitting your application. Please try again.');
+            }
+        };
+
+
+        // Add the event listener for form submission
+        document.addEventListener('submitRentalApplication', async (event) => {
+            try {
+                const formData = {
+                    ...event.detail,
+                    timestamp: new Date(),
+                    status: 'pending'
+                };
+
+                // Add to Firestore
+                const rentalApplicationsRef = collection(db, 'rentalApplications');
+                await addDoc(rentalApplicationsRef, formData);
+
+                // Show success message
+                alert('Your rental application has been submitted successfully!');
+
+                // Close modal and reset form
+                const modal = bootstrap.Modal.getInstance(document.getElementById('rentalFormModal'));
+                modal.hide();
+                document.getElementById('rentalForm').reset();
+                document.getElementById('rentalForm').classList.remove('was-validated');
+            } catch (error) {
+                console.error('Error submitting rental application:', error);
+                alert('There was an error submitting your application. Please try again.');
+            }
+        });
 
         // Populate location dropdown function remains the same
         async function populateLocationDropdown() {
@@ -363,26 +635,30 @@
                     const starRating = renderStars(parseFloat(rating));
                     const imageUrl = listing.imageUrl?.trim() || 'default-image.jpg';
 
+                    // Update the listingCard template in your applyFilters function to include the Rent Now button
                     const listingCard = `
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="${imageUrl}" class="card-img-top" alt="Listing Image" style="height: 200px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title">${listing.title}</h5>
-                            <div class="rating mb-2">
-                                ${starRating} 
-                                <span class="ms-2">(${rating})</span>
-                            </div>
-                            <p>Location: ${listing.location || 'Not specified'}</p>
-                            <p>Number of Roommates Allowed: ${listing.roommateCount || 'Not specified'}</p>
-                            <p>Price: $${listing.pricePerMonth || 0}/month</p>
-                            <p>Start Date: ${listing.startDate || 'Not specified'}</p>
-                            <p>End Date: ${listing.endDate || 'Not specified'}</p>
-                            <a href="${listing.linkUrl || '#'}" class="btn btn-outline-primary">View Details</a>
-                        </div>
-                    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <img src="${imageUrl}" class="card-img-top" alt="Listing Image" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">${listing.title}</h5>
+                <div class="rating mb-2">
+                    ${starRating} 
+                    <span class="ms-2">(${rating})</span>
                 </div>
-            `;
+                <p>Location: ${listing.location || 'Not specified'}</p>
+                <p>Number of Roommates Allowed: ${listing.roommateCount || 'Not specified'}</p>
+                <p>Price: $${listing.pricePerMonth || 0}/month</p>
+                <p>Start Date: ${listing.startDate || 'Not specified'}</p>
+                <p>End Date: ${listing.endDate || 'Not specified'}</p>
+                <div class="d-flex">
+                    <a href="${listing.linkUrl || '#'}" class="btn btn-outline-primary">View Details</a>
+                    <button class="btn btn-rent" onclick="openRentalForm('${listing.id}')">Rent Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+`;
                     listingsContainer.insertAdjacentHTML("beforeend", listingCard);
                     console.log("Added listing card for:", listing.title);
                 }
@@ -397,6 +673,7 @@
                 listingsContainer.innerHTML = "<p>Error loading listings. Please try again later.</p>";
             }
         }
+
 
         // Add event listeners
         document.getElementById('search-form').addEventListener('submit', applyFilters);
@@ -415,6 +692,169 @@
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+    <!-- Add this modal HTML right before the closing body tag -->
+    <div class="modal fade" id="rentalFormModal" tabindex="-1" aria-labelledby="rentalFormModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rentalFormModalLabel">Rental Application Form</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="rentalForm" class="needs-validation" novalidate>
+                        <input type="hidden" id="listingId">
+
+                        <!-- Personal Information -->
+                        <div class="mb-4">
+                            <h6 class="text-primary mb-3">Personal Information</h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" required>
+                                    <div class="invalid-feedback">Please provide your first name.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" required>
+                                    <div class="invalid-feedback">Please provide your last name.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                    <div class="invalid-feedback">Please provide a valid email.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" required>
+                                    <div class="invalid-feedback">Please provide your phone number.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shared Parties Information -->
+                        <div class="mb-4">
+                            <h6 class="text-primary mb-3">Shared Parties Information</h6>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label for="numberOfRoommates" class="form-label">Number of Roommates</label>
+                                    <select class="form-select" id="numberOfRoommates" required>
+                                        <option value="">Select number of roommates</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4+</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select the number of roommates.</div>
+                                </div>
+                                <div class="col-12" id="roommateFields">
+                                    <!-- Roommate fields will be added dynamically -->
+                                </div>
+                                <!-- <div class="col-md-6">
+                                    <label for="preferredMoveInDate" class="form-label">Preferred Move-in Date</label>
+                                    <input type="date" class="form-control" id="preferredMoveInDate" required>
+                                    <div class="invalid-feedback">Please select your preferred move-in date.</div>
+                                </div> -->
+                            </div>
+                        </div>
+
+                        <!-- Additional Details -->
+                        <div class="mb-4">
+                            <h6 class="text-primary mb-3">Additional Details</h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="hasPets" class="form-label">Do you have pets?</label>
+                                    <select class="form-select" id="hasPets" required>
+                                        <option value="">Select an option</option>
+                                        <option value="no">No</option>
+                                        <option value="yes">Yes</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please indicate if you have pets.</div>
+                                </div>
+                                <div class="col-md-6" id="petDetailsField" style="display: none;">
+                                    <label for="petDetails" class="form-label">Pet Details</label>
+                                    <input type="text" class="form-control" id="petDetails"
+                                        placeholder="Type, breed, number of pets">
+                                </div>
+                                <div class="col-12">
+                                    <label for="lifestyle" class="form-label">Lifestyle Preferences</label>
+                                    <select class="form-select" id="lifestyle" required>
+                                        <option value="">Select your lifestyle preference</option>
+                                        <option value="early">Early bird (Early morning routine)</option>
+                                        <option value="night">Night owl (Late night routine)</option>
+                                        <option value="mixed">Mixed schedule</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select your lifestyle preference.</div>
+                                </div>
+                                <div class="col-12">
+                                    <label for="cleaningPreferences" class="form-label">Cleaning Preferences</label>
+                                    <select class="form-select" id="cleaningPreferences" required>
+                                        <option value="">Select cleaning preference</option>
+                                        <option value="daily">Daily cleaning</option>
+                                        <option value="weekly">Weekly cleaning</option>
+                                        <option value="biweekly">Bi-weekly cleaning</option>
+                                        <option value="monthly">Monthly deep cleaning</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select your cleaning preference.</div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Additional Information -->
+                        <div class="mb-4">
+                            <h6 class="text-primary mb-3">Additional Information</h6>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label for="moveInDate" class="form-label">Desired Move-in Date</label>
+                                    <input type="date" class="form-control" id="moveInDate" required>
+                                    <div class="invalid-feedback">Please select a move-in date.</div>
+                                    <div class="col-md-6">
+                                        <label for="leaseDuration" class="form-label">Preferred Lease Duration</label>
+                                        <select class="form-control" id="leaseDuration" required>
+                                            <option value="">Select lease duration</option>
+                                            <option value="6">6 months</option>
+                                            <option value="12">1 year</option>
+                                            <option value="24">2 years</option>
+                                        </select>
+                                        <div class="invalid-feedback">Please select your preferred lease duration.</div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label for="comments" class="form-label">Additional Comments</label>
+                                    <textarea class="form-control" id="comments" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                                <label class="form-check-label" for="termsCheck">
+                                    I agree to the terms and conditions, and I certify that all information provided is
+                                    true and accurate.
+                                </label>
+                                <div class="invalid-feedback">
+                                    You must agree before submitting.
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="submitRentalForm(event)">Submit
+                        Application</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </body>
 
 </html>
