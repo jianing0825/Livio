@@ -347,6 +347,22 @@
                         // Store roommate gender preference
                         localStorage.setItem('preferredRoommateGender', value);
                         console.log('Stored preferred roommate gender:', value);
+
+                        // Display confirmation
+                        const confirmation = document.createElement('div');
+                        confirmation.style.color = '#28a745';
+                        confirmation.style.marginTop = '10px';
+                        confirmation.textContent = `Preference saved: ${value === 'any' ? 'Any gender' : capitalizeFirstLetter(value)}`;
+
+                        // Remove any existing confirmation
+                        const existingConfirmation = parentStep.querySelector('.preference-confirmation');
+                        if (existingConfirmation) {
+                            existingConfirmation.remove();
+                        }
+
+                        // Add new confirmation
+                        confirmation.classList.add('preference-confirmation');
+                        this.parentNode.appendChild(confirmation);
                     } else {
                         // Handle other choice buttons (interests)
                         this.classList.toggle('active');
@@ -355,17 +371,45 @@
             });
 
 
+
+
+            // Handle next button clicks
             // Handle next button clicks
             nextBtn.addEventListener('click', async function () {
+                // First validate the current step
+                const currentStepElement = document.querySelector(`.step[data-step="${currentStep}"]`);
+                const inputs = currentStepElement.querySelectorAll('input[required], select[required]');
+                let isValid = true;
+
+                inputs.forEach(input => {
+                    if (!input.value) {
+                        isValid = false;
+                        input.classList.add('is-invalid');
+                    }
+                });
+
+                if (!isValid) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+
+                // Handle step 2 (gender preference) specifically
                 if (currentStep === 2) {
                     const activeGenderBtn = document.querySelector('.step[data-step="2"] .choice-btn.active');
-                    if (activeGenderBtn) {
-                        const preferredGender = activeGenderBtn.getAttribute('data-value');
-                        localStorage.setItem('preferredRoommateGender', preferredGender);
-                        // Also store it in the form data for database submission
-                        formData.roommateGender = preferredGender;
+                    if (!activeGenderBtn) {
+                        alert('Please select a roommate gender preference.');
+                        return;
                     }
-                } else {
+                    const preferredGender = activeGenderBtn.getAttribute('data-value');
+                    localStorage.setItem('preferredRoommateGender', preferredGender);
+                    console.log('Saved roommate gender preference:', preferredGender);
+                }
+
+                // Move to next step
+                if (currentStep < steps.length) {
+                    currentStep++;
+                    showStep(currentStep);
+                } else if (currentStep === steps.length) {
                     try {
                         // Get interests from step 3
                         const interestButtons = document.querySelectorAll('.step[data-step="3"] .choice-btn.active');
@@ -387,17 +431,7 @@
 
                         // Update Firestore
                         const userId = localStorage.getItem('userId');
-                        await updateDoc(doc(db, "users", userId), {
-                            firstName: userData.firstName,
-                            lastName: userData.lastName,
-                            age: userData.age,
-                            gender: userData.gender,
-                            roommateGender: userData.roommateGender,
-                            budget: userData.budget,
-                            moveInDate: userData.moveInDate,
-                            interests: userData.interests,
-                            bio: userData.bio,
-                        });
+                        await updateDoc(doc(db, "users", userId), userData);
 
                         // Store final values in localStorage
                         localStorage.setItem('userFirstName', userData.firstName);

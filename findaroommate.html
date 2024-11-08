@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
@@ -567,7 +568,7 @@
     <nav class="top-nav">
         <a href="#" class="brand">Livio</a>
         <div class="top-nav-links">
-            <a href="newhome.html">Home</a>
+            <a href="index.html">Home</a>
             <a href="housinglisting.html">Housing Listing</a>
             <a href="findaroommate.html">Find A Roommate</a>
             <li class="nav-item">
@@ -653,22 +654,10 @@
         </div>
     </div>
 
-    <!-- Bootstrap JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // check if logged in
-        if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
 
-        // Add logout functionality
-        document.getElementById('logoutBtn').addEventListener('click', function () {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('userId');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('userFirstName');
-            localStorage.removeItem('userLastName');
-            window.location.href = 'loginpage.html';
-        });
-
+    <script type="module">
+        import { db } from "./db.js";
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
         // Track selected roommates
         let selectedRoommates = new Set();
 
@@ -708,63 +697,152 @@
             }
         ];
 
-        // Function to filter roommates based on preference
-        function filterRoommates() {
-            const preferredGender = localStorage.getItem('preferredRoommateGender');
-            console.log('Filtering by preferred gender:', preferredGender);
-
-            if (!preferredGender || preferredGender === 'any') {
-                console.log('Showing all roommates');
-                return roommates;
-            }
-
-            const filtered = roommates.filter(roommate => roommate.gender === preferredGender);
-            console.log('Filtered roommates:', filtered);
-            return filtered;
+        function capitalizeFirstLetter(string) {
+            if (!string) return '';
+            return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
         }
 
-        // Function to capitalize first letter
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
+        // 1. Fix the getUserPreference function
+        async function getUserPreference() {
+            try {
+                const userId = localStorage.getItem('userId');
+                if (!userId) {
+                    console.log('No userId found');
+                    return 'any';
+                }
+
+                // First check Firebase for existing users
+                const userDoc = await getDoc(doc(db, "users", userId));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    const firebaseGender = userData.roommateGender;
+
+                    if (firebaseGender) {
+                        // Update localStorage to match Firebase
+                        localStorage.setItem('preferredRoommateGender', firebaseGender);
+                        console.log('Using Firebase preference:', firebaseGender);
+                        return firebaseGender;
+                    }
+                }
+
+                // If no Firebase value, check localStorage (for new users)
+                const localGender = localStorage.getItem('preferredRoommateGender');
+                console.log('Using localStorage preference:', localGender);
+                return localGender || 'any';
+            } catch (error) {
+                console.error('Error getting user preference:', error);
+                return 'any';
+            }
+        }
+
+
+
+        // 2. Fix the addFilterIndicator function
+        async function addFilterIndicator() {
+            const exploreSection = document.getElementById('explore-section');
+            const existingIndicator = document.querySelector('.filter-indicator');
+            if (existingIndicator) {
+                existingIndicator.remove();
+            }
+
+            const indicator = document.createElement('div');
+            indicator.className = 'filter-indicator';
+            indicator.style.cssText = `
+        text-align: center;
+        padding: 10px;
+        margin-bottom: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        color: #666;
+    `;
+
+            // Always get fresh preference
+            const preferredGender = await getUserPreference();
+
+            indicator.textContent = `Showing ${preferredGender === 'any' ? 'all roommates' :
+                `${preferredGender} roommates only`}`;
+
+            exploreSection.insertBefore(indicator, exploreSection.firstChild);
+        }
+
+
+
+        // Modified filterRoommates function
+        async function filterRoommates() {
+            try {
+                const preferredGender = await getUserPreference();
+                console.log('Filtering roommates by gender:', preferredGender);
+
+                if (!preferredGender || preferredGender === 'any') {
+                    return roommates;
+                }
+
+                return roommates.filter(roommate => roommate.gender === preferredGender);
+            } catch (error) {
+                console.error('Error in filterRoommates:', error);
+                return roommates;
+            }
         }
 
         // Updated function to render roommate cards
-        function renderRoommateCards() {
+        async function renderRoommateCards() {
             const grid = document.querySelector('.roommate-grid');
-            const filteredRoommates = filterRoommates();
+            const filteredRoommates = await filterRoommates();
+
+            // Add filter indicator
+            addFilterIndicator();
 
             if (filteredRoommates.length === 0) {
-                grid.innerHTML = '<div class="no-results">No roommates match your preferences.</div>';
+                grid.innerHTML = `
+                <div style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+                    <div style="color: #666; font-size: 18px; margin-bottom: 10px;">
+                        No roommates match your preferences
+                        </div>
+                        <div style="color: #999; font-size: 14px;">
+                            Try adjusting your preferences in your profile settings
+                </div>
+            </div>
+            `;
                 return;
             }
 
+            // 3. Fix the roommate card template to show gender
             grid.innerHTML = filteredRoommates.map(roommate => `
-        <div class="roommate-card">
-            <img src="${roommate.img}" alt="Profile photo" class="profile-photo">
-            <div class="roommate-info">
-                <h3 class="roommate-name">${roommate.name}</h3>
-                
-                <!-- Gender badge -->
-                <div class="gender-badge" style="
-                    display: inline-flex;
-                    align-items: center;
-                    padding: 4px 12px;
-                    background-color: #EBF5FF;
-                    color: #1E40AF;
-                    border-radius: 9999px;
-                    font-size: 14px;
-                    margin: 8px 0;
-                    font-weight: 500;
-                ">
-                    <i class="fas fa-user" style="margin-right: 6px;"></i>
-                    ${capitalizeFirstLetter(roommate.gender)}
-                </div>
-
-                <p class="roommate-traits">${roommate.traits.split('\n').join('<br>')}</p>
-                <button class="chat-button">Chat</button>
+    <div class="roommate-card">
+        <img src="${roommate.img}" alt="Profile photo" class="profile-photo">
+        <div class="roommate-info">
+            <h3 class="roommate-name">${roommate.name}</h3>
+            
+            <!-- Gender badge -->
+            <div class="gender-badge" style="
+                display: inline-flex;
+                align-items: center;
+                padding: 4px 12px;
+                background-color: #EBF5FF;
+                color: #1E40AF;
+                border-radius: 9999px;
+                font-size: 14px;
+                margin: 8px 0;
+                font-weight: 500;
+            ">
+                <i class="fas fa-user" style="margin-right: 6px;"></i>
+                ${capitalizeFirstLetter(roommate.gender)}  
             </div>
+            
+            <p class="roommate-traits">${roommate.traits.split('\n').join('<br>')}</p>
+            <button class="chat-button">Chat</button>
         </div>
-    `).join('');
+    </div>
+`).join('');
+
+
+            // Add click handlers for chat buttons
+            document.querySelectorAll('.chat-button').forEach((button, index) => {
+                button.addEventListener('click', () => {
+                    const roommate = filteredRoommates[index];
+                    showProfileModal(roommate);
+                });
+            });
         }
 
         // Get modal elements
@@ -785,8 +863,8 @@
             profileImage.src = roommate.img;
             profileImage.alt = roommate.name;
             profileName.innerHTML = `
-        ${roommate.name}
-        <div class="gender-badge" style="
+            ${roommate.name}
+            <div class="gender-badge" style="
             display: inline-flex;
             align-items: center;
             padding: 4px 12px;
@@ -796,11 +874,11 @@
             font-size: 14px;
             margin-left: 12px;
             font-weight: 500;
-        ">
+            ">
             <i class="fas fa-user" style="margin-right: 6px;"></i>
-            ${capitalizeFirstLetter(roommate.gender)}
-        </div>
-    `;
+            ${capitalizeFirstLetter(roommate.gender)}  
+            </div>
+            `;
             profileTraits.innerHTML = `${roommate.traits}<br><br>${roommate.details}`.replace(/\n/g, '<br>');
 
             // Show modal
@@ -862,30 +940,6 @@
         }
 
 
-        // // Function to show confirmation modal
-        // function showConfirmationModal(roommate) {
-        //     const modal = document.getElementById('confirmationModal');
-        //     const modalTitle = modal.querySelector('.modal-title');
-        //     const modalBody = modal.querySelector('.modal-body');
-        //     const confirmButton = modal.querySelector('.confirm-button');
-
-        //     modalTitle.textContent = 'Confirmation';
-        //     modalBody.innerHTML = `<p>You have successfully chosen ${roommate.name} as your roommate!</p>`;
-        //     confirmButton.textContent = 'OK';
-
-        //     modal.classList.add('show');
-        //     selectedRoommates.add(roommate.id);
-
-        //     // Add click handler for OK button
-        //     confirmButton.onclick = () => {
-        //         modal.classList.remove('show');
-        //         updateAllChooseButtons();
-        //         renderChooseList();
-        //     };
-        // }
-
-        // Function to update all choose buttons
-
         function updateAllChooseButtons() {
             document.querySelectorAll('.choose-button').forEach((button) => {
                 const roommateId = parseInt(button.getAttribute('data-id'));
@@ -936,11 +990,12 @@
             chooseList.insertBefore(limitDisplay, chooseList.firstChild);
         }
 
-        // Function to render choose list
-        // Function to render choose list with fixed implementation
-        function renderChooseList() {
+
+
+        // Modified renderChooseList function to use filtered roommates
+        async function renderChooseList() {
             const chooseList = document.querySelector('.choose-list');
-            const filteredRoommates = filterRoommates();
+            const filteredRoommates = await filterRoommates();
 
             // Clear existing content first
             chooseList.innerHTML = '';
@@ -949,40 +1004,41 @@
             renderSelectionLimit();
 
             // Add roommate items
+            // 4. Fix the choose list template to show gender
             chooseList.innerHTML += filteredRoommates.map(roommate => {
                 const isSelected = selectedRoommates.has(roommate.id);
                 return `
-            <div class="choose-item">
-                <div class="choose-profile">
-                    <img src="${roommate.img}" alt="${roommate.name}" class="choose-avatar">
-                    <div class="choose-info">
-                        <div class="choose-name">
-                            ${roommate.name}
-                            <div class="gender-badge" style="
-                                display: inline-flex;
-                                align-items: center;
-                                padding: 2px 8px;
-                                background-color: #EBF5FF;
-                                color: #1E40AF;
-                                border-radius: 9999px;
-                                font-size: 12px;
-                                margin-left: 8px;
-                                font-weight: 500;
-                            ">
-                                <i class="fas fa-user" style="margin-right: 4px;"></i>
-                                ${capitalizeFirstLetter(roommate.gender)}
-                            </div>
+        <div class="choose-item">
+            <div class="choose-profile">
+                <img src="${roommate.img}" alt="${roommate.name}" class="choose-avatar">
+                <div class="choose-info">
+                    <div class="choose-name">
+                        ${roommate.name}
+                        <div class="gender-badge" style="
+                            display: inline-flex;
+                            align-items: center;
+                            padding: 2px 8px;
+                            background-color: #EBF5FF;
+                            color: #1E40AF;
+                            border-radius: 9999px;
+                            font-size: 12px;
+                            margin-left: 8px;
+                            font-weight: 500;
+                        ">
+                            <i class="fas fa-user" style="margin-right: 4px;"></i>
+                            ${capitalizeFirstLetter(roommate.gender)}  
                         </div>
-                        <div class="choose-traits">${roommate.traits.split('\n')[0]}</div>
                     </div>
+                    <div class="choose-traits">${roommate.traits.split('\n')[0]}</div>
                 </div>
-                <button class="choose-button ${isSelected ? 'chosen' : ''}" 
-                        data-id="${roommate.id}"
-                        ${selectedRoommates.size >= 3 && !isSelected ? 'disabled' : ''}>
-                    ${isSelected ? 'Remove' : 'Choose'}
-                </button>
             </div>
-        `;
+            <button class="choose-button ${isSelected ? 'chosen' : ''}" 
+                    data-id="${roommate.id}"
+                    ${selectedRoommates.size >= 3 && !isSelected ? 'disabled' : ''}>
+                ${isSelected ? 'Remove' : 'Choose'}
+            </button>
+        </div>
+    `;
             }).join('');
 
             // Add click handlers for choose buttons
@@ -993,10 +1049,8 @@
                     const isSelected = selectedRoommates.has(roommateId);
 
                     if (isSelected) {
-                        // If already selected, show deselection confirmation
                         showConfirmationModal(roommate, true);
                     } else if (selectedRoommates.size < 3) {
-                        // If not selected and under limit, show selection confirmation
                         showProfileModal(roommate);
                     }
                 });
@@ -1004,22 +1058,21 @@
         }
 
 
-        // Function to render chat list
-        function renderChatList() {
+        // Modified renderChatList function to use filtered roommates
+        async function renderChatList() {
             const chatList = document.querySelector('.chat-list');
-            const filteredRoommates = filterRoommates();
+            const filteredRoommates = await filterRoommates();
 
             chatList.innerHTML = filteredRoommates.map(roommate => `
-        <div class="chat-item">
-            <img src="${roommate.img}" alt="${roommate.name}" class="chat-avatar">
-            <div class="chat-info">
-                <div class="chat-name">${roommate.name}</div>
-                <div class="chat-preview">Click to continue chat</div>
-            </div>
-        </div>
-    `).join('');
+            <div class="chat-item">
+                <img src="${roommate.img}" alt="${roommate.name}" class="chat-avatar">
+                <div class="chat-info">
+                    <div class="chat-name">${roommate.name}</div>
+                    <div class="chat-preview">Click to continue chat</div>
+                    </div>
+                    </div>
+                    `).join('');
         }
-
         // Navigation functionality
         document.querySelectorAll('.sub-nav-item').forEach(item => {
             item.addEventListener('click', (e) => {
@@ -1044,52 +1097,53 @@
         renderRoommateCards();
         renderChatList();
         renderChooseList();
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const navbar = document.querySelector('#navbarNav ul');
 
-            if (isLoggedIn) {
-                navbar.innerHTML = `
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="housinglisting.html">Housing Listing</a></li>
-                    <li class="nav-item"><a class="nav-link" href="findaroommate.html">Find A Roommate</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#profile">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" id="logoutBtn">Logout</a></li>
-                `;
 
-                document.getElementById('logoutBtn').addEventListener('click', function () {
-                    localStorage.removeItem('isLoggedIn');
-                    localStorage.removeItem('userId');
-                    localStorage.removeItem('userEmail');
-                    localStorage.removeItem('userFirstName');
-                    localStorage.removeItem('userLastName');
-                    window.location.href = 'loginpage.html';
-                });
+
+
+        // Modified DOMContentLoaded event listener
+        document.addEventListener("DOMContentLoaded", async function () {
+            if (localStorage.getItem('isLoggedIn') !== 'true') {
+                window.location.href = 'loginpage.html';
+                return;
             }
 
-            // Activate current page link
-            const currentPath = window.location.pathname;
-            const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
-            navLinks.forEach(link => {
-                if (link.getAttribute("href") === currentPath) {
-                    link.classList.add("active");
-                }
-            });
+            try {
+                // Initialize gender preference
+                await getUserPreference();
 
-            // Initial render with filters
-            renderRoommateCards();
-            renderChooseList();
-            renderChatList();
-            renderSelectionLimit(); // Add this line
+                // Initial renders
+                await renderRoommateCards();
+                await renderChooseList();
+                await renderChatList();
+                renderSelectionLimit();
 
+                // Rest of the initialization code remains the same
+            } catch (error) {
+                console.error('Error during initialization:', error);
+            }
+        });
+
+        // check if logged in
+        if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
+
+        // Add logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userFirstName');
+            localStorage.removeItem('userLastName');
+            window.location.href = 'loginpage.html';
         });
     </script>
 
     <!-- ChatBot -->
     <script src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js" async></script>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </body>
 
