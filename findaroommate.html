@@ -660,6 +660,8 @@
         import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
         // Track selected roommates
         let selectedRoommates = new Set();
+        // Add this near the top where other state variables are defined
+        let activeChats = new Set(); // Track active chats
 
         // Sample roommate data with gender information
         const roommates = [
@@ -840,7 +842,7 @@
             document.querySelectorAll('.chat-button').forEach((button, index) => {
                 button.addEventListener('click', () => {
                     const roommate = filteredRoommates[index];
-                    showProfileModal(roommate);
+                    showProfileModal(roommate, true); // Pass true to indicate it's from chat button
                 });
             });
         }
@@ -852,7 +854,8 @@
 
 
         // Function to show profile modal
-        function showProfileModal(roommate) {
+        // Modify the showProfileModal function
+        function showProfileModal(roommate, isFromChatButton = false) {
             const modal = document.getElementById('profileModal');
             const profileImage = modal.querySelector('.profile-image');
             const profileName = modal.querySelector('.profile-info h3');
@@ -863,8 +866,8 @@
             profileImage.src = roommate.img;
             profileImage.alt = roommate.name;
             profileName.innerHTML = `
-            ${roommate.name}
-            <div class="gender-badge" style="
+        ${roommate.name}
+        <div class="gender-badge" style="
             display: inline-flex;
             align-items: center;
             padding: 4px 12px;
@@ -874,21 +877,38 @@
             font-size: 14px;
             margin-left: 12px;
             font-weight: 500;
-            ">
+        ">
             <i class="fas fa-user" style="margin-right: 6px;"></i>
-            ${capitalizeFirstLetter(roommate.gender)}  
-            </div>
-            `;
+            ${capitalizeFirstLetter(roommate.gender)}
+        </div>
+    `;
             profileTraits.innerHTML = `${roommate.traits}<br><br>${roommate.details}`.replace(/\n/g, '<br>');
 
             // Show modal
             modal.classList.add('show');
 
-            // Setup confirm button
-            confirmButton.onclick = () => {
-                modal.classList.remove('show');
-                showConfirmationModal(roommate);
-            };
+            // Change button text and behavior based on context
+            if (isFromChatButton) {
+                confirmButton.textContent = 'Start Chat';
+                confirmButton.onclick = () => {
+                    modal.classList.remove('show');
+                    activeChats.add(roommate.id);
+                    renderChatList(); // Refresh chat list
+
+                    // Switch to chats tab
+                    document.querySelectorAll('.sub-nav-item').forEach(i => i.classList.remove('active'));
+                    document.querySelector('a[href="#chats"]').classList.add('active');
+
+                    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                    document.getElementById('chats-section').classList.add('active');
+                };
+            } else {
+                confirmButton.textContent = 'Confirm Choice';
+                confirmButton.onclick = () => {
+                    modal.classList.remove('show');
+                    showConfirmationModal(roommate);
+                };
+            }
 
             // Setup cancel button
             modal.querySelector('.cancel-button').onclick = () => {
@@ -1059,20 +1079,40 @@
 
 
         // Modified renderChatList function to use filtered roommates
+        // Modify the renderChatList function
         async function renderChatList() {
             const chatList = document.querySelector('.chat-list');
             const filteredRoommates = await filterRoommates();
 
-            chatList.innerHTML = filteredRoommates.map(roommate => `
-            <div class="chat-item">
-                <img src="${roommate.img}" alt="${roommate.name}" class="chat-avatar">
-                <div class="chat-info">
-                    <div class="chat-name">${roommate.name}</div>
-                    <div class="chat-preview">Click to continue chat</div>
-                    </div>
-                    </div>
-                    `).join('');
+            // Only show roommates that have active chats
+            const activeRoommates = filteredRoommates.filter(roommate => activeChats.has(roommate.id));
+
+            if (activeRoommates.length === 0) {
+                chatList.innerHTML = `
+            <div style="text-align: center; padding: 40px;">
+                <div style="color: #666; font-size: 18px; margin-bottom: 10px;">
+                    No active chats
+                </div>
+                <div style="color: #999; font-size: 14px;">
+                    Start a chat by clicking the chat button on a roommate's profile
+                </div>
+            </div>
+        `;
+                return;
+            }
+
+            chatList.innerHTML = activeRoommates.map(roommate => `
+        <div class="chat-item">
+            <img src="${roommate.img}" alt="${roommate.name}" class="chat-avatar">
+            <div class="chat-info">
+                <div class="chat-name">${roommate.name}</div>
+                <div class="chat-preview">Click to continue chat</div>
+            </div>
+        </div>
+    `).join('');
         }
+
+
         // Navigation functionality
         document.querySelectorAll('.sub-nav-item').forEach(item => {
             item.addEventListener('click', (e) => {
@@ -1097,8 +1137,6 @@
         renderRoommateCards();
         renderChatList();
         renderChooseList();
-
-
 
 
         // Modified DOMContentLoaded event listener
