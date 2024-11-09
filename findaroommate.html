@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<head> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find a Roommate</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
@@ -23,34 +24,6 @@
             width: 100%;
         }
 
-        /* Top Navigation */
-        .top-nav {
-            padding: 15px 40px;
-            background: #1E3A8A;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-
-        .brand {
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-            text-decoration: none;
-        }
-
-        .top-nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .top-nav-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-        }
 
         /* Hero Section */
         .hero-section {
@@ -132,6 +105,46 @@
         .sub-nav-item.active {
             color: #1a73e8;
             font-weight: 500;
+        }
+        .navbar {
+            background-color: #001F3F;
+            color: white;
+            width: 100%;
+            z-index: 1000;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar .navbar-nav .nav-link,
+        .navbar .navbar-brand {
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+
+        .navbar .navbar-nav .nav-link:hover,
+        .navbar .navbar-brand:hover {
+            color: #f0f0f0;
+        }
+        /* Navbar Link Hover Effect */
+        .navbar .navbar-nav .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1); 
+            border-radius: 5px; 
+        }
+
+        /* Underline the Active Page Link */
+        .navbar .navbar-nav .nav-link.active ,.navbar .dropdown-item.active{
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        /* Add specific styling to underline both main link and dropdown links */
+        .navbar .navbar-nav .dropdown-toggle.active {
+            border-bottom: 2px solid #fff;
+            padding-bottom: 5px;
         }
 
         /* Content Grid */
@@ -269,6 +282,22 @@
             padding: 20px;
         }
 
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
         .profile-detail {
             display: flex;
             gap: 20px;
@@ -294,21 +323,6 @@
             margin-bottom: 5px;
         }
 
-        .modal-footer {
-            padding: 20px;
-            border-top: 1px solid #eee;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        .modal-button {
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
 
         .cancel-button {
             background: #f8f9fa;
@@ -402,42 +416,59 @@
             background-color: #218838;
         }
 
+        /* Roommate Grid Enhancements */
         .roommate-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
+            padding: 2rem;
         }
+
 
         .roommate-card {
             border: 1px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 16px;
             overflow: hidden;
             background: white;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .roommate-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
         }
 
         .roommate-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .roommate-info {
-            padding: 20px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .roommate-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
         }
 
         .roommate-name {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 8px;
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin: 0;
         }
 
         .roommate-traits {
@@ -445,6 +476,14 @@
             font-size: 14px;
             margin-bottom: 15px;
             line-height: 1.4;
+        }
+
+        .roommate-details {
+            color: #666;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            margin: 12px 0;
+            flex-grow: 1;
         }
 
         .chat-button {
@@ -491,14 +530,6 @@
             }
         }
 
-        /* Additional styles for enhanced modal */
-        .modal {
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-content {
-            animation: modalSlideIn 0.3s ease;
-        }
 
         @keyframes modalSlideIn {
             from {
@@ -520,7 +551,7 @@
             background: #1e40af;
         }
 
-        /*  */
+
         .choose-button.chosen {
             background-color: #6c757d;
             cursor: pointer;
@@ -535,7 +566,7 @@
             opacity: 0.7;
         }
 
-        /* Add this to the top of your CSS to show the selection limit */
+        /*  show the selection limit */
         .selection-limit {
             text-align: center;
             color: #666;
@@ -548,32 +579,156 @@
 
         /* gender */
         .gender-badge {
-            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #EBF5FF 0%, #E1EFFE 100%);
+            color: #1E40AF;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(30, 64, 175, 0.1);
         }
 
         .gender-badge:hover {
             transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.1);
         }
+
+        .gender-badge i {
+            margin-right: 6px;
+        }
+
 
         /* Adjust spacing for better layout */
         .roommate-traits {
             margin-top: 12px;
         }
+
+
+        /* Interest Tags Styling */
+        .interest-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .interest-tag {
+            background: linear-gradient(135deg, #7c3aed11 0%, #7c3aed22 100%);
+            border: 1px solid #7c3aed33;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 14px;
+            color: #6b21a8;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .interest-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
+            background: linear-gradient(135deg, #7c3aed22 0%, #7c3aed33 100%);
+        }
+
+        .chat-button {
+            width: 100%;
+            padding: 12px;
+            background: #1E3A8A;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: auto;
+        }
+
+        .chat-button:hover {
+            background: #1e40af;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
+        }
+
+
+        .filter-indicator {
+            text-align: center;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f1ff 100%);
+            border-radius: 12px;
+            color: #666;
+            font-size: 0.875rem;
+            border: 1px solid rgba(124, 58, 237, 0.1);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .roommate-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+                gap: 1.5rem;
+            }
+
+            .interest-tags {
+                gap: 6px;
+            }
+
+            .interest-tag {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <!-- Top Navigation -->
-    <nav class="top-nav">
-        <a href="#" class="brand">Livio</a>
-        <div class="top-nav-links">
-            <a href="index.html">Home</a>
-            <a href="housinglisting.html">Housing Listing</a>
-            <a href="findaroommate.html">Find A Roommate</a>
-            <a href="places.html">Places</a>
-            <a href="profile.html">Profile</a>
-            <a href="#" id="logoutBtn">Logout</a>
+     <!-- Navbar -->
+     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand ms-4" href="#">Livio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="housinglisting.html">Housing Listing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="findaroommate.html">Find A Roommate</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Expenses
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
+                            <li><a class="dropdown-item " href="expense.html">Expenses</a></li>
+                            <li><a class="dropdown-item" href="allexpenses.html">All Expenses</a></li>
+                            <li><a class="dropdown-item" href="splitexpense.html">Split Expense</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="places.html">Places</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logoutBtn">Logout</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -661,13 +816,16 @@
         // Add this near the top where other state variables are defined
         let activeChats = new Set(); // Track active chats
 
+        // Add this predefined interests list
+        const VALID_INTERESTS = ['sports', 'music', 'art', 'technology', 'travel', 'cooking'];
+
         // Sample roommate data with gender information
         const roommates = [
             {
                 id: 1,
                 name: 'Lisa Chen',
                 gender: 'female',
-                traits: 'Student, Clean, Early bird\nLooking for roommate in downtown area\nPrefers quiet environment',
+                traits: 'Art, Music, Traveling\nLooking for roommate in downtown area\nPrefers quiet environment',
                 img: '/api/placeholder/300/200',
                 details: 'Exchange student from China\nStudying Business Administration\nHobbies: Yoga, Reading\nPreferred lease: 6 months'
             },
@@ -675,7 +833,7 @@
                 id: 2,
                 name: 'Mark Johnson',
                 gender: 'male',
-                traits: 'Professional, Quiet, Night owl\nAvailable from September\nBudget: $800-1200/month',
+                traits: 'Technology, Coding, Music\nAvailable from September\nBudget: $800-1200/month',
                 img: '/api/placeholder/300/200',
                 details: 'Software Engineer\nWorking remotely\nHobbies: Gaming, Music\nPreferred lease: 12 months'
             },
@@ -683,7 +841,7 @@
                 id: 3,
                 name: 'Sarah Smith',
                 gender: 'female',
-                traits: 'Graduate, Social, Pet-friendly\nExchange student from Germany\nLoves cooking and outdoor activities',
+                traits: 'Cooking, Travel, Sports\nExchange student from Germany\nLoves cooking and outdoor activities',
                 img: '/api/placeholder/300/200',
                 details: 'PhD Student in Biology\nHas a friendly cat\nHobbies: Hiking, Cooking\nPreferred lease: 12+ months'
             },
@@ -691,7 +849,7 @@
                 id: 4,
                 name: 'David Kim',
                 gender: 'male',
-                traits: 'Undergraduate, Athletic, Early riser\nStudying Computer Science\nLooking for long-term roommate',
+                traits: 'Sports, Technology, Basketball\nStudying Computer Science\nLooking for long-term roommate',
                 img: '/api/placeholder/300/200',
                 details: 'Computer Science Major\nGym enthusiast\nHobbies: Basketball, Coding\nPreferred lease: 12 months'
             }
@@ -784,7 +942,52 @@
             }
         }
 
-        // Updated function to render roommate cards
+        // Add this to your existing JavaScript
+        // Updated getInterestTags function
+        function getInterestTags(traits) {
+            // Helper function to check if a word is related to valid interests
+            function isRelatedToInterest(word) {
+                word = word.toLowerCase().trim();
+
+                // Define related terms for each interest
+                const interestMap = {
+                    'sports': ['sports', 'basketball', 'soccer', 'gym', 'athletic', 'fitness'],
+                    'music': ['music', 'singing', 'guitar', 'piano', 'band'],
+                    'art': ['art', 'painting', 'drawing', 'creative'],
+                    'technology': ['technology', 'coding', 'programming', 'computer', 'tech', 'software'],
+                    'travel': ['travel', 'traveling', 'touring', 'adventures'],
+                    'cooking': ['cooking', 'baking', 'chef', 'food']
+                };
+
+                // Check each interest category
+                for (const [interest, relatedTerms] of Object.entries(interestMap)) {
+                    if (relatedTerms.includes(word)) {
+                        return interest; // Return the main interest category
+                    }
+                }
+                return null;
+            }
+
+            // Get all words from the first line of traits
+            const words = traits
+                .split('\n')[0]
+                .split(',')
+                .flatMap(phrase => phrase.split(' '))
+                .map(word => word.trim().toLowerCase())
+                .filter(word => word.length > 0);
+
+            // Map related terms to main interest categories and remove duplicates
+            const interests = [...new Set(
+                words
+                    .map(word => isRelatedToInterest(word))
+                    .filter(interest => interest !== null)
+            )];
+
+            return interests;
+        }
+
+
+        // Update the roommate card template in the renderRoommateCards function
         async function renderRoommateCards() {
             const grid = document.querySelector('.roommate-grid');
             const filteredRoommates = await filterRoommates();
@@ -794,53 +997,57 @@
 
             if (filteredRoommates.length === 0) {
                 grid.innerHTML = `
-                <div style="text-align: center; padding: 40px; grid-column: 1 / -1;">
-                    <div style="color: #666; font-size: 18px; margin-bottom: 10px;">
-                        No roommates match your preferences
-                        </div>
-                        <div style="color: #999; font-size: 14px;">
-                            Try adjusting your preferences in your profile settings
+            <div style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+                <div style="color: #666; font-size: 18px; margin-bottom: 10px;">
+                    No roommates match your preferences
+                </div>
+                <div style="color: #999; font-size: 14px;">
+                    Try adjusting your preferences in your profile settings
                 </div>
             </div>
-            `;
+        `;
                 return;
             }
 
-            // 3. Fix the roommate card template to show gender
-            grid.innerHTML = filteredRoommates.map(roommate => `
-    <div class="roommate-card">
-        <img src="${roommate.img}" alt="Profile photo" class="profile-photo">
-        <div class="roommate-info">
-            <h3 class="roommate-name">${roommate.name}</h3>
-            
-            <!-- Gender badge -->
-            <div class="gender-badge" style="
-                display: inline-flex;
-                align-items: center;
-                padding: 4px 12px;
-                background-color: #EBF5FF;
-                color: #1E40AF;
-                border-radius: 9999px;
-                font-size: 14px;
-                margin: 8px 0;
-                font-weight: 500;
-            ">
-                <i class="fas fa-user" style="margin-right: 6px;"></i>
-                ${capitalizeFirstLetter(roommate.gender)}  
-            </div>
-            
-            <p class="roommate-traits">${roommate.traits.split('\n').join('<br>')}</p>
-            <button class="chat-button">Chat</button>
-        </div>
-    </div>
-`).join('');
+            grid.innerHTML = filteredRoommates.map(roommate => {
+                const interestTags = getInterestTags(roommate.traits);
+                const otherDetails = roommate.traits.split('\n').slice(1);
 
+                return `
+            <div class="roommate-card">
+                <img src="${roommate.img}" alt="${roommate.name}'s profile" class="profile-photo">
+                <div class="roommate-info">
+                    <div class="roommate-header">
+                        <h3 class="roommate-name">${roommate.name}</h3>
+                        <div class="gender-badge">
+                            <i class="fas fa-user"></i>
+                            ${capitalizeFirstLetter(roommate.gender)}
+                        </div>
+                    </div>
+                    
+                    <div class="interest-tags">
+                        ${interestTags.map(tag => `
+                            <span class="interest-tag">${tag}</span>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="roommate-details">
+                        ${otherDetails.map(detail => `
+                            <p>${detail}</p>
+                        `).join('')}
+                    </div>
+                    
+                    <button class="chat-button">Chat</button>
+                </div>
+            </div>
+        `;
+            }).join('');
 
             // Add click handlers for chat buttons
             document.querySelectorAll('.chat-button').forEach((button, index) => {
                 button.addEventListener('click', () => {
                     const roommate = filteredRoommates[index];
-                    showProfileModal(roommate, true); // Pass true to indicate it's from chat button
+                    showProfileModal(roommate, true);
                 });
             });
         }

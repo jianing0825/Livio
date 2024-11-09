@@ -24,6 +24,8 @@
       href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"
     />
 
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles/nav.css" />
     <link rel="stylesheet" href="styles/general.css" />
@@ -195,7 +197,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Livio</a>
+        <a class="navbar-brand ms-4" href="#">Livio</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -210,7 +212,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="newhome.html">Home</a>
+              <a class="nav-link" href="index.html">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="housinglisting.html">Housing Listing</a>
@@ -421,10 +423,10 @@
 
         if (isLoggedIn) {
           navbar.innerHTML = `
-                    <li class="nav-item"><a class="nav-link" href="newhome.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="housinglisting.html">Housing Listing</a></li>
                     <li class="nav-item"><a class="nav-link" href="findaroommate.html">Find A Roommate</a></li>
-                    <li class="nav-item"><a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Expenses</a>
+                    <li class="nav-item"><a class="nav-link dropdown-toggle active" href="#" id="expensesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Expenses</a>
                         <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
                             <li><a class="dropdown-item" href="expense.html">Expenses</a></li>
                             <li><a class="dropdown-item" href="allexpenses.html">All Expenses</a></li>
@@ -434,7 +436,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="places.html">Places</a>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="#profile">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
                     <li class="nav-item"><a class="nav-link" href="#" id="logoutBtn">Logout</a></li>
                 `;
 
