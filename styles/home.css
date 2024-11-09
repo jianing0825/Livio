@@ -18,10 +18,20 @@ body {
     transition: color 0.3s ease;
 }
 
-.navbar .navbar-nav .nav-link:hover,
-.navbar .navbar-brand:hover {
-    text-decoration: underline;
-    color: #f0f0f0;
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.navbar .navbar-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1); 
+    border-radius: 5px; 
+}
+
+.navbar .navbar-nav .nav-link.active ,.navbar .dropdown-item.active{
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
 }
 
 /* Navbar color on scroll for Home Page */
