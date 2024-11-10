@@ -46,6 +46,7 @@
             padding: 5px;
             background-color: #1E3A8A;
         }
+
         .h4problem {
             margin-bottom: -50px;
         }
@@ -78,6 +79,7 @@
                 height: 120px;
             }
         }
+
         .rating {
             display: inline-flex;
             align-items: center;
@@ -129,11 +131,12 @@
             margin: 0 10px;
             height: 8px;
         }
-        .popup{
+
+        .popup {
             margin-top: -50px;
         }
 
-        .popup1{
+        .popup1 {
             margin-top: -140px;
             margin-left: 130px;
             background-color: #1E3A8A;
@@ -146,7 +149,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand ms-4" href="#">Livio</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -155,7 +159,8 @@
                     <li class="nav-item"><a class="nav-link active" href="housinglisting.html">Housing Listing</a></li>
                     <li class="nav-item"><a class="nav-link" href="findaroommate.html">Find A Roommate</a></li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             Expenses
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
@@ -183,9 +188,12 @@
             <!-- Property Images Carousel -->
             <div id="propertyCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
                 <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="0" class="active"
+                        aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="1"
+                        aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="2"
+                        aria-label="Slide 3"></button>
                 </div>
                 <div class="carousel-inner">
                     <!-- Carousel Item 1 -->
@@ -200,38 +208,43 @@
                         <img src='images/apartment7.png' alt='Living Room' class='d-block rounded'>
                     </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
+                <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel"
+                    data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
+                <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel"
+                    data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
             </div>
             <div id="overallStarsMain" class="rating mb-3 d-flex align-items-center"></div>
             <div class="container mt-5">
-                <button type="button" class="btn btn-primary popup1" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                <button type="button" class="btn btn-primary popup1" data-bs-toggle="modal"
+                    data-bs-target="#reviewModal">
                     View Reviews
                 </button>
-        
-                <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+
+                <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel"
+                    aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content p-4">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="reviewModalLabel">Overall Rating</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="rating-overall">
                                     <span id="overallRating">0.0</span>
                                     <div class="rating-stars ms-3" id="overallStars"></div>
                                 </div>
-        
+
                                 <ul class="list-unstyled rating-breakdown mt-4" id="ratingBreakdown">
                                     <!-- Rating breakdown will be populated here -->
                                 </ul>
-        
+
                                 <div class="mt-4">
                                     <h5 id="reviewCount">Loading reviews...</h5>
                                     <div id="reviewsContainer">
@@ -247,7 +260,9 @@
             <div class="row popup">
                 <div class="col-md-6">
                     <h4>Description</h4>
-                    <p>Indulge in the pinnacle of sophistication and style in this stunning penthouse located in the heart of Beverly Hills. Offering unparalleled luxury and breathtaking views, this property is the epitome of opulent living, perfect for those who crave the finer things in life.</p>
+                    <p>Indulge in the pinnacle of sophistication and style in this stunning penthouse located in the
+                        heart of Beverly Hills. Offering unparalleled luxury and breathtaking views, this property is
+                        the epitome of opulent living, perfect for those who crave the finer things in life.</p>
                     <h4>Amenities</h4>
                     <ul class="list-unstyled">
                         <li><strong>Price:</strong> $12000/month</li>
@@ -308,7 +323,7 @@
     <script type="module">
         // check if logged in
         if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
-        
+
         // Add logout functionality
         document.getElementById('logoutBtn').addEventListener('click', function () {
             localStorage.removeItem('isLoggedIn');
@@ -321,7 +336,7 @@
 
         import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
         import { getFirestore, collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
-    
+
         // Check if Firebase has already been initialized
         let app;
         if (!getApps().length) {
@@ -333,79 +348,122 @@
                 messagingSenderId: "641180735040",
                 appId: "1:641180735040:web:b95b1bcf4f53f4d519f1a5"
             };
-    
+
             app = initializeApp(firebaseConfig);
         } else {
             app = getApps()[0];
         }
-    
+
         // Initialize Firestore
         const db = getFirestore(app);
 
         // Function to render stars
         function renderStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
             let starsHTML = '';
-            for (let i = 1; i <= 5; i++) {
-                if (i <= rating) {
-                    starsHTML += '<i class="fas fa-star"></i>';
-                } else if (i - 0.5 <= rating) {
-                    starsHTML += '<i class="fas fa-star-half-alt"></i>';
-                } else {
-                    starsHTML += '<i class="far fa-star"></i>';
-                }
+
+            // Add full stars
+            for (let i = 1; i <= fullStars; i++) {
+                starsHTML += '<i class="fas fa-star"></i>';
             }
+
+            // Add half star if needed
+            if (hasHalfStar) {
+                starsHTML += '<i class="fas fa-star-half-alt"></i>';
+            }
+
+            // Add empty stars
+            const emptyStars = 5 - Math.ceil(rating);
+            for (let i = 1; i <= emptyStars; i++) {
+                starsHTML += '<i class="far fa-star"></i>';
+            }
+
             return starsHTML;
         }
 
         async function displayOverallStarRating() {
-        try {
-            const feedbackQuery = query(
-                collection(db, 'feedbacks', 'feedback', 'houselisting11'),
-                orderBy('timestamp', 'desc')
-            );
-            const querySnapshot = await getDocs(feedbackQuery);
+            try {
+                const feedbackQuery = query(
+                    collection(db, 'feedbacks', 'feedback', 'houselisting10'),
+                    orderBy('timestamp', 'desc')
+                );
+                const querySnapshot = await getDocs(feedbackQuery);
 
-            let totalRating = 0;
-            let count = 0;
+                let totalRating = 0;
+                let count = 0;
 
-            querySnapshot.forEach(doc => {
-                const feedback = doc.data();
-                if (feedback.rating) {
-                    totalRating += feedback.rating;
-                    count++;
+                querySnapshot.forEach(doc => {
+                    const feedback = doc.data();
+                    if (feedback.rating) {
+                        totalRating += feedback.rating;
+                        count++;
+                    }
+                });
+
+                const averageRating = count > 0 ? totalRating / count : 0;
+
+                // Update the main star rating container
+                const mainStarRatingSection = document.getElementById('overallStarsMain');
+                if (mainStarRatingSection) {
+                    mainStarRatingSection.innerHTML = `
+                        ${renderStars(averageRating)} (${averageRating.toFixed(1)})
+                    `;
                 }
-            });
 
-            const averageRating = count > 0 ? totalRating / count : 0;
+                // Update the modal star rating container
+                const modalStarRatingSection = document.getElementById('overallStars');
+                if (modalStarRatingSection) {
+                    modalStarRatingSection.innerHTML = renderStars(averageRating);
+                }
 
-            // Update the main star rating container
-            const mainStarRatingSection = document.getElementById('overallStarsMain');
-            mainStarRatingSection.innerHTML = `
-                ${renderStars(averageRating)} (${averageRating.toFixed(2)})
-            `;
-
-            // Update the modal star rating container
-            const modalStarRatingSection = document.getElementById('overallStars');
-            if (modalStarRatingSection) {
-                modalStarRatingSection.innerHTML = renderStars(averageRating);
+                // Update the overall rating number
+                const overallRating = document.getElementById('overallRating');
+                if (overallRating) {
+                    overallRating.textContent = averageRating.toFixed(1);
+                }
+            } catch (error) {
+                console.error('Error fetching overall star rating:', error);
             }
-        } catch (error) {
-            console.error('Error fetching overall star rating:', error);
         }
-    }
 
-    // Call the function to display the overall star rating on page load
-    window.addEventListener('load', displayOverallStarRating);
+
+        // Call the function to display the overall star rating on page load
+        window.addEventListener('load', displayOverallStarRating);
 
         // Function to format timestamp
         function formatDate(timestamp) {
             if (!timestamp) return 'N/A';
-            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-            return date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
+
+            try {
+                // If it's already in the desired format (like "5 November 2024 at 17:51:35 UTC+8")
+                if (typeof timestamp === 'string' && timestamp.includes('UTC')) {
+                    return timestamp.split(' at ')[0]; // This will return just "5 November 2024"
+                }
+
+                // Handle Firebase Timestamp object if present
+                if (timestamp.toDate) {
+                    return timestamp.toDate().toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                }
+
+                // Default date handling
+                const date = new Date(timestamp);
+                if (isNaN(date.getTime())) {
+                    return timestamp; // Return original if can't parse
+                }
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            } catch (error) {
+                console.error('Error formatting date:', error);
+                return timestamp; // Return original timestamp if there's an error
+            }
         }
 
         // Function to calculate rating statistics
@@ -431,6 +489,7 @@
             return stats;
         }
 
+
         // Function to update rating breakdown UI
         function updateRatingBreakdown(stats) {
             const breakdownContainer = document.getElementById('ratingBreakdown');
@@ -439,7 +498,7 @@
             for (let i = 5; i >= 1; i--) {
                 const count = stats.breakdown[i - 1];
                 const percentage = (count / stats.total * 100) || 0;
-                
+
                 const li = document.createElement('li');
                 li.innerHTML = `
                     <span>${i} stars</span>
@@ -467,13 +526,13 @@
         async function fetchAndDisplayReviews() {
             try {
                 const reviewsQuery = query(
-                    collection(db, 'feedbacks','feedback','houselisting4'),
+                    collection(db, 'feedbacks', 'feedback', 'houselisting10'),
                     orderBy('timestamp', 'desc')
                 );
-                
+
                 const querySnapshot = await getDocs(reviewsQuery);
                 const reviews = [];
-                
+
                 querySnapshot.forEach((doc) => {
                     reviews.push({
                         id: doc.id,
@@ -487,10 +546,14 @@
 
                 // Update review count
                 const reviewCount = document.getElementById('reviewCount');
-                reviewCount.textContent = `${reviews.length} reviews`;
+                if (reviewCount) {
+                    reviewCount.textContent = `${reviews.length} review${reviews.length !== 1 ? 's' : ''}`;
+                }
 
                 // Display reviews
                 const reviewsContainer = document.getElementById('reviewsContainer');
+                if (!reviewsContainer) return;
+
                 reviewsContainer.innerHTML = '';
 
                 reviews.forEach(review => {
@@ -511,14 +574,21 @@
 
             } catch (error) {
                 console.error('Error fetching reviews:', error);
-                document.getElementById('reviewCount').textContent = 'Error loading reviews';
+                const reviewCount = document.getElementById('reviewCount');
+                if (reviewCount) {
+                    reviewCount.textContent = 'Error loading reviews';
+                }
             }
         }
 
         // Initialize when the modal is shown
         const reviewModal = document.getElementById('reviewModal');
         reviewModal.addEventListener('show.bs.modal', fetchAndDisplayReviews);
+
+
     </script>
+
+
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 

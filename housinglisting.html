@@ -482,39 +482,29 @@
         // Function to fetch ratings for a specific listing
         async function fetchRatingForListing(listingNumber) {
             try {
-                console.log(`Fetching ratings for houselisting${listingNumber}`);
-                // Get ratings from the correct path: /feedbacks/feedback/houselisting{n}
-                const ratingsRef = collection(db, 'feedbacks', 'feedback', `houselisting${listingNumber}`);
-                const querySnapshot = await getDocs(ratingsRef);
-
-                if (querySnapshot.empty) {
-                    console.log(`No ratings found for houselisting${listingNumber}`);
-                    return 0;
-                }
+                // Get ratings from the correct collection path
+                const feedbackQuery = query(
+                    collection(db, 'feedbacks', 'feedback', `houselisting${listingNumber}`),
+                    orderBy('timestamp', 'desc')
+                );
+                const querySnapshot = await getDocs(feedbackQuery);
 
                 let totalRating = 0;
                 let count = 0;
 
                 querySnapshot.forEach(doc => {
-                    const feedbackData = doc.data();
-                    console.log('Rating data:', feedbackData);
-                    if (feedbackData.rating) {
-                        totalRating += parseFloat(feedbackData.rating);
+                    const feedback = doc.data();
+                    if (feedback.rating) {
+                        totalRating += parseFloat(feedback.rating);
                         count++;
                     }
                 });
 
-                if (count === 0) {
-                    console.log('No valid ratings found in the documents');
-                    return 0;
-                }
-
-                const averageRating = totalRating / count;
-                console.log(`Calculated average rating: ${averageRating.toFixed(2)}`);
-                return averageRating.toFixed(2);
+                // Calculate average rating
+                const averageRating = count > 0 ? totalRating / count : 0;
+                return averageRating;
             } catch (error) {
-                console.error(`Error fetching ratings:`, error);
-                console.error('Error details:', error.message);
+                console.error(`Error fetching ratings for listing ${listingNumber}:`, error);
                 return 0;
             }
         }
@@ -563,6 +553,9 @@
                         else if (listing.linkUrl.includes('listing2.html')) houseNumber = '2';
                         else if (listing.linkUrl.includes('listing3.html')) houseNumber = '3';
                         else if (listing.linkUrl.includes('listing4.html')) houseNumber = '4';
+                        else if (listing.title.includes('Penthouse in Beverly Hills')) {
+                            houseNumber = '10'
+                        };
                     }
 
                     if (houseNumber) {
@@ -762,7 +755,7 @@
         // // Call the test function when the page loads
         // window.addEventListener('load', testFirebaseConnection);
 
-        
+
     </script>
 
     <!-- ChatBot -->
