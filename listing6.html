@@ -360,7 +360,7 @@
         async function displayOverallStarRating() {
         try {
             const feedbackQuery = query(
-                collection(db, 'feedbacks', 'feedback', 'houselisting4'),
+                collection(db, 'feedbacks', 'feedback', 'houselisting11'),
                 orderBy('timestamp', 'desc')
             );
             const querySnapshot = await getDocs(feedbackQuery);
