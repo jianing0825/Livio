@@ -13,6 +13,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/nav.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
 
     <style>
         body {
@@ -142,6 +145,7 @@
 </head>
 
 <body>
+    <div id="app">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
@@ -155,7 +159,7 @@
                     <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link active" href="housinglisting.html">Housing Listing</a></li>
                     <li class="nav-item"><a class="nav-link" href="findaroommate.html">Find A Roommate</a></li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" v-if="hasSubmitted=='true'">
                         <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Expenses
                         </a>
@@ -174,6 +178,7 @@
             </div>
         </div>
     </nav>
+</div>
 
     <!-- Property Details Section -->
     <section class="py-5 bg-white">
@@ -313,6 +318,19 @@
             <p class="mt-2">© 2024 Livio. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+        // <div id='app'></div>
+        const appVue = Vue.createApp({ 
+            data() { 
+                return { 
+                    hasSubmitted: localStorage.getItem("hasSubmitted")  // key: value
+                };
+            }, // data
+            
+        });
+        const vm = appVue.mount('#app'); 
+    </script>
     <script type="module">
         // check if logged in
         if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";

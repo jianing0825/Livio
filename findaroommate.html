@@ -10,6 +10,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -694,6 +697,7 @@
 
 <body id="app">
     <!-- Navbar -->
+     <div id="app">
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand ms-4" href="#">Livio</a>
@@ -712,7 +716,7 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="findaroommate.html">Find A Roommate</a>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" v-if="hasSubmitted=='true'">
                         <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Expenses
@@ -736,6 +740,7 @@
             </div>
         </div>
     </nav>
+</div>
 
      <!-- Hero Section -->
      <div class="hero-section">

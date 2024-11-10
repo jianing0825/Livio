@@ -30,7 +30,8 @@ const app = Vue.createApp({
                 "Supermarket",
                 "Tourist Attraction",
                 "Zoo"
-            ]  // key: value
+            ],
+            hasSubmitted: localStorage.getItem("hasSubmitted")  // key: value
         };
     }, // data
 });

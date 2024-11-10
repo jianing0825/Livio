@@ -529,7 +529,8 @@
                 // Setup navigation
                 const navbarLinks = document.getElementById('navbarLinks');
                 if (navbarLinks) {
-                    navbarLinks.innerHTML = `
+                    if (localStorage.getItem("hasSubmitted") == "true") {
+                        navbarLinks.innerHTML = `
                     <li class="nav-item">
                         <a class="nav-link" href="index.html">Home</a>
                     </li>
@@ -559,6 +560,29 @@
                         <a class="nav-link" href="#" id="logoutBtn">Logout</a>
                     </li>
                 `;
+                    } else {
+                        navItems.innerHTML = `
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="housinglisting.html">Housing Listing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="findaroommate.html">Find A Roommate</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="places.html">Places</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logoutBtn">Logout</a>
+                    </li>
+                `;
+                    }
+                    
 
                     // Add logout handler
                     const logoutBtn = document.getElementById('logoutBtn');

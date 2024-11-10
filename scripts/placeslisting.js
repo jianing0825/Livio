@@ -7,7 +7,8 @@ const app = Vue.createApp({
     data() {
         return {
             result: {},
-            open: null // key: value
+            open: null,
+            hasSubmitted: localStorage.getItem("hasSubmitted") // key: value
         };
     }, // data
     computed: {
