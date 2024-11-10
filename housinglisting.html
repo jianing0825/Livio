@@ -474,8 +474,8 @@
             try {
                 const querySnapshot = await getDocs(collection(db, "rooms"));
                 const countries = new Set();
-                querySnapshot.forEach((docum) => {
-                    const listing = docum.data();
+                querySnapshot.forEach((doc) => {
+                    const listing = doc.data();
                     if (listing.country) { // Use 'country' field instead
                         countries.add(listing.country);
                     }
@@ -520,8 +520,8 @@
                 let totalRating = 0;
                 let count = 0;
 
-                querySnapshot.forEach(docum => {
-                    const feedback = docum.data();
+                querySnapshot.forEach(doc => {
+                    const feedback = doc.data();
                     if (feedback.rating) {
                         totalRating += parseFloat(feedback.rating);
                         count++;
