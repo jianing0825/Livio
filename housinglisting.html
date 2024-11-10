@@ -555,6 +555,12 @@
                         else if (listing.linkUrl.includes('listing4.html')) houseNumber = '4';
                         else if (listing.title.includes('Penthouse in Beverly Hills')) {
                             houseNumber = '10'
+                        } else if (listing.title.includes('Cozy Studio Near Riverfront')) {
+                            houseNumber = '11'
+                        } else if (listing.title.includes('Spacious Loft in Manhattan')) {
+                            houseNumber = '12'
+                        } else if (listing.title.includes('Beachfront Condo in Miami')) {
+                            houseNumber = '13'
                         };
                     }
 
@@ -715,8 +721,6 @@
         // Call this function when the modal is shown
         document.getElementById('rentalFormModal').addEventListener('show.bs.modal', populatePartnerDropdown);
 
-
-        // // Add this after your Firebase initialization
         // async function testFirebaseConnection() {
         //     try {
         //         console.log('Testing Firebase connection...');
