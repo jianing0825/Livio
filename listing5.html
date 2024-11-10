@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Housing Listings - Livio</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts for modern typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/nav.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        #priceTrendChart {
+            max-width: 100%;
+            /* Responsive width */
+            height: 300px;
+            /* Auto height */
+            margin: 0 auto;
+        }
+
+        .carousel-item img {
+            opacity: 1 !important;
+            filter: none !important;
+            max-height: 500px;
+            /* Limit height */
+            width: 100%;
+            object-fit: cover;
+        }
+
+        h4 {
+            color: white;
+            border: 2px solid #1E3A8A;
+            border-radius: 10px;
+            padding: 5px;
+            background-color: #1E3A8A;
+        }
+        .h4problem {
+            margin-bottom: -50px;
+        }
+
+        /* Media queries for smaller screens */
+        @media (max-width: 768px) {
+            .carousel-item img {
+                max-height: 300px;
+            }
+
+            h2,
+            h4 {
+                font-size: 1.2rem;
+            }
+
+            .card img {
+                height: 150px;
+                /* Adjust height for smaller cards */
+            }
+        }
+
+        @media (max-width: 576px) {
+
+            h2,
+            h4 {
+                font-size: 1rem;
+            }
+
+            .card img {
+                height: 120px;
+            }
+        }
+        .rating {
+            display: inline-flex;
+            align-items: center;
+            margin-top: -40px;
+        }
+
+        .rating i {
+            color: #FFD700;
+            /* Gold color for stars */
+        }
+
+        .modal-content {
+            max-width: 700px;
+            margin: auto;
+            border-radius: 10px;
+        }
+
+        .rating-overall {
+            font-size: 3rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .rating-stars i {
+            color: #FFD700;
+        }
+
+        .review-item {
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .rating-breakdown li {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        .progress {
+            flex-grow: 1;
+            margin: 0 10px;
+            height: 8px;
+        }
+        .popup{
+            margin-top: -50px;
+        }
+
+        .popup1{
+            margin-top: -140px;
+            margin-left: 130px;
+            background-color: #1E3A8A;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand ms-4" href="#">Livio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="housinglisting.html">Housing Listing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="findaroommate.html">Find A Roommate</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Expenses
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
+                            <li><a class="dropdown-item " href="expense.html">Expenses</a></li>
+                            <li><a class="dropdown-item" href="allexpenses.html">All Expenses</a></li>
+                            <li><a class="dropdown-item" href="splitexpense.html">Split Expense</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="places.html">Places</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" id="logoutBtn">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Property Details Section -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <!-- Property Title -->
+            <h2 class="text-center" style="font-weight: bold; padding: 10px;">Cozy Studio Near Riverfront</h2>
+
+            <!-- Property Images Carousel -->
+            <div id="propertyCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#propertyCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <!-- Carousel Item 1 -->
+                    <div class="carousel-item active">
+                        <img src='images/apartment4.png' alt='Cozy Apartment' class='d-block rounded'>
+                    </div>
+                    <!-- Carousel Item 2 -->
+                    <div class="carousel-item">
+                        <img src='images/apartment6.png' alt='Living Room' class='d-block rounded'>
+                    </div>
+                    <div class="carousel-item">
+                        <img src='images/apartment7.png' alt='Living Room' class='d-block rounded'>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+            <div id="overallStarsMain" class="rating mb-3 d-flex align-items-center"></div>
+            <div class="container mt-5">
+                <button type="button" class="btn btn-primary popup1" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                    View Reviews
+                </button>
+        
+                <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content p-4">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="reviewModalLabel">Overall Rating</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="rating-overall">
+                                    <span id="overallRating">0.0</span>
+                                    <div class="rating-stars ms-3" id="overallStars"></div>
+                                </div>
+        
+                                <ul class="list-unstyled rating-breakdown mt-4" id="ratingBreakdown">
+                                    <!-- Rating breakdown will be populated here -->
+                                </ul>
+        
+                                <div class="mt-4">
+                                    <h5 id="reviewCount">Loading reviews...</h5>
+                                    <div id="reviewsContainer">
+                                        <!-- Reviews will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Property Details -->
+            <div class="row popup">
+                <div class="col-md-6">
+                    <h4>Description</h4>
+                    <p>Experience the perfect blend of comfort and convenience in this charming studio located just steps from the serene riverfront. Ideal for solo travelers, couples, or business professionals, this studio offers a warm and inviting atmosphere with modern amenities.</p>
+                    <h4>Amenities</h4>
+                    <ul class="list-unstyled">
+                        <li><strong>Price:</strong> $1800/month</li>
+                        <li><strong>Rooms:</strong> 2 bedrooms, 1 bathroom</li>
+                        <li><strong>Utilities:</strong> Electricity not included</li>
+                        <li><strong>Deposit:</strong> $800</li>
+                        <li><strong>WiFi:</strong> High-speed internet</li>
+                        <li><strong>Community Features:</strong> Pool and gym access</li>
+
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h4>Nearby Locations</h4>
+                    <ul class="list-unstyled">
+                        <li>0.5 miles from Willow Market</li>
+                        <li>0.4 miles from Eastview Medical Center</li>
+                        <li>1.0 mile from Midtown Movie Theater</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Price Trend Chart Section -->
+            <h4 class="mt-5 text-center">Previous Monthly Price Trend</h4>
+            <canvas id="priceTrendChart"></canvas>
+
+            <!-- Similar Listings Section
+            <h4 class="mt-5">Similar Listings</h4>
+            <div class="card mb-3 shadow-sm">
+                <img src='images/apartment2.png' alt='Modern Studio' class='card-img-top' style='object-fit: cover; border-radius: 10px;'>
+                <div class='card-body'>
+                    <h5 class='card-title'>Modern Studio in Downtown</h5>
+                    <p>Price: $1500/month | Rooms: 1 | Distance: 0.5 miles from train station</p>
+                    <a href='#' class='btn btn-outline-primary'>View Details</a>
+                </div>
+            </div>
+
+            <div class="card mb-3 shadow-sm">
+                <img src='images/apartment3.png' alt='Charming House' class='card-img-top' style='object-fit: cover; border-radius: 10px;'>
+                <div class='card-body'>
+                    <h5 class='card-title'>Charming House with Garden</h5>
+                    <p>Price: $1800/month | Rooms: 3 | Distance: 1.2 miles from school</p>
+                    <a href='#' class='btn btn-outline-primary'>View Details</a>
+                </div>
+            </div> -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="container">
+            <p>Follow us on social media:</p>
+            <a href="#" class="fab fa-facebook-square"></a>
+            <a href="#" class="fab fa-instagram"></a>
+            <a href="#" class="fab fa-twitter-square"></a>
+            <p class="mt-2">© 2024 Livio. All rights reserved.</p>
+        </div>
+    </footer>
+    <script type="module">
+        // check if logged in
+        if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
+        
+        // Add logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userFirstName');
+            localStorage.removeItem('userLastName');
+            window.location.href = 'loginpage.html';
+        });
+
+        import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+        import { getFirestore, collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js';
+    
+        // Check if Firebase has already been initialized
+        let app;
+        if (!getApps().length) {
+            const firebaseConfig = {
+                apiKey: "AIzaSyBzWcOPasd5_KEcRodDRVtJA_wUn_-35N8",
+                authDomain: "livio-e4af5.firebaseapp.com",
+                projectId: "livio-e4af5",
+                storageBucket: "livio-e4af5.appspot.com",
+                messagingSenderId: "641180735040",
+                appId: "1:641180735040:web:b95b1bcf4f53f4d519f1a5"
+            };
+    
+            app = initializeApp(firebaseConfig);
+        } else {
+            app = getApps()[0];
+        }
+    
+        // Initialize Firestore
+        const db = getFirestore(app);
+
+        // Function to render stars
+        function renderStars(rating) {
+            let starsHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    starsHTML += '<i class="fas fa-star"></i>';
+                } else if (i - 0.5 <= rating) {
+                    starsHTML += '<i class="fas fa-star-half-alt"></i>';
+                } else {
+                    starsHTML += '<i class="far fa-star"></i>';
+                }
+            }
+            return starsHTML;
+        }
+
+        async function displayOverallStarRating() {
+        try {
+            const feedbackQuery = query(
+                collection(db, 'feedbacks', 'feedback', 'houselisting4'),
+                orderBy('timestamp', 'desc')
+            );
+            const querySnapshot = await getDocs(feedbackQuery);
+
+            let totalRating = 0;
+            let count = 0;
+
+            querySnapshot.forEach(doc => {
+                const feedback = doc.data();
+                if (feedback.rating) {
+                    totalRating += feedback.rating;
+                    count++;
+                }
+            });
+
+            const averageRating = count > 0 ? totalRating / count : 0;
+
+            // Update the main star rating container
+            const mainStarRatingSection = document.getElementById('overallStarsMain');
+            mainStarRatingSection.innerHTML = `
+                ${renderStars(averageRating)} (${averageRating.toFixed(2)})
+            `;
+
+            // Update the modal star rating container
+            const modalStarRatingSection = document.getElementById('overallStars');
+            if (modalStarRatingSection) {
+                modalStarRatingSection.innerHTML = renderStars(averageRating);
+            }
+        } catch (error) {
+            console.error('Error fetching overall star rating:', error);
+        }
+    }
+
+    // Call the function to display the overall star rating on page load
+    window.addEventListener('load', displayOverallStarRating);
+
+        // Function to format timestamp
+        function formatDate(timestamp) {
+            if (!timestamp) return 'N/A';
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Function to calculate rating statistics
+        function calculateRatingStats(reviews) {
+            const stats = {
+                average: 0,
+                breakdown: Array(5).fill(0),
+                total: reviews.length
+            };
+
+            if (reviews.length === 0) return stats;
+
+            let sum = 0;
+            reviews.forEach(review => {
+                const rating = Math.round(review.rating);
+                sum += review.rating;
+                if (rating > 0 && rating <= 5) {
+                    stats.breakdown[rating - 1]++;
+                }
+            });
+
+            stats.average = sum / reviews.length;
+            return stats;
+        }
+
+        // Function to update rating breakdown UI
+        function updateRatingBreakdown(stats) {
+            const breakdownContainer = document.getElementById('ratingBreakdown');
+            breakdownContainer.innerHTML = '';
+
+            for (let i = 5; i >= 1; i--) {
+                const count = stats.breakdown[i - 1];
+                const percentage = (count / stats.total * 100) || 0;
+                
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${i} stars</span>
+                    <div class="progress">
+                        <div class="progress-bar bg-warning" role="progressbar" 
+                             style="width: ${percentage}%" 
+                             aria-valuenow="${percentage}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                        </div>
+                    </div>
+                    <span>${count}</span>
+                `;
+                breakdownContainer.appendChild(li);
+            }
+
+            // Update overall rating
+            const overallRating = document.getElementById('overallRating');
+            const overallStars = document.getElementById('overallStars');
+            overallRating.textContent = stats.average.toFixed(2);
+            overallStars.innerHTML = renderStars(stats.average);
+        }
+
+        // Main function to fetch and display reviews
+        async function fetchAndDisplayReviews() {
+            try {
+                const reviewsQuery = query(
+                    collection(db, 'feedbacks','feedback','houselisting4'),
+                    orderBy('timestamp', 'desc')
+                );
+                
+                const querySnapshot = await getDocs(reviewsQuery);
+                const reviews = [];
+                
+                querySnapshot.forEach((doc) => {
+                    reviews.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                // Calculate and update statistics
+                const stats = calculateRatingStats(reviews);
+                updateRatingBreakdown(stats);
+
+                // Update review count
+                const reviewCount = document.getElementById('reviewCount');
+                reviewCount.textContent = `${reviews.length} reviews`;
+
+                // Display reviews
+                const reviewsContainer = document.getElementById('reviewsContainer');
+                reviewsContainer.innerHTML = '';
+
+                reviews.forEach(review => {
+                    const reviewElement = document.createElement('div');
+                    reviewElement.classList.add('review-item');
+                    reviewElement.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong>${review.userName || 'Anonymous'}</strong>
+                            <span class="text-muted">${formatDate(review.timestamp)}</span>
+                        </div>
+                        <div class="rating-stars my-2">
+                            ${renderStars(review.rating)}
+                        </div>
+                        <p class="mb-0">${review.reviewText || 'No comment provided'}</p>
+                    `;
+                    reviewsContainer.appendChild(reviewElement);
+                });
+
+            } catch (error) {
+                console.error('Error fetching reviews:', error);
+                document.getElementById('reviewCount').textContent = 'Error loading reviews';
+            }
+        }
+
+        // Initialize when the modal is shown
+        const reviewModal = document.getElementById('reviewModal');
+        reviewModal.addEventListener('show.bs.modal', fetchAndDisplayReviews);
+    </script>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Chart.js Script -->
+    <script>
+        const ctx = document.getElementById('priceTrendChart').getContext('2d');
+        const priceTrendChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October'],
+                datasets: [{
+                    label: 'Monthly Price, 2024',
+                    data: [2480, 2510, 2495, 2520, 2475, 2505, 2530, 2490, 2500, 2515],
+                    borderColor: '#42A5F5',
+                    backgroundColor: 'rgba(66, 165, 245, 0.2)',
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true, position: 'top' },
+                    tooltip: { mode: 'index', intersect: false }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'Month' } },
+                    y: { title: { display: true, text: 'Price ($)' } }
+                }
+            }
+        });
+    </script>
+
+    <!-- ChatBot -->
+    <script src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js" async></script>
+</body>
+
+</html>
