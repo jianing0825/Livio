@@ -363,12 +363,15 @@
                 const newUser = {
                     email: email,
                     password: password, // In a real application, this should be hashed
-                    createdAt: new Date().toISOString()
+                    createdAt: new Date().toISOString(),
+                    hasSubmitted: false
                 };
 
                 const userId = await writeToFirebase(newUser);
                 localStorage.setItem('userId', userId);
                 localStorage.setItem('userEmail', email);
+                localStorage.setItem('hasSubmitted', "false");
+
                 window.location.href = 'initial_survey.html';
             } catch (error) {
                 console.error("Error during signup:", error);
@@ -401,6 +404,8 @@
                 console.log("Login successful, isLoggedIn set to true"); // Debugging
                 localStorage.setItem('userId', userData.id);
                 localStorage.setItem('userEmail', email);
+                localStorage.setItem('hasSubmitted', userData.hasSubmitted);
+
                 
                 // If user has firstName/lastName (Google sign-in user), store those too
                 if (userData.firstName) localStorage.setItem('userFirstName', userData.firstName);

@@ -13,7 +13,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/nav.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -142,37 +144,40 @@
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand ms-4" href="#">Livio</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="housinglisting.html">Housing Listing</a></li>
-                    <li class="nav-item"><a class="nav-link" href="findaroommate.html">Find A Roommate</a></li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Expenses
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
-                            <li><a class="dropdown-item " href="expense.html">Expenses</a></li>
-                            <li><a class="dropdown-item" href="allexpenses.html">All Expenses</a></li>
-                            <li><a class="dropdown-item" href="splitexpense.html">Split Expense</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="places.html">Places</a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" id="logoutBtn">Logout</a></li>
-                </ul>
+    <div id="app">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand ms-4" href="#">Livio</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="housinglisting.html">Housing Listing</a></li>
+                        <li class="nav-item"><a class="nav-link" href="findaroommate.html">Find A Roommate</a></li>
+                        <li class="nav-item dropdown" v-if="hasSubmitted=='true'">
+                            <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Expenses
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
+                                <li><a class="dropdown-item " href="expense.html">Expenses</a></li>
+                                <li><a class="dropdown-item" href="allexpenses.html">All Expenses</a></li>
+                                <li><a class="dropdown-item" href="splitexpense.html">Split Expense</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="places.html">Places</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" id="logoutBtn">Logout</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </div>
 
     <!-- Property Details Section -->
     <section class="py-5 bg-white">
@@ -305,6 +310,18 @@
             <p class="mt-2">© 2024 Livio. All rights reserved.</p>
         </div>
     </footer>
+    <script>
+        // <div id='app'></div>
+        const appVue = Vue.createApp({ 
+            data() { 
+                return { 
+                    hasSubmitted: localStorage.getItem("hasSubmitted")  // key: value
+                };
+            }, // data
+            
+        });
+        const vm = appVue.mount('#app'); 
+    </script>
     <script type="module">
         // check if logged in
         if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
