@@ -563,8 +563,8 @@
                 const roommateCount = document.getElementById("roommateCount").value;
 
                 // Process each listing
-                for (const doc of querySnapshot.docs) {
-                    const listing = { ...doc.data(), id: doc.id };
+                for (const docu of querySnapshot.docs) {
+                    const listing = { ...docu.data(), id: docu.id };
                     console.log("Processing listing:", listing);
 
                     // Skip if filters don't match
