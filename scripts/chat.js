@@ -7,7 +7,6 @@ import {
   where,
   getDocs,
   addDoc,
-  serverTimestamp,
   onSnapshot,
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { db } from "../src/firebase.js";
@@ -23,6 +22,8 @@ const app = createApp({
       otherUser: null,
       partners: [],
       users: [],
+      usersIds: [],
+      loading: true,
     };
   },
   methods: {
@@ -45,60 +46,80 @@ const app = createApp({
         })
         .map(doc => doc.data())
         .sort((a, b) => a.timestamp.toMillis() - b.timestamp.toMillis());
+
       console.log(this.messages);
     },
     // Send Message
     async sendMessage() {
       if (this.newMessage.trim() !== "") {
+        let chatID = this.messages[0]?.chatID;
+        if (this.messages.length === 0) {
+          const chat = {
+            timestamp: new Date(),
+            users: [this.userId, this.otherUserId],
+          };
+          const chatRes = await addDoc(collection(db, "chats"), chat);
+          chatID = chatRes.id;
+          this.getPartners();
+        }
+
         const message = {
+          chatID: chatID,
           message: this.newMessage,
           sender: this.userId,
           receiver: this.otherUserId,
           timestamp: new Date(),
           users: [this.userId, this.otherUserId],
         };
-        console.log("Sending Message!");
+
         await addDoc(collection(db, "messages"), message);
         this.newMessage = "";
         await this.getMessages(); // Fetch messages again to update the view
       }
     },
     chat(userId) {
-      window.location.href = `/chat.html?user=${this.userId}&with=${userId}`;
+      window.location.href = `/chat.html?with=${userId}`;
     },
     async getPartners() {
-      const partnersQuerySnapshot = await getDocs(
+      const chatsQuerySnapshot = await getDocs(
         query(
-          collection(db, "partners"),
-          where("partners", "array-contains", this.userId)
+          collection(db, "chats"),
+          where("users", "array-contains", this.userId)
         )
       );
-      partnersQuerySnapshot.docs.map(doc => {
-        doc.data().partners.forEach(partner => {
-          if (partner !== this.userId) {
-            this.partners.push(partner);
+      let userIds = [];
+      chatsQuerySnapshot.docs.map(doc => {
+        doc.data().users.forEach(user => {
+          console.log(user);
+          if (user !== this.userId) {
+            userIds.push(user);
           }
         });
       });
 
-      const usersQuerySnapshot = await getDocs(
-        query(collection(db, "users"), where("movedIn", "==", false))
-      );
-      this.users = usersQuerySnapshot.docs
-        .filter(doc => !this.partners.includes(doc.id))
-        .map(doc => ({ id: doc.id, data: doc.data() }));
+      // Get users where Ids are from usersIds
+
+      if (userIds.length === 0) return (this.loading = false);
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("__name__", "in", userIds));
+      const querySnapshot = await getDocs(q);
+      this.users = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        data: doc.data(),
+      }));
+      this.loading = false;
     },
   },
   async mounted() {
+    const userID = localStorage.getItem("userId");
+    if (!userID) return (window.location.href = "/loginpage.html");
+    this.userId = userID;
     const urlParams = new URLSearchParams(window.location.search);
-    const loggedInUserId = urlParams.get("user") || this.userId;
+    const loggedInUserId = userID;
     const otherUserId = urlParams.get("with") || this.otherUserId;
 
-    console.log(loggedInUserId, otherUserId);
-    console.log(!loggedInUserId, !otherUserId);
-
     if (!loggedInUserId || !otherUserId) {
-      return (window.location.href = "/loginpage.html");
+      return (window.location.href = "/allexpenses.html");
     }
     this.userId = loggedInUserId;
     this.otherUserId = otherUserId;
@@ -123,7 +144,7 @@ const app = createApp({
       // add messages html to the chat box
 
       const msgPage = document.getElementById("msg-page");
-      msgPage.innerHTML = "";
+      if (msgPage) msgPage.innerHTML = "";
       this.messages.forEach(message => {
         const messageElement = document.createElement("div");
         messageElement.classList.add("textMsg");
@@ -138,13 +159,13 @@ const app = createApp({
         timeElement.textContent = new Date(
           message.timestamp.seconds * 1000
         ).toLocaleString();
-        textContainer.appendChild(timeElement);
-        messageElement.appendChild(textContainer);
-        msgPage.appendChild(messageElement);
+        if (textContainer) textContainer.appendChild(timeElement);
+        if (messageElement) messageElement.appendChild(textContainer);
+        if (msgPage) msgPage.appendChild(messageElement);
       });
       this.$nextTick(() => {
         const chat = document.getElementById("msg-page");
-        chat.scrollTop = chat.scrollHeight;
+        if (chat) chat.scrollTop = chat.scrollHeight;
       });
     },
   },
