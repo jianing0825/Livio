@@ -9,8 +9,10 @@
   /* margin-top: 2rem; */
   width: 100%;
   display: flex;
-  margin-top: 70px; /* Adjust this to match the height of the navbar */
-  padding: 5rem; /* Optional: additional padding for a cleaner look */
+  gap: 1rem; /* Space between chat list and main chat area */
+
+  /* margin-top: 70px; Adjust this to match the height of the navbar */
+  padding: 1rem; /* Optional: additional padding for a cleaner look */
 }
 
 .chatsList {
@@ -19,11 +21,11 @@
   gap: 2rem;
   border: 1px solid rgb(199, 194, 194);
   border-radius: 1rem;
-  
+
   width: 20rem;
   height: 76vh;
   overflow-y: auto;
-  padding-bottom: 120px;
+  /* padding-bottom: 120px; */
 }
 
 .chatDetails {
@@ -99,7 +101,7 @@ img {
   flex-direction: column;
   justify-content: flex-end;
   overflow-y: auto;
-  padding-bottom: 100px;
+  padding-bottom: 70px;
 }
 
 .msg-inbox {
