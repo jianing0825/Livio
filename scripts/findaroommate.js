@@ -5,19 +5,28 @@ import {
   addDoc,
   where,
   getDocs,
+  getDoc,
+  doc,
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { db } from "../src/firebase.js";
 
 const app = createApp({
   data() {
     return {
-      userId: localStorage.getItem('userId'),
+      userId: "",
       partners: [],
       users: [],
       tab: "Explore",
+      chatters: [],
+      loading: true,
     };
   },
   methods: {
+    async getUserById(userId) {
+      const userDoc = await getDoc(doc(db, "users", userId));
+      this.user = { id: userDoc.id, data: userDoc.data() };
+
+    },
     async getPartners() {
       const partnersQuerySnapshot = await getDocs(
         query(
@@ -36,13 +45,51 @@ const app = createApp({
       const usersQuerySnapshot = await getDocs(
         query(collection(db, "users"), where("movedIn", "==", false))
       );
+
       this.users = usersQuerySnapshot.docs
-        .filter(doc => !this.partners.includes(doc.id))
+        .filter(
+          doc =>
+            // !this.partners.includes(doc.id) &&
+            doc.id !== this.userId &&
+            doc.data().gender === this.user.data.gender
+        )
         .map(doc => ({ id: doc.id, data: doc.data() }));
     },
     chat(partnerId) {
-      window.location = `chat.html?user=${this.userId}&with=${partnerId}`;
+      window.location = `chat.html?with=${partnerId}`;
     },
+    async getChatters() {
+      const chatsQuerySnapshot = await getDocs(
+        query(
+          collection(db, "chats"),
+          where("users", "array-contains", this.userId)
+        )
+      );
+      let userIds = [];
+      chatsQuerySnapshot.docs.map(doc => {
+        doc.data().users.forEach(user => {
+          console.log(user);
+          if (user !== this.userId) {
+            userIds.push(user);
+          }
+        });
+      });
+
+      // Get users where Ids are from usersIds
+
+      if (userIds.length === 0) return (this.loading = false);
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("__name__", "in", userIds));
+      const querySnapshot = await getDocs(q);
+      doc.id !== this.userId  // Exclude the current user here
+
+      this.chatters = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        data: doc.data(),
+      }));
+
+    }
+,
     async partnerUp(partnerId) {
       console.log(partnerId);
       const partnersData = {
@@ -76,10 +123,9 @@ const app = createApp({
       }
       this.tab = tab;
     },
-    renderCards() {
+    async renderCards() {
       if (this.tab === "Explore") {
-  // Filter users based on the current user's gender
-  const filteredUsers = this.users.filter(user => user.data.gender === this.currentUserGender);
+        console.log("Current User ID on Explore page:", this.userId); // Print current user’s ID
 
         const parentContainer = document.querySelector(".roommate-grid");
         parentContainer.classList.remove("chat-grid");
@@ -87,8 +133,7 @@ const app = createApp({
         this.users.forEach(user => {
           const container = document.createElement("div");
           container.classList.add("roommate-card");
-         // Create the updated innerHTML for the roommate card with the new design
-      container.innerHTML = `
+          container.innerHTML = `
       <img src="${user.data.profileImage || 'default-profile.jpg'}" alt="${user.data.firstName || ''} ${user.data.lastName || ''}'s profile" class="profile-photo">
       <div class="roommate-info">
         <div class="roommate-header">
@@ -125,30 +170,37 @@ const app = createApp({
           const container = document.createElement("div");
           container.classList.add("chat-item");
           container.addEventListener("click", () => this.chat(user.id));
-          container.innerHTML = ` <img src="https://images.unsplash.com/photo-1719937206498-b31844530a96?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8" alt="Profile Picture" class="chat-avatar"> <div class="chat-info"> <div class="chat-name">${user.data.firstName || ""
-            } ${user.data.lastName || ""
-            }</div> <div class="chat-preview">Click to continue chat</div> </div> `;
+          container.innerHTML = ` <img src="https://images.unsplash.com/photo-1719937206498-b31844530a96?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8" alt="Profile Picture" class="chat-avatar"> <div class="chat-info"> <div class="chat-name">${
+            user.data.firstName || ""
+          } ${
+            user.data.lastName || ""
+          }</div> <div class="chat-preview">Click to continue chat</div> </div> `;
           parentContainer.appendChild(container);
         });
       } else if (this.tab === "Choose your roommate") {
+        this.loading = true;
+        await this.getChatters();
+        this.loading = false;
         const parentContainer = document.querySelector(".roommate-grid");
         parentContainer.classList.remove("chat-grid");
         parentContainer.innerHTML = "";
-        this.users.forEach(user => {
+        this.chatters.forEach(user => {
           const container = document.createElement("div");
           container.classList.add("choose-item");
           container.innerHTML = `<div class="choose-profile">
                         <img src="https://images.unsplash.com/photo-1685903772095-f07172808761?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="https://images.unsplash.com/photo-1685903772095-f07172808761?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="choose-avatar">
                         <div class="choose-info">
-                            <div class="choose-name">${user.data.firstName || ""
-            } ${user.data.lastName || ""}</div>
+                            <div class="choose-name">${
+                              user.data.firstName || ""
+                            } ${user.data.lastName || ""}</div>
                             <div class="choose-traits">${user.data.interests
-              .map(trait => trait.split("\n").join("<br />"))
-              .join(", ")}</div>
+                              .map(trait => trait.split("\n").join("<br />"))
+                              .join(", ")}</div>
                         </div>
                     </div>
-                    <button class="choose-button" data-id="${user.id
-            }">Choose</button>`;
+                    <button class="choose-button" data-id="${
+                      user.id
+                    }">Choose</button>`;
           container
             .querySelector(".choose-button")
             .addEventListener("click", () => this.partnerUp(user.id));
@@ -158,6 +210,10 @@ const app = createApp({
     },
   },
   async mounted() {
+    const userID = localStorage.getItem("userId");
+    if (!userID) return (window.location.href = "/loginpage.html");
+    this.userId = userID;
+    await this.getUserById(userID);
     await this.getPartners();
   },
   watch: {
