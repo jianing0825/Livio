@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="styles/nav.css">
     <!-- Vue 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    
+
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -148,48 +148,48 @@
 
 <body>
     <!-- Navbar -->
-     <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand ms-4" href="#">Livio</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="housinglisting.html">Housing Listing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="findaroommate.html">Find A Roommate</a>
-                    </li>
-                    <li class="nav-item dropdown" v-if="hasSubmitted=='true'">
-                        <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">Expenses</a>
-                        <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
-                            <li><a class="dropdown-item" href="expense.html">Expenses</a></li>
-                            <li><a class="dropdown-item" href="allexpenses.html">All Expenses</a></li>
-                            <li><a class="dropdown-item" href="splitexpense.html">Split Expense</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="places.html">Places</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="profile.html">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="logoutBtn">Logout</a>
-                    </li>
-                </ul>
+    <div id="app">
+        <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+            <div class="container-fluid">
+                <a class="navbar-brand ms-4" href="#">Livio</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="housinglisting.html">Housing Listing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="findaroommate.html">Find A Roommate</a>
+                        </li>
+                        <li class="nav-item dropdown" v-if="hasSubmitted=='true'">
+                            <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">Expenses</a>
+                            <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
+                                <li><a class="dropdown-item" href="expense.html">Expenses</a></li>
+                                <li><a class="dropdown-item" href="allexpenses.html">All Expenses</a></li>
+                                <li><a class="dropdown-item" href="splitexpense.html">Split Expense</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="places.html">Places</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="profile.html">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="logoutBtn">Logout</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-</div>
+        </nav>
+    </div>
 
     <!-- Search Section -->
     <section id="search-section" class="py-5">
@@ -231,15 +231,15 @@
     <script>
 
         // <div id='app'></div>
-        const appVue = Vue.createApp({ 
-            data() { 
-                return { 
+        const appVue = Vue.createApp({
+            data() {
+                return {
                     hasSubmitted: localStorage.getItem("hasSubmitted")  // key: value
                 };
             }, // data
-            
+
         });
-        const vm = appVue.mount('#app'); 
+        const vm = appVue.mount('#app');
         document.addEventListener('DOMContentLoaded', function () {
             // Pet details toggle
             const hasPetsSelect = document.getElementById('hasPets');
@@ -412,12 +412,12 @@
                 // Submit the form data
                 const rentalApplicationsRef = collection(db, 'rentalApplications');
                 await addDoc(rentalApplicationsRef, formData);
-                await updateDoc(doc(db,"users",localStorage.userId), {
+                await updateDoc(doc(db, "users", localStorage.userId), {
                     hasSubmitted: true
                 });
-                localStorage.setItem("hasSubmitted","true");
+                localStorage.setItem("hasSubmitted", "true");
                 try {
-                        await updateDoc(doc(db,"users",partnerId), {
+                    await updateDoc(doc(db, "users", partnerId), {
                         hasSubmitted: true
                     });
                 } catch (error) {
@@ -569,9 +569,17 @@
                     // Skip if filters don't match
                     if (country && listing.country !== country) continue;
                     if (!isNaN(maxPrice) && listing.pricePerMonth > maxPrice) continue;
+
+                    // Roommate count filter logic
                     if (roommateCount) {
-                        const countValue = roommateCount === "3+" ? 3 : parseInt(roommateCount);
-                        if (listing.roommateCount < countValue) continue;
+                        const selectedCount = parseInt(roommateCount);
+                        if (roommateCount === "3+") {
+                            // Include listings allowing 3 or more roommates
+                            if (listing.roommateCount < 3) continue;
+                        } else {
+                            // Ensure exact match for roommate count
+                            if (listing.roommateCount !== selectedCount) continue;
+                        }
                     }
 
                     // Extract house number
@@ -589,49 +597,49 @@
                             houseNumber = '12'
                         } else if (listing.title.includes('Beachfront Condo in Miami')) {
                             houseNumber = '13'
-                        }else if (listing.title.includes('Modern 2-Bedroom Apartment in Downtown')) {
+                        } else if (listing.title.includes('Modern 2-Bedroom Apartment in Downtown')) {
                             houseNumber = '14'
-                        }else if (listing.title.includes('Luxurious 3-Bedroom Condo with Sea View')) {
+                        } else if (listing.title.includes('Luxurious 3-Bedroom Condo with Sea View')) {
                             houseNumber = '15'
-                        }else if (listing.title.includes('Spacious 4-Bedroom House with Backyard')) {
+                        } else if (listing.title.includes('Spacious 4-Bedroom House with Backyard')) {
                             houseNumber = '16'
-                        }else if (listing.title.includes('Charming 1-Bedroom Loft')) {
+                        } else if (listing.title.includes('Charming 1-Bedroom Loft')) {
                             houseNumber = '17'
-                        }else if (listing.title.includes('Elegant 2-Bedroom Villa with Private Pool')) {
+                        } else if (listing.title.includes('Elegant 2-Bedroom Villa with Private Pool')) {
                             houseNumber = '18'
-                        }else if (listing.title.includes('Modern Apartment with City View')) {
+                        } else if (listing.title.includes('Modern Apartment with City View')) {
                             houseNumber = '19'
-                        }else if (listing.title.includes('Cozy 2-Bedroom Flat in Downtown Paris')) {
+                        } else if (listing.title.includes('Cozy 2-Bedroom Flat in Downtown Paris')) {
                             houseNumber = '20'
-                        }else if (listing.title.includes('Luxury Condo in Berlin')) {
+                        } else if (listing.title.includes('Luxury Condo in Berlin')) {
                             houseNumber = '21'
-                        }else if (listing.title.includes('Villa with Garden in Tuscany')) {
+                        } else if (listing.title.includes('Villa with Garden in Tuscany')) {
                             houseNumber = '22'
-                        }else if (listing.title.includes('Stylish Flat near Sagrada Familia')) {
+                        } else if (listing.title.includes('Stylish Flat near Sagrada Familia')) {
                             houseNumber = '23'
-                        }else if (listing.title.includes('Elegant Apartment near Eiffel Tower')) {
+                        } else if (listing.title.includes('Elegant Apartment near Eiffel Tower')) {
                             houseNumber = '24'
-                        }else if (listing.title.includes('Historic Home in Munich')) {
+                        } else if (listing.title.includes('Historic Home in Munich')) {
                             houseNumber = '25'
-                        }else if (listing.title.includes('Rustic Cottage in Amalfi Coast')) {
+                        } else if (listing.title.includes('Rustic Cottage in Amalfi Coast')) {
                             houseNumber = '26'
-                        }else if (listing.title.includes('Bright Flat in Madrid City Center')) {
+                        } else if (listing.title.includes('Bright Flat in Madrid City Center')) {
                             houseNumber = '27'
-                        }else if (listing.title.includes('Chic Apartment in Lyon')) {
+                        } else if (listing.title.includes('Chic Apartment in Lyon')) {
                             houseNumber = '28'
-                        }else if (listing.title.includes('Modern Flat in Frankfurt')) {
+                        } else if (listing.title.includes('Modern Flat in Frankfurt')) {
                             houseNumber = '29'
-                        }else if (listing.title.includes('Charming Apartment in Romes Historic Center')) {
+                        } else if (listing.title.includes('Charming Apartment in Romes Historic Center')) {
                             houseNumber = '30'
-                        }else if (listing.title.includes('Modern 2-Bedroom Apartment Near the Beach')) {
+                        } else if (listing.title.includes('Modern 2-Bedroom Apartment Near the Beach')) {
                             houseNumber = '5'
-                        }else if (listing.title.includes('Luxury 5-Bedroom Penthouse')) {
+                        } else if (listing.title.includes('Luxury 5-Bedroom Penthouse')) {
                             houseNumber = '6'
-                        }else if (listing.title.includes('Charming 3-Bedroom Condo')) {
+                        } else if (listing.title.includes('Charming 3-Bedroom Condo')) {
                             houseNumber = '7'
-                        }else if (listing.title.includes('Cozy 1-Bedroom Apartment')) {
+                        } else if (listing.title.includes('Cozy 1-Bedroom Apartment')) {
                             houseNumber = '8'
-                        }else if (listing.title.includes('Affordable Studio Apartment')) {
+                        } else if (listing.title.includes('Affordable Studio Apartment')) {
                             houseNumber = '9'
                         };
                     }
