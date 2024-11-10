@@ -15,7 +15,7 @@ let budget = 0;
 
 const app = createApp({
   data: () => ({
-    userId: "fFAn1qIMMeEAc6G4R9nf",
+    userId: localStorage.getItem('userId'),
     pastTransactions: [],
     loading: true,
     user: null,
@@ -83,7 +83,7 @@ $(document).ready(async function () {
   async function fetchChartData() {
     let monthlyExpenses = {};
     let currentMonthExpensesByCategory = [];
-    const userId = "fFAn1qIMMeEAc6G4R9nf";
+    const userId = localStorage.getItem('userId');
     const past12Months = new Date(
       new Date().setMonth(new Date().getMonth() - 12)
     ).toISOString();

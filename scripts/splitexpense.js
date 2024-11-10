@@ -137,7 +137,7 @@ const app = createApp({
     },
   },
   async created() {
-    const loggedInUserId = "RIgHvDQnglki83sixogm";
+    const loggedInUserId = localStorage.getItem('userId');    ;
     // Get Logged In User Info and save it in localstorage
     this.user = await this.getUserById(loggedInUserId);
 

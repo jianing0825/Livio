@@ -10,7 +10,7 @@ const app = createApp({
   data: () => ({
     budget: 0,
     loading: true,
-    userId: "fFAn1qIMMeEAc6G4R9nf",
+    userId: localStorage.getItem('userId') ,
     user: null,
   }),
   methods: {
