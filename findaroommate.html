@@ -818,7 +818,6 @@
         import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
         // Track selected roommates
         let selectedRoommates = new Set();
-        // Add this near the top where other state variables are defined
         let activeChats = new Set(); // Track active chats
 
         // Add this predefined interests list
@@ -905,7 +904,7 @@
             return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
         }
 
-        // 1. Fix the getUserPreference function
+
         async function getUserPreference() {
             try {
                 const userId = localStorage.getItem('userId');
@@ -939,8 +938,6 @@
         }
 
 
-
-        // 2. Fix the addFilterIndicator function
         async function addFilterIndicator() {
             const exploreSection = document.getElementById('explore-section');
             const existingIndicator = document.querySelector('.filter-indicator');
@@ -968,9 +965,6 @@
             exploreSection.insertBefore(indicator, exploreSection.firstChild);
         }
 
-
-
-        // Modified filterRoommates function
         async function filterRoommates() {
             try {
                 const preferredGender = await getUserPreference();
@@ -987,8 +981,6 @@
             }
         }
 
-        // Add this to your existing JavaScript
-        // Updated getInterestTags function
         function getInterestTags(traits) {
             // Helper function to check if a word is related to valid interests
             function isRelatedToInterest(word) {
@@ -1031,8 +1023,6 @@
             return interests;
         }
 
-
-        // Update the roommate card template in the renderRoommateCards function
         async function renderRoommateCards() {
             const grid = document.querySelector('.roommate-grid');
             const filteredRoommates = await filterRoommates();
@@ -1343,9 +1333,6 @@
             });
         }
 
-
-        // Modified renderChatList function to use filtered roommates
-        // Modify the renderChatList function
         async function renderChatList() {
             const chatList = document.querySelector('.chat-list');
             const filteredRoommates = await filterRoommates();
@@ -1422,7 +1409,6 @@
                 await renderChatList();
                 renderSelectionLimit();
 
-                // Rest of the initialization code remains the same
             } catch (error) {
                 console.error('Error during initialization:', error);
             }
