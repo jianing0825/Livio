@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head> 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find a Roommate</title>
@@ -106,6 +106,7 @@
             color: #1a73e8;
             font-weight: 500;
         }
+
         .navbar {
             background-color: #001F3F;
             color: white;
@@ -129,18 +130,21 @@
         .navbar .navbar-brand:hover {
             color: #f0f0f0;
         }
+
         /* Navbar Link Hover Effect */
         .navbar .navbar-nav .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1); 
-            border-radius: 5px; 
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
         }
 
         /* Underline the Active Page Link */
-        .navbar .navbar-nav .nav-link.active ,.navbar .dropdown-item.active{
+        .navbar .navbar-nav .nav-link.active,
+        .navbar .dropdown-item.active {
             border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 0.5rem 1rem;
             border-radius: 4px;
         }
+
         /* Add specific styling to underline both main link and dropdown links */
         .navbar .navbar-nav .dropdown-toggle.active {
             border-bottom: 2px solid #fff;
@@ -689,8 +693,8 @@
 </head>
 
 <body>
-     <!-- Navbar -->
-     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand ms-4" href="#">Livio</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -709,7 +713,8 @@
                         <a class="nav-link active" href="findaroommate.html">Find A Roommate</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             Expenses
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
@@ -740,11 +745,11 @@
 
     <!-- Sub Navigation -->
     <div class="sub-nav">
-        <a href="#explore" class="sub-nav-item active">explore</a>
+        <a href="#explore" class="sub-nav-item active">Explore</a>
         <span class="sub-nav-divider">|</span>
-        <a href="#chats" class="sub-nav-item">chats</a>
+        <a href="#chats" class="sub-nav-item">Chats</a>
         <span class="sub-nav-divider">|</span>
-        <a href="#choose" class="sub-nav-item">choose your roommate</a>
+        <a href="#choose" class="sub-nav-item">Choose Your Roommate</a>
     </div>
 
     <!-- Explore Section -->
@@ -813,7 +818,6 @@
         import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
         // Track selected roommates
         let selectedRoommates = new Set();
-        // Add this near the top where other state variables are defined
         let activeChats = new Set(); // Track active chats
 
         // Add this predefined interests list
@@ -826,7 +830,7 @@
                 name: 'Lisa Chen',
                 gender: 'female',
                 traits: 'Art, Music, Traveling\nLooking for roommate in downtown area\nPrefers quiet environment',
-                img: '/api/placeholder/300/200',
+                img: 'images/profile1.jpg',
                 details: 'Exchange student from China\nStudying Business Administration\nHobbies: Yoga, Reading\nPreferred lease: 6 months'
             },
             {
@@ -834,7 +838,7 @@
                 name: 'Mark Johnson',
                 gender: 'male',
                 traits: 'Technology, Coding, Music\nAvailable from September\nBudget: $800-1200/month',
-                img: '/api/placeholder/300/200',
+                img: 'images/Mark.jpg',
                 details: 'Software Engineer\nWorking remotely\nHobbies: Gaming, Music\nPreferred lease: 12 months'
             },
             {
@@ -842,7 +846,7 @@
                 name: 'Sarah Smith',
                 gender: 'female',
                 traits: 'Cooking, Travel, Sports\nExchange student from Germany\nLoves cooking and outdoor activities',
-                img: '/api/placeholder/300/200',
+                img: 'images/profile3.jpg',
                 details: 'PhD Student in Biology\nHas a friendly cat\nHobbies: Hiking, Cooking\nPreferred lease: 12+ months'
             },
             {
@@ -850,8 +854,48 @@
                 name: 'David Kim',
                 gender: 'male',
                 traits: 'Sports, Technology, Basketball\nStudying Computer Science\nLooking for long-term roommate',
-                img: '/api/placeholder/300/200',
+                img: 'images/David.jpg',
                 details: 'Computer Science Major\nGym enthusiast\nHobbies: Basketball, Coding\nPreferred lease: 12 months'
+            },
+            {
+                id: 5,
+                name: 'Melissa Winston',
+                gender: 'female',
+                traits: 'Music, Technology, Art\nPiano enthusiast\nLooking for long-term roommate',
+                img: 'images/melissa.webp',
+                details: 'Digital Arts Major\nClassical pianist\nHobbies: Digital drawing, Music production\nPreferred lease: 12 months'
+            },
+            {
+                id: 6,
+                name: 'Jenny Lawence',
+                gender: 'female',
+                traits: 'Cooking, Travel, Art\nCulinary Arts student\nLooking for clean roommate',
+                img: 'images/jenny.avif',
+                details: 'Culinary Arts Major\nFood blogger\nHobbies: Food photography, Traveling\nPreferred lease: 6 months'
+            },
+            {
+                id: 6,
+                name: 'Kim En Soo',
+                gender: 'female',
+                traits: 'Technology, Music, Sports\nMusic Technology student\nLooking for quiet roommate',
+                img: 'images/ensoo.jpg',
+                details: 'Music Technology Major\nElectronic musician\nHobbies: Tennis, Sound design\nPreferred lease: 12 months'
+            },
+            {
+                id: 7,
+                name: 'Benedict Allen',
+                gender: 'male',
+                traits: 'Sports, Travel, Cooking\nSports Management student\nLooking for active roommate',
+                img: 'images/benedict.jpg',
+                details: 'Sports Management Major\nTravel vlogger\nHobbies: Rock climbing, International cuisine\nPreferred lease: 12 months'
+            },
+            {
+                id: 8,
+                name: 'Robert Downy Senior',
+                gender: 'male',
+                traits: 'Art, Technology, Music\nGame Design student\nLooking for creative roommate',
+                img: 'images/robert.jpg',
+                details: 'Game Design Major\n3D Artist\nHobbies: Guitar, Game development\nPreferred lease: 9 months'
             }
         ];
 
@@ -860,7 +904,7 @@
             return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
         }
 
-        // 1. Fix the getUserPreference function
+
         async function getUserPreference() {
             try {
                 const userId = localStorage.getItem('userId');
@@ -894,8 +938,6 @@
         }
 
 
-
-        // 2. Fix the addFilterIndicator function
         async function addFilterIndicator() {
             const exploreSection = document.getElementById('explore-section');
             const existingIndicator = document.querySelector('.filter-indicator');
@@ -923,9 +965,6 @@
             exploreSection.insertBefore(indicator, exploreSection.firstChild);
         }
 
-
-
-        // Modified filterRoommates function
         async function filterRoommates() {
             try {
                 const preferredGender = await getUserPreference();
@@ -942,8 +981,6 @@
             }
         }
 
-        // Add this to your existing JavaScript
-        // Updated getInterestTags function
         function getInterestTags(traits) {
             // Helper function to check if a word is related to valid interests
             function isRelatedToInterest(word) {
@@ -986,8 +1023,6 @@
             return interests;
         }
 
-
-        // Update the roommate card template in the renderRoommateCards function
         async function renderRoommateCards() {
             const grid = document.querySelector('.roommate-grid');
             const filteredRoommates = await filterRoommates();
@@ -1204,7 +1239,7 @@
             const chooseList = document.querySelector('.choose-list');
             const limitDisplay = document.createElement('div');
             limitDisplay.className = 'selection-limit';
-            limitDisplay.textContent = `Selected: ${selectedRoommates.size}/3 roommates`;
+            limitDisplay.textContent = `Selected: ${selectedRoommates.size}/3 Roommates`;
 
             // Remove existing limit display if present
             const existingLimit = chooseList.querySelector('.selection-limit');
@@ -1217,10 +1252,12 @@
 
 
 
-        // Modified renderChooseList function to use filtered roommates
         async function renderChooseList() {
             const chooseList = document.querySelector('.choose-list');
             const filteredRoommates = await filterRoommates();
+
+            // Filter roommates to only those with active chats
+            const activeChatRoommates = filteredRoommates.filter(roommate => activeChats.has(roommate.id));
 
             // Clear existing content first
             chooseList.innerHTML = '';
@@ -1228,42 +1265,56 @@
             // Add selection limit display
             renderSelectionLimit();
 
-            // Add roommate items
-            // 4. Fix the choose list template to show gender
-            chooseList.innerHTML += filteredRoommates.map(roommate => {
-                const isSelected = selectedRoommates.has(roommate.id);
-                return `
-        <div class="choose-item">
-            <div class="choose-profile">
-                <img src="${roommate.img}" alt="${roommate.name}" class="choose-avatar">
-                <div class="choose-info">
-                    <div class="choose-name">
-                        ${roommate.name}
-                        <div class="gender-badge" style="
-                            display: inline-flex;
-                            align-items: center;
-                            padding: 2px 8px;
-                            background-color: #EBF5FF;
-                            color: #1E40AF;
-                            border-radius: 9999px;
-                            font-size: 12px;
-                            margin-left: 8px;
-                            font-weight: 500;
-                        ">
-                            <i class="fas fa-user" style="margin-right: 4px;"></i>
-                            ${capitalizeFirstLetter(roommate.gender)}  
-                        </div>
-                    </div>
-                    <div class="choose-traits">${roommate.traits.split('\n')[0]}</div>
+            // Display a message if no active chats are available for choosing roommates
+            if (activeChatRoommates.length === 0) {
+                chooseList.innerHTML = `
+            <div style="text-align: center; padding: 40px;">
+                <div style="color: #666; font-size: 18px; margin-bottom: 10px;">
+                    No Active Chats with roommates available for selection
+                </div>
+                <div style="color: #999; font-size: 14px;">
+                    Start a chat with a roommate to make them eligible for selection
                 </div>
             </div>
-            <button class="choose-button ${isSelected ? 'chosen' : ''}" 
-                    data-id="${roommate.id}"
-                    ${selectedRoommates.size >= 3 && !isSelected ? 'disabled' : ''}>
-                ${isSelected ? 'Remove' : 'Choose'}
-            </button>
-        </div>
-    `;
+        `;
+                return;
+            }
+
+            // Render active chat roommates in the choose list
+            chooseList.innerHTML += activeChatRoommates.map(roommate => {
+                const isSelected = selectedRoommates.has(roommate.id);
+                return `
+            <div class="choose-item">
+                <div class="choose-profile">
+                    <img src="${roommate.img}" alt="${roommate.name}" class="choose-avatar">
+                    <div class="choose-info">
+                        <div class="choose-name">
+                            ${roommate.name}
+                            <div class="gender-badge" style="
+                                display: inline-flex;
+                                align-items: center;
+                                padding: 2px 8px;
+                                background-color: #EBF5FF;
+                                color: #1E40AF;
+                                border-radius: 9999px;
+                                font-size: 12px;
+                                margin-left: 8px;
+                                font-weight: 500;
+                            ">
+                                <i class="fas fa-user" style="margin-right: 4px;"></i>
+                                ${capitalizeFirstLetter(roommate.gender)}  
+                            </div>
+                        </div>
+                        <div class="choose-traits">${roommate.traits.split('\n')[0]}</div>
+                    </div>
+                </div>
+                <button class="choose-button ${isSelected ? 'chosen' : ''}" 
+                        data-id="${roommate.id}"
+                        ${selectedRoommates.size >= 3 && !isSelected ? 'disabled' : ''}>
+                    ${isSelected ? 'Remove' : 'Choose'}
+                </button>
+            </div>
+        `;
             }).join('');
 
             // Add click handlers for choose buttons
@@ -1282,9 +1333,6 @@
             });
         }
 
-
-        // Modified renderChatList function to use filtered roommates
-        // Modify the renderChatList function
         async function renderChatList() {
             const chatList = document.querySelector('.chat-list');
             const filteredRoommates = await filterRoommates();
@@ -1296,10 +1344,10 @@
                 chatList.innerHTML = `
             <div style="text-align: center; padding: 40px;">
                 <div style="color: #666; font-size: 18px; margin-bottom: 10px;">
-                    No active chats
+                    No Active Chats
                 </div>
                 <div style="color: #999; font-size: 14px;">
-                    Start a chat by clicking the chat button on a roommate's profile
+                    Start a Chat by clicking the chat button on a Roommate's Profile
                 </div>
             </div>
         `;
@@ -1361,7 +1409,6 @@
                 await renderChatList();
                 renderSelectionLimit();
 
-                // Rest of the initialization code remains the same
             } catch (error) {
                 console.error('Error during initialization:', error);
             }

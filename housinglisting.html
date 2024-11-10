@@ -352,7 +352,7 @@
                 alert('There was an error opening the rental form. Please try again.');
             }
         };
-
+        const originalSubmitRentalForm = window.submitRentalForm;
         window.submitRentalForm = async function (event) {
             if (event) {
                 event.preventDefault();
@@ -367,103 +367,43 @@
             }
 
             try {
-                // Get all required form elements and check if they exist
-                const elements = {
-                    listingId: document.getElementById('listingId'),
-                    firstName: document.getElementById('firstName'),
-                    lastName: document.getElementById('lastName'),
-                    email: document.getElementById('email'),
-                    phone: document.getElementById('phone'),
-                    numberOfRoommates: document.getElementById('numberOfRoommates'),
-                    moveInDate: document.getElementById('moveInDate'),
-                    leaseDuration: document.getElementById('leaseDuration'),
-                    hasPets: document.getElementById('hasPets'),
-                    lifestyle: document.getElementById('lifestyle'),
-                    cleaningPreferences: document.getElementById('cleaningPreferences'),
-                    comments: document.getElementById('comments')
-                };
-
-                // Check if all required elements exist
-                for (const [key, element] of Object.entries(elements)) {
-                    if (!element) {
-                        throw new Error(`Required form element ${key} not found`);
-                    }
+                const partnerId = document.getElementById('partnerId').value;
+                if (!partnerId) {
+                    throw new Error('Partner selection is required');
                 }
 
-                // Collect roommate data safely
-                const numberOfRoommates = parseInt(elements.numberOfRoommates.value) || 0;
-                const roommates = [];
-                for (let i = 1; i <= numberOfRoommates; i++) {
-                    const nameField = document.getElementById(`roommateName${i}`);
-                    const phoneField = document.getElementById(`roommatePhone${i}`);
-                    if (nameField && phoneField && nameField.value && phoneField.value) {
-                        roommates.push({
-                            name: nameField.value,
-                            phone: phoneField.value
-                        });
-                    }
-                }
-
-                // Create form data object with null checks
+                // Collect all form data
                 const formData = {
-                    // Basic Information
-                    listingId: elements.listingId.value || '',
-                    firstName: elements.firstName.value || '',
-                    lastName: elements.lastName.value || '',
-                    email: elements.email.value || '',
-                    phone: elements.phone.value || '',
-
-                    // Shared Parties Information
-                    numberOfRoommates,
-                    roommates,
-                    moveInDate: elements.moveInDate.value || '',
-                    leaseDuration: elements.leaseDuration.value || '',
-
-                    // Additional Details
-                    hasPets: elements.hasPets.value || 'no',
-                    petDetails: elements.hasPets.value === 'yes' ?
-                        (document.getElementById('petDetails')?.value || '') : null,
-                    lifestyle: elements.lifestyle.value || '',
-                    cleaningPreferences: elements.cleaningPreferences.value || '',
-
-                    // Metadata
+                    listingId: document.getElementById('listingId').value,
+                    firstName: document.getElementById('firstName').value,
+                    lastName: document.getElementById('lastName').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    partnerId: partnerId,
+                    hasPets: document.getElementById('hasPets').value,
+                    petDetails: document.getElementById('hasPets').value === 'yes' ?
+                        document.getElementById('petDetails').value : null,
+                    lifestyle: document.getElementById('lifestyle').value,
+                    cleaningPreferences: document.getElementById('cleaningPreferences').value,
+                    moveInDate: document.getElementById('moveInDate').value,
+                    leaseDuration: document.getElementById('leaseDuration').value,
+                    comments: document.getElementById('comments').value,
                     timestamp: new Date(),
-                    status: 'pending',
-                    comments: elements.comments.value || ''
+                    status: 'pending'
                 };
 
-                // Validate critical fields
-                if (!formData.listingId || !formData.firstName || !formData.email) {
-                    throw new Error('Required fields are missing');
-                }
-
-                // Add to Firestore
+                // Submit the form data
                 const rentalApplicationsRef = collection(db, 'rentalApplications');
                 await addDoc(rentalApplicationsRef, formData);
 
-                // Show success message
+                // Show success message and reset form
                 alert('Your rental application has been submitted successfully!');
-
-                // Close modal and reset form
                 const modal = bootstrap.Modal.getInstance(document.getElementById('rentalFormModal'));
                 if (modal) {
                     modal.hide();
                 }
-
-                // Reset the form
                 form.reset();
                 form.classList.remove('was-validated');
-
-                // Clear dynamic fields
-                const roommateFields = document.getElementById('roommateFields');
-                if (roommateFields) {
-                    roommateFields.innerHTML = '';
-                }
-
-                const petDetailsField = document.getElementById('petDetailsField');
-                if (petDetailsField) {
-                    petDetailsField.style.display = 'none';
-                }
 
             } catch (error) {
                 console.error('Error submitting rental application:', error);
@@ -471,8 +411,9 @@
             }
         };
 
-
         // Add the event listener for form submission
+
+
         document.addEventListener('submitRentalApplication', async (event) => {
             try {
                 const formData = {
@@ -541,39 +482,29 @@
         // Function to fetch ratings for a specific listing
         async function fetchRatingForListing(listingNumber) {
             try {
-                console.log(`Fetching ratings for houselisting${listingNumber}`);
-                // Get ratings from the correct path: /feedbacks/feedback/houselisting{n}
-                const ratingsRef = collection(db, 'feedbacks', 'feedback', `houselisting${listingNumber}`);
-                const querySnapshot = await getDocs(ratingsRef);
-
-                if (querySnapshot.empty) {
-                    console.log(`No ratings found for houselisting${listingNumber}`);
-                    return 0;
-                }
+                // Get ratings from the correct collection path
+                const feedbackQuery = query(
+                    collection(db, 'feedbacks', 'feedback', `houselisting${listingNumber}`),
+                    orderBy('timestamp', 'desc')
+                );
+                const querySnapshot = await getDocs(feedbackQuery);
 
                 let totalRating = 0;
                 let count = 0;
 
                 querySnapshot.forEach(doc => {
-                    const feedbackData = doc.data();
-                    console.log('Rating data:', feedbackData);
-                    if (feedbackData.rating) {
-                        totalRating += parseFloat(feedbackData.rating);
+                    const feedback = doc.data();
+                    if (feedback.rating) {
+                        totalRating += parseFloat(feedback.rating);
                         count++;
                     }
                 });
 
-                if (count === 0) {
-                    console.log('No valid ratings found in the documents');
-                    return 0;
-                }
-
-                const averageRating = totalRating / count;
-                console.log(`Calculated average rating: ${averageRating.toFixed(2)}`);
-                return averageRating.toFixed(2);
+                // Calculate average rating
+                const averageRating = count > 0 ? totalRating / count : 0;
+                return averageRating;
             } catch (error) {
-                console.error(`Error fetching ratings:`, error);
-                console.error('Error details:', error.message);
+                console.error(`Error fetching ratings for listing ${listingNumber}:`, error);
                 return 0;
             }
         }
@@ -622,6 +553,9 @@
                         else if (listing.linkUrl.includes('listing2.html')) houseNumber = '2';
                         else if (listing.linkUrl.includes('listing3.html')) houseNumber = '3';
                         else if (listing.linkUrl.includes('listing4.html')) houseNumber = '4';
+                        else if (listing.title.includes('Penthouse in Beverly Hills')) {
+                            houseNumber = '10'
+                        };
                     }
 
                     if (houseNumber) {
@@ -685,6 +619,143 @@
 
         console.log("Full listing data:", JSON.stringify(listing, null, 2));
 
+
+        // // Function to populate partner dropdown
+        // async function populatePartnerDropdown() {
+        //     try {
+        //         console.log('Starting populatePartnerDropdown function');
+
+        //         const partnerSelect = document.getElementById('partnerId');
+        //         if (!partnerSelect) {
+        //             console.error('Partner select element not found');
+        //             return;
+        //         }
+
+        //         // Clear existing options except the first one
+        //         while (partnerSelect.options.length > 1) {
+        //             partnerSelect.remove(1);
+        //         }
+
+        //         // Get the current user's ID
+        //         const userId = localStorage.getItem('userId');
+        //         console.log('Current user ID:', userId);
+
+        //         // Get document from partners collection
+        //         const partnerDoc = await getDoc(doc(db, 'partners', userId));
+        //         console.log('Looking for partners document with ID:', userId);
+
+        //         if (!partnerDoc.exists()) {
+        //             console.log('No partner document found for current user');
+        //             const docRef = doc(db, 'partners', 'mrzqKGWMCvfD3hzTh3ec');
+        //             const fallbackDoc = await getDoc(docRef);
+
+        //             if (fallbackDoc.exists()) {
+        //                 const data = fallbackDoc.data();
+        //                 console.log('Found fallback document:', data);
+
+        //                 if (data.partners && Array.isArray(data.partners)) {
+        //                     for (const partnerId of data.partners) {
+        //                         // Try to get user info for each partner
+        //                         try {
+        //                             const userDoc = await getDoc(doc(db, 'users', partnerId));
+        //                             const userData = userDoc.exists() ? userDoc.data() : null;
+
+        //                             const option = document.createElement('option');
+        //                             option.value = partnerId;
+
+        //                             if (userData && userData.firstName) {
+        //                                 option.textContent = `${userData.firstName} ${userData.lastName || ''}`;
+        //                             } else {
+        //                                 option.textContent = `Partner ID: ${partnerId}`;
+        //                             }
+
+        //                             partnerSelect.appendChild(option);
+        //                             console.log('Added partner option:', option.textContent);
+        //                         } catch (error) {
+        //                             console.error('Error getting user data for partner:', partnerId, error);
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         } else {
+        //             const data = partnerDoc.data();
+        //             console.log('Found user partner document:', data);
+
+        //             if (data.partners && Array.isArray(data.partners)) {
+        //                 for (const partnerId of data.partners) {
+        //                     const option = document.createElement('option');
+        //                     option.value = partnerId;
+        //                     option.textContent = `Partner: ${partnerId}`;
+        //                     partnerSelect.appendChild(option);
+        //                 }
+        //             }
+        //         }
+
+        //         // If no options were added, show the "no partners" message
+        //         if (partnerSelect.options.length === 1) {
+        //             const option = document.createElement('option');
+        //             option.value = "";
+        //             option.textContent = "No partners selected yet - please select partners in Find A Roommate page";
+        //             option.disabled = true;
+        //             partnerSelect.appendChild(option);
+        //             console.log('Added no partners message');
+        //         }
+
+        //     } catch (error) {
+        //         console.error('Error in populatePartnerDropdown:', error);
+        //         const option = document.createElement('option');
+        //         option.value = "";
+        //         option.textContent = "Error loading partners";
+        //         option.disabled = true;
+        //         partnerSelect.appendChild(option);
+        //     }
+        // }
+
+
+        // Call this function when the modal is shown
+        document.getElementById('rentalFormModal').addEventListener('show.bs.modal', populatePartnerDropdown);
+
+
+        // // Add this after your Firebase initialization
+        // async function testFirebaseConnection() {
+        //     try {
+        //         console.log('Testing Firebase connection...');
+
+        //         // Test basic Firebase initialization
+        //         console.log('Firebase app:', app);
+        //         console.log('Firestore instance:', db);
+
+        //         // Test partners collection access
+        //         const partnersRef = collection(db, 'partners');
+        //         console.log('Partners collection reference:', partnersRef);
+
+        //         // Try to get the specific document we saw
+        //         const docRef = doc(db, 'partners', 'mrzqKGWMCvfD3hzTh3ec');
+        //         const docSnap = await getDoc(docRef);
+
+        //         if (docSnap.exists()) {
+        //             console.log('Found document data:', docSnap.data());
+        //         } else {
+        //             console.log('Document not found');
+        //         }
+
+        //         // Test querying the collection
+        //         const querySnapshot = await getDocs(partnersRef);
+        //         console.log('Number of documents in partners collection:', querySnapshot.size);
+
+        //         querySnapshot.forEach((doc) => {
+        //             console.log('Document ID:', doc.id, 'Data:', doc.data());
+        //         });
+
+        //     } catch (error) {
+        //         console.error('Firebase test error:', error);
+        //     }
+        // }
+
+        // // Call the test function when the page loads
+        // window.addEventListener('load', testFirebaseConnection);
+
+
     </script>
 
     <!-- ChatBot -->
@@ -740,24 +811,16 @@
                             <h6 class="text-primary mb-3">Shared Parties Information</h6>
                             <div class="row g-3">
                                 <div class="col-12">
-                                    <label for="numberOfRoommates" class="form-label">Number of Roommates</label>
-                                    <select class="form-select" id="numberOfRoommates" required>
-                                        <option value="">Select number of roommates</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4+</option>
+                                    <label for="partnerId" class="form-label">Select Partner</label>
+                                    <select class="form-select" id="partnerId" required>
+                                        <option value="">Select a partner</option>
+                                        <!-- Partner options will be populated dynamically -->
                                     </select>
-                                    <div class="invalid-feedback">Please select the number of roommates.</div>
+                                    <div class="invalid-feedback">Please select a partner.</div>
                                 </div>
                                 <div class="col-12" id="roommateFields">
                                     <!-- Roommate fields will be added dynamically -->
                                 </div>
-                                <!-- <div class="col-md-6">
-                                    <label for="preferredMoveInDate" class="form-label">Preferred Move-in Date</label>
-                                    <input type="date" class="form-control" id="preferredMoveInDate" required>
-                                    <div class="invalid-feedback">Please select your preferred move-in date.</div>
-                                </div> -->
                             </div>
                         </div>
 

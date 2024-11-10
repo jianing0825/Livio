@@ -75,12 +75,11 @@
                 aria-label="Slide 3"></button>
         </div>
         <div class="carousel-inner">
-            <div class="carousel-item active"
-                style="background-image: url('images/homecarousel1.jpg'); position: relative;">
-                <div class="carousel-caption" class="welcome-section">
+            <div class="carousel-item active" style="background-image: url('images/homecarousel1.jpg'); position: relative;">
+                <div class="carousel-caption welcome-section">
                     <h1 class="welcome-message">Welcome to Livio</h1>
                     <p>Find Your Perfect Roommate Abroad</p>
-                    <a href="loginpage.html" class="btn btn-primary btn-lg">Get Started</a>
+                    <a href="loginpage.html" class="btn btn-primary btn-lg" id="getStartedBtn">Get Started</a>
                 </div>
             </div>
             <div class="carousel-item" style="background-image: url('images/homecarousel2.jpg');">
@@ -209,7 +208,7 @@
                             </div>
                             <!-- Testimonial Content on the Right -->
                             <div class="testimonial-content ms-4">
-                                <p>"Livio helped me find a great roommate while studying abroad in Paris!"</p>
+                                <p>"So happy i found Livio before i went on exchange!"</p>
                                 <footer class="blockquote-footer mt-3">Sophia</footer>
                                 <small class="text-muted">University Exchange Student</small>
                                 <div class="social-icons mt-3">
@@ -230,7 +229,7 @@
                             </div>
                             <!-- Testimonial Content on the Right -->
                             <div class="testimonial-content ms-4">
-                                <p>"Livio helped me find a great roommate while studying abroad in Paris!"</p>
+                                <p>"Without Livio, I do not think I would go on exchange!"</p>
                                 <footer class="blockquote-footer mt-3">John</footer>
                                 <small class="text-muted">University Exchange Student</small>
                                 <div class="social-icons mt-3">
@@ -304,6 +303,10 @@
             const navItems = document.getElementById('nav-items');
 
             if (isLoggedIn) {
+                const getStartedBtn = document.getElementById('getStartedBtn');
+                if (getStartedBtn) {
+                    getStartedBtn.style.display = 'none';
+                }
                 navItems.innerHTML = `
                     <li class="nav-item">
                         <a class="nav-link active" href="index.html">Home</a>
