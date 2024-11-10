@@ -186,6 +186,10 @@
                             <p>Tell us a little bit about yourself. This will help your potential roommates get to know
                                 you.</p>
                             <div class="mb-3">
+                                <label for="userId" class="form-label">Username (@johndoe)</label>
+                                <input type="text" class="form-control" id="userId" required>
+                            </div>
+                            <div class="mb-3">
                                 <label for="firstName" class="form-label">First Name</label>
                                 <input type="text" class="form-control" id="firstName" required>
                             </div>
@@ -415,6 +419,7 @@
                         // Prepare user data using stored values
                         const userData = {
                             firstName: document.getElementById('firstName').value,
+                            userId: document.getElementById('userId').value,
                             lastName: document.getElementById('lastName').value,
                             age: document.getElementById('age').value,
                             gender: localStorage.getItem('userGender'),
@@ -432,6 +437,7 @@
 
                         // Store final values in localStorage
                         localStorage.setItem('userFirstName', userData.firstName);
+                        localStorage.setItem('userId', userData.userId);
                         localStorage.setItem('userLastName', userData.lastName);
                         window.location.href = 'index.html';
                     } catch (error) {
