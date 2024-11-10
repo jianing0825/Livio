@@ -692,7 +692,7 @@
     </style>
 </head>
 
-<body>
+<body id="app">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid">
@@ -737,660 +737,307 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <div class="hero-section">
+     <!-- Hero Section -->
+     <div class="hero-section">
         <h1>Find Your Perfect Exchange Student Roommate</h1>
         <p>Connect with like-minded students from around the world</p>
-    </div>
-
-    <!-- Sub Navigation -->
-    <div class="sub-nav">
-        <a href="#explore" class="sub-nav-item active">Explore</a>
+      </div>
+  
+      <!-- Sub Navigation -->
+      <div class="sub-nav">
+        <span
+          class="sub-nav-item active"
+          id="sub-nav-item-explore"
+          @click="changeTab('Explore')"
+          >Explore</span
+        >
         <span class="sub-nav-divider">|</span>
-        <a href="#chats" class="sub-nav-item">Chats</a>
+        <span
+          class="sub-nav-item"
+          id="sub-nav-item-chat"
+          @click="changeTab('Chats')"
+          >Chats</span
+        >
         <span class="sub-nav-divider">|</span>
-        <a href="#choose" class="sub-nav-item">Choose Your Roommate</a>
-    </div>
-
-    <!-- Explore Section -->
-    <div id="explore-section" class="section active">
-        <div class="roommate-grid">
-            <!-- Roommate cards will be dynamically inserted here -->
+        <span
+          class="sub-nav-item"
+          id="sub-nav-item-choose"
+          @click="changeTab('Choose your roommate')"
+          >Choose your roommate</span
+        >
+      </div>
+  
+      <!-- Explore Section -->
+      <div id="explore-section" class="section active">
+        <div class="roommate-grid" id="roommate-grid">
+          <!-- Roommate cards will be dynamically inserted here -->
         </div>
-    </div>
-
-    <!-- Chats Section -->
-    <div id="chats-section" class="section">
+      </div>
+  
+      <!-- Chats Section -->
+      <div id="chats-section" class="section">
         <div class="chat-list">
-            <!-- Chat list will be dynamically inserted here -->
+          <!-- Chat list will be dynamically inserted here -->
         </div>
-    </div>
-
-    <!-- Choose Section -->
-    <div id="choose-section" class="section">
+      </div>
+  
+      <!-- Choose Section -->
+      <div id="choose-section" class="section">
         <div class="choose-list">
-            <!-- Choose list will be dynamically inserted here -->
+          <!-- Choose list will be dynamically inserted here -->
         </div>
-    </div>
-
-    <!-- Profile Modal -->
-    <div id="profileModal" class="modal">
+      </div>
+  
+      <!-- Profile Modal -->
+      <div id="profileModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Roommate Profile</h3>
-                <button class="modal-close">&times;</button>
+          <div class="modal-header">
+            <h3 class="modal-title">Roommate Profile</h3>
+            <button class="modal-close">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="profile-detail">
+              <img class="profile-image" src="" alt="Profile Image" />
+              <div class="profile-info">
+                <h3></h3>
+                <p class="traits"></p>
+              </div>
             </div>
-            <div class="modal-body">
-                <div class="profile-detail">
-                    <img class="profile-image" src="" alt="Profile Image">
-                    <div class="profile-info">
-                        <h3></h3>
-                        <p class="traits"></p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-button cancel-button">Cancel</button>
-                <button class="modal-button confirm-button">Confirm Choice</button>
-            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="modal-button cancel-button">Cancel</button>
+            <button class="modal-button confirm-button">Confirm Choice</button>
+          </div>
         </div>
-    </div>
-
-    <!-- Confirmation Modal -->
-    <div id="confirmationModal" class="modal confirmation-modal">
+      </div>
+  
+      <!-- Confirmation Modal -->
+      <div id="confirmationModal" class="modal confirmation-modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Confirmation</h3>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>You have successfully chosen <span class="chosen-roommate"></span> as your roommate!</p>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-button confirm-button">OK</button>
-            </div>
+          <div class="modal-header">
+            <h3 class="modal-title">Confirmation</h3>
+            <button class="modal-close">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>
+              You have successfully chosen
+              <span class="chosen-roommate"></span> as your roommate!
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button class="modal-button confirm-button">OK</button>
+          </div>
         </div>
-    </div>
-
-
-    <script type="module">
-        import { db } from "./db.js";
-        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-        // Track selected roommates
-        let selectedRoommates = new Set();
-        let activeChats = new Set(); // Track active chats
-
-        // Add this predefined interests list
-        const VALID_INTERESTS = ['sports', 'music', 'art', 'technology', 'travel', 'cooking'];
-
-        // Sample roommate data with gender information
+      </div>
+      <script src="./scripts/findaroommate.js" type="module"></script>
+      <!-- Bootstrap JavaScript -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+      <script>
+        // Sample roommate data
         const roommates = [
-            {
-                id: 1,
-                name: 'Lisa Chen',
-                gender: 'female',
-                traits: 'Art, Music, Traveling\nLooking for roommate in downtown area\nPrefers quiet environment',
-                img: 'images/profile1.jpg',
-                details: 'Exchange student from China\nStudying Business Administration\nHobbies: Yoga, Reading\nPreferred lease: 6 months'
-            },
-            {
-                id: 2,
-                name: 'Mark Johnson',
-                gender: 'male',
-                traits: 'Technology, Coding, Music\nAvailable from September\nBudget: $800-1200/month',
-                img: 'images/Mark.jpg',
-                details: 'Software Engineer\nWorking remotely\nHobbies: Gaming, Music\nPreferred lease: 12 months'
-            },
-            {
-                id: 3,
-                name: 'Sarah Smith',
-                gender: 'female',
-                traits: 'Cooking, Travel, Sports\nExchange student from Germany\nLoves cooking and outdoor activities',
-                img: 'images/profile3.jpg',
-                details: 'PhD Student in Biology\nHas a friendly cat\nHobbies: Hiking, Cooking\nPreferred lease: 12+ months'
-            },
-            {
-                id: 4,
-                name: 'David Kim',
-                gender: 'male',
-                traits: 'Sports, Technology, Basketball\nStudying Computer Science\nLooking for long-term roommate',
-                img: 'images/David.jpg',
-                details: 'Computer Science Major\nGym enthusiast\nHobbies: Basketball, Coding\nPreferred lease: 12 months'
-            },
-            {
-                id: 5,
-                name: 'Melissa Winston',
-                gender: 'female',
-                traits: 'Music, Technology, Art\nPiano enthusiast\nLooking for long-term roommate',
-                img: 'images/melissa.webp',
-                details: 'Digital Arts Major\nClassical pianist\nHobbies: Digital drawing, Music production\nPreferred lease: 12 months'
-            },
-            {
-                id: 6,
-                name: 'Jenny Lawence',
-                gender: 'female',
-                traits: 'Cooking, Travel, Art\nCulinary Arts student\nLooking for clean roommate',
-                img: 'images/jenny.avif',
-                details: 'Culinary Arts Major\nFood blogger\nHobbies: Food photography, Traveling\nPreferred lease: 6 months'
-            },
-            {
-                id: 6,
-                name: 'Kim En Soo',
-                gender: 'female',
-                traits: 'Technology, Music, Sports\nMusic Technology student\nLooking for quiet roommate',
-                img: 'images/ensoo.jpg',
-                details: 'Music Technology Major\nElectronic musician\nHobbies: Tennis, Sound design\nPreferred lease: 12 months'
-            },
-            {
-                id: 7,
-                name: 'Benedict Allen',
-                gender: 'male',
-                traits: 'Sports, Travel, Cooking\nSports Management student\nLooking for active roommate',
-                img: 'images/benedict.jpg',
-                details: 'Sports Management Major\nTravel vlogger\nHobbies: Rock climbing, International cuisine\nPreferred lease: 12 months'
-            },
-            {
-                id: 8,
-                name: 'Robert Downy Senior',
-                gender: 'male',
-                traits: 'Art, Technology, Music\nGame Design student\nLooking for creative roommate',
-                img: 'images/robert.jpg',
-                details: 'Game Design Major\n3D Artist\nHobbies: Guitar, Game development\nPreferred lease: 9 months'
-            }
+          {
+            id: 1,
+            name: "Lisa Chen",
+            traits:
+              "Student, Clean, Early bird\nLooking for roommate in downtown area\nPrefers quiet environment",
+            img: "https://images.unsplash.com/photo-1719937206498-b31844530a96?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
+            details:
+              "Exchange student from China\nStudying Business Administration\nHobbies: Yoga, Reading\nPreferred lease: 6 months",
+          },
+          {
+            id: 2,
+            name: "Mark Johnson",
+            traits:
+              "Professional, Quiet, Night owl\nAvailable from September\nBudget: $800-1200/month",
+            img: "https://images.unsplash.com/photo-1719937206498-b31844530a96?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
+            details:
+              "Software Engineer\nWorking remotely\nHobbies: Gaming, Music\nPreferred lease: 12 months",
+          },
+          {
+            id: 3,
+            name: "Sarah Smith",
+            traits:
+              "Graduate, Social, Pet-friendly\nExchange student from Germany\nLoves cooking and outdoor activities",
+            img: "https://images.unsplash.com/photo-1719937206498-b31844530a96?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
+            details:
+              "PhD Student in Biology\nHas a friendly cat\nHobbies: Hiking, Cooking\nPreferred lease: 12+ months",
+          },
+          {
+            id: 4,
+            name: "David Kim",
+            traits:
+              "Undergraduate, Athletic, Early riser\nStudying Computer Science\nLooking for long-term roommate",
+            img: "https://images.unsplash.com/photo-1719937206498-b31844530a96?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8",
+            details:
+              "Computer Science Major\nGym enthusiast\nHobbies: Basketball, Coding\nPreferred lease: 12 months",
+          },
         ];
-
-        function capitalizeFirstLetter(string) {
-            if (!string) return '';
-            return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-        }
-
-
-        async function getUserPreference() {
-            try {
-                const userId = localStorage.getItem('userId');
-                if (!userId) {
-                    console.log('No userId found');
-                    return 'any';
-                }
-
-                // First check Firebase for existing users
-                const userDoc = await getDoc(doc(db, "users", userId));
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    const firebaseGender = userData.roommateGender;
-
-                    if (firebaseGender) {
-                        // Update localStorage to match Firebase
-                        localStorage.setItem('preferredRoommateGender', firebaseGender);
-                        console.log('Using Firebase preference:', firebaseGender);
-                        return firebaseGender;
-                    }
-                }
-
-                // If no Firebase value, check localStorage (for new users)
-                const localGender = localStorage.getItem('preferredRoommateGender');
-                console.log('Using localStorage preference:', localGender);
-                return localGender || 'any';
-            } catch (error) {
-                console.error('Error getting user preference:', error);
-                return 'any';
-            }
-        }
-
-
-        async function addFilterIndicator() {
-            const exploreSection = document.getElementById('explore-section');
-            const existingIndicator = document.querySelector('.filter-indicator');
-            if (existingIndicator) {
-                existingIndicator.remove();
-            }
-
-            const indicator = document.createElement('div');
-            indicator.className = 'filter-indicator';
-            indicator.style.cssText = `
-        text-align: center;
-        padding: 10px;
-        margin-bottom: 20px;
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        color: #666;
-    `;
-
-            // Always get fresh preference
-            const preferredGender = await getUserPreference();
-
-            indicator.textContent = `Showing ${preferredGender === 'any' ? 'all roommates' :
-                `${preferredGender} roommates only`}`;
-
-            exploreSection.insertBefore(indicator, exploreSection.firstChild);
-        }
-
-        async function filterRoommates() {
-            try {
-                const preferredGender = await getUserPreference();
-                console.log('Filtering roommates by gender:', preferredGender);
-
-                if (!preferredGender || preferredGender === 'any') {
-                    return roommates;
-                }
-
-                return roommates.filter(roommate => roommate.gender === preferredGender);
-            } catch (error) {
-                console.error('Error in filterRoommates:', error);
-                return roommates;
-            }
-        }
-
-        function getInterestTags(traits) {
-            // Helper function to check if a word is related to valid interests
-            function isRelatedToInterest(word) {
-                word = word.toLowerCase().trim();
-
-                // Define related terms for each interest
-                const interestMap = {
-                    'sports': ['sports', 'basketball', 'soccer', 'gym', 'athletic', 'fitness'],
-                    'music': ['music', 'singing', 'guitar', 'piano', 'band'],
-                    'art': ['art', 'painting', 'drawing', 'creative'],
-                    'technology': ['technology', 'coding', 'programming', 'computer', 'tech', 'software'],
-                    'travel': ['travel', 'traveling', 'touring', 'adventures'],
-                    'cooking': ['cooking', 'baking', 'chef', 'food']
-                };
-
-                // Check each interest category
-                for (const [interest, relatedTerms] of Object.entries(interestMap)) {
-                    if (relatedTerms.includes(word)) {
-                        return interest; // Return the main interest category
-                    }
-                }
-                return null;
-            }
-
-            // Get all words from the first line of traits
-            const words = traits
-                .split('\n')[0]
-                .split(',')
-                .flatMap(phrase => phrase.split(' '))
-                .map(word => word.trim().toLowerCase())
-                .filter(word => word.length > 0);
-
-            // Map related terms to main interest categories and remove duplicates
-            const interests = [...new Set(
-                words
-                    .map(word => isRelatedToInterest(word))
-                    .filter(interest => interest !== null)
-            )];
-
-            return interests;
-        }
-
-        async function renderRoommateCards() {
-            const grid = document.querySelector('.roommate-grid');
-            const filteredRoommates = await filterRoommates();
-
-            // Add filter indicator
-            addFilterIndicator();
-
-            if (filteredRoommates.length === 0) {
-                grid.innerHTML = `
-            <div style="text-align: center; padding: 40px; grid-column: 1 / -1;">
-                <div style="color: #666; font-size: 18px; margin-bottom: 10px;">
-                    No roommates match your preferences
-                </div>
-                <div style="color: #999; font-size: 14px;">
-                    Try adjusting your preferences in your profile settings
-                </div>
-            </div>
-        `;
-                return;
-            }
-
-            grid.innerHTML = filteredRoommates.map(roommate => {
-                const interestTags = getInterestTags(roommate.traits);
-                const otherDetails = roommate.traits.split('\n').slice(1);
-
-                return `
-            <div class="roommate-card">
-                <img src="${roommate.img}" alt="${roommate.name}'s profile" class="profile-photo">
-                <div class="roommate-info">
-                    <div class="roommate-header">
-                        <h3 class="roommate-name">${roommate.name}</h3>
-                        <div class="gender-badge">
-                            <i class="fas fa-user"></i>
-                            ${capitalizeFirstLetter(roommate.gender)}
-                        </div>
-                    </div>
-                    
-                    <div class="interest-tags">
-                        ${interestTags.map(tag => `
-                            <span class="interest-tag">${tag}</span>
-                        `).join('')}
-                    </div>
-                    
-                    <div class="roommate-details">
-                        ${otherDetails.map(detail => `
-                            <p>${detail}</p>
-                        `).join('')}
-                    </div>
-                    
-                    <button class="chat-button">Chat</button>
-                </div>
-            </div>
-        `;
-            }).join('');
-
-            // Add click handlers for chat buttons
-            document.querySelectorAll('.chat-button').forEach((button, index) => {
-                button.addEventListener('click', () => {
-                    const roommate = filteredRoommates[index];
-                    showProfileModal(roommate, true);
-                });
-            });
-        }
-
+  
         // Get modal elements
-        const profileModal = document.getElementById('profileModal');
-        const confirmationModal = document.getElementById('confirmationModal');
-        const modalClose = document.querySelectorAll('.modal-close, .cancel-button');
-
-
+        const profileModal = document.getElementById("profileModal");
+        const confirmationModal = document.getElementById("confirmationModal");
+        const modalClose = document.querySelectorAll(".modal-close");
+  
         // Function to show profile modal
-        // Modify the showProfileModal function
-        function showProfileModal(roommate, isFromChatButton = false) {
-            const modal = document.getElementById('profileModal');
-            const profileImage = modal.querySelector('.profile-image');
-            const profileName = modal.querySelector('.profile-info h3');
-            const profileTraits = modal.querySelector('.profile-info .traits');
-            const confirmButton = modal.querySelector('.confirm-button');
-
-            // Set modal content
-            profileImage.src = roommate.img;
-            profileImage.alt = roommate.name;
-            profileName.innerHTML = `
-        ${roommate.name}
-        <div class="gender-badge" style="
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 12px;
-            background-color: #EBF5FF;
-            color: #1E40AF;
-            border-radius: 9999px;
-            font-size: 14px;
-            margin-left: 12px;
-            font-weight: 500;
-        ">
-            <i class="fas fa-user" style="margin-right: 6px;"></i>
-            ${capitalizeFirstLetter(roommate.gender)}
-        </div>
-    `;
-            profileTraits.innerHTML = `${roommate.traits}<br><br>${roommate.details}`.replace(/\n/g, '<br>');
-
-            // Show modal
-            modal.classList.add('show');
-
-            // Change button text and behavior based on context
-            if (isFromChatButton) {
-                confirmButton.textContent = 'Start Chat';
-                confirmButton.onclick = () => {
-                    modal.classList.remove('show');
-                    activeChats.add(roommate.id);
-                    renderChatList(); // Refresh chat list
-
-                    // Switch to chats tab
-                    document.querySelectorAll('.sub-nav-item').forEach(i => i.classList.remove('active'));
-                    document.querySelector('a[href="#chats"]').classList.add('active');
-
-                    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                    document.getElementById('chats-section').classList.add('active');
-                };
-            } else {
-                confirmButton.textContent = 'Confirm Choice';
-                confirmButton.onclick = () => {
-                    modal.classList.remove('show');
-                    showConfirmationModal(roommate);
-                };
-            }
-
-            // Setup cancel button
-            modal.querySelector('.cancel-button').onclick = () => {
-                modal.classList.remove('show');
-            };
-
-            // Setup close button
-            modal.querySelector('.modal-close').onclick = () => {
-                modal.classList.remove('show');
-            };
+        function showProfileModal(roommate) {
+          const modal = document.getElementById("profileModal");
+          const profileImage = modal.querySelector(".profile-image");
+          const profileName = modal.querySelector(".profile-info h3");
+          const profileTraits = modal.querySelector(".profile-info .traits");
+  
+          profileImage.src = roommate.img;
+          profileImage.alt = roommate.name;
+          profileName.textContent = roommate.name;
+          profileTraits.innerHTML =
+            `${roommate.traits}<br><br>${roommate.details}`.replace(
+              /\n/g,
+              "<br>"
+            );
+  
+          modal.classList.add("show");
+  
+          // Setup confirm button
+          const confirmButton = modal.querySelector(".confirm-button");
+          confirmButton.onclick = () => {
+            modal.classList.remove("show");
+            showConfirmationModal(roommate);
+          };
         }
-
+  
         // Function to show confirmation modal
-        function showConfirmationModal(roommate, isDeselecting = false) {
-            const modal = document.getElementById('confirmationModal');
-            const modalTitle = modal.querySelector('.modal-title');
-            const modalBody = modal.querySelector('.modal-body');
-            const confirmButton = modal.querySelector('.confirm-button');
-
-            if (isDeselecting) {
-                modalTitle.textContent = 'Confirm Deselection';
-                modalBody.innerHTML = `<p>Are you sure you want to remove ${roommate.name} as your roommate?</p>`;
-                confirmButton.textContent = 'Confirm';
-            } else {
-                modalTitle.textContent = 'Confirmation';
-                modalBody.innerHTML = `<p>You have successfully chosen ${roommate.name} as your roommate!</p>`;
-                confirmButton.textContent = 'OK';
-            }
-
-            modal.classList.add('show');
-
-            // Add click handler for confirmation button
-            confirmButton.onclick = () => {
-                if (isDeselecting) {
-                    selectedRoommates.delete(roommate.id);
-                } else {
-                    selectedRoommates.add(roommate.id);
-                }
-                modal.classList.remove('show');
-                updateAllChooseButtons();
-                renderChooseList();
-                renderSelectionLimit();
-            };
-
-            // Setup close button
-            modal.querySelector('.modal-close').onclick = () => {
-                modal.classList.remove('show');
-            };
+        function showConfirmationModal(roommate) {
+          const modal = document.getElementById("confirmationModal");
+          const roommateSpan = modal.querySelector(".chosen-roommate");
+          roommateSpan.textContent = roommate.name;
+          modal.classList.add("show");
+  
+          // Only disable the chosen roommate's button
+          const chosenButton = document.querySelector(
+            `.choose-button[data-id="${roommate.id}"]`
+          );
+          if (chosenButton) {
+            chosenButton.disabled = true;
+            chosenButton.textContent = "Chosen";
+            chosenButton.style.backgroundColor = "#6c757d";
+          }
+  
+          // Add click handler for OK button
+          const okButton = modal.querySelector(".confirm-button");
+          okButton.onclick = () => {
+            modal.classList.remove("show");
+          };
         }
-
-
-        function updateAllChooseButtons() {
-            document.querySelectorAll('.choose-button').forEach((button) => {
-                const roommateId = parseInt(button.getAttribute('data-id'));
-                const isSelected = selectedRoommates.has(roommateId);
-
-                if (isSelected) {
-                    button.textContent = 'Remove';
-                    button.classList.add('chosen');
-                    button.style.backgroundColor = '#6c757d';
-                } else {
-                    button.textContent = 'Choose';
-                    button.classList.remove('chosen');
-                    button.style.backgroundColor = '#28a745';
-                }
-
-                // Only disable unselected buttons if max limit reached
-                if (!isSelected && selectedRoommates.size >= 3) {
-                    button.disabled = true;
-                    button.style.backgroundColor = '#a9a9a9';
-                } else {
-                    button.disabled = false;
-                }
-            });
-        }
-
-
+  
         // Close modal functionality
         modalClose.forEach(button => {
-            button.addEventListener('click', () => {
-                button.closest('.modal').classList.remove('show');
-            });
+          button.addEventListener("click", () => {
+            button.closest(".modal").classList.remove("show");
+          });
         });
-
-
-        // Add selection limit display
-        function renderSelectionLimit() {
-            const chooseList = document.querySelector('.choose-list');
-            const limitDisplay = document.createElement('div');
-            limitDisplay.className = 'selection-limit';
-            limitDisplay.textContent = `Selected: ${selectedRoommates.size}/3 Roommates`;
-
-            // Remove existing limit display if present
-            const existingLimit = chooseList.querySelector('.selection-limit');
-            if (existingLimit) {
-                existingLimit.remove();
-            }
-
-            chooseList.insertBefore(limitDisplay, chooseList.firstChild);
+  
+        // Function to render roommate cards
+        function renderRoommateCards() {
+          const grid = document.querySelector(".roommate-grid");
+          grid.innerHTML = roommates
+            .map(
+              roommate => `
+                  <div class="roommate-card">
+                      <img src="${roommate.img}" alt="${roommate.name}">
+                      <div class="roommate-info">
+                          <h3 class="roommate-name">${roommate.name}</h3>
+                          <p class="roommate-traits">${roommate.traits
+                            .split("\n")
+                            .join("<br>")}</p>
+                          <button class="chat-button">Chat</button>
+                      </div>
+                  </div>
+              `
+            )
+            .join("");
         }
-
-
-
-        async function renderChooseList() {
-            const chooseList = document.querySelector('.choose-list');
-            const filteredRoommates = await filterRoommates();
-
-            // Filter roommates to only those with active chats
-            const activeChatRoommates = filteredRoommates.filter(roommate => activeChats.has(roommate.id));
-
-            // Clear existing content first
-            chooseList.innerHTML = '';
-
-            // Add selection limit display
-            renderSelectionLimit();
-
-            // Display a message if no active chats are available for choosing roommates
-            if (activeChatRoommates.length === 0) {
-                chooseList.innerHTML = `
-            <div style="text-align: center; padding: 40px;">
-                <div style="color: #666; font-size: 18px; margin-bottom: 10px;">
-                    No Active Chats with roommates available for selection
-                </div>
-                <div style="color: #999; font-size: 14px;">
-                    Start a chat with a roommate to make them eligible for selection
-                </div>
-            </div>
-        `;
-                return;
-            }
-
-            // Render active chat roommates in the choose list
-            chooseList.innerHTML += activeChatRoommates.map(roommate => {
-                const isSelected = selectedRoommates.has(roommate.id);
-                return `
-            <div class="choose-item">
-                <div class="choose-profile">
-                    <img src="${roommate.img}" alt="${roommate.name}" class="choose-avatar">
-                    <div class="choose-info">
-                        <div class="choose-name">
-                            ${roommate.name}
-                            <div class="gender-badge" style="
-                                display: inline-flex;
-                                align-items: center;
-                                padding: 2px 8px;
-                                background-color: #EBF5FF;
-                                color: #1E40AF;
-                                border-radius: 9999px;
-                                font-size: 12px;
-                                margin-left: 8px;
-                                font-weight: 500;
-                            ">
-                                <i class="fas fa-user" style="margin-right: 4px;"></i>
-                                ${capitalizeFirstLetter(roommate.gender)}  
-                            </div>
-                        </div>
-                        <div class="choose-traits">${roommate.traits.split('\n')[0]}</div>
-                    </div>
-                </div>
-                <button class="choose-button ${isSelected ? 'chosen' : ''}" 
-                        data-id="${roommate.id}"
-                        ${selectedRoommates.size >= 3 && !isSelected ? 'disabled' : ''}>
-                    ${isSelected ? 'Remove' : 'Choose'}
-                </button>
-            </div>
-        `;
-            }).join('');
-
-            // Add click handlers for choose buttons
-            document.querySelectorAll('.choose-button').forEach((button) => {
-                button.addEventListener('click', () => {
-                    const roommateId = parseInt(button.getAttribute('data-id'));
-                    const roommate = roommates.find(r => r.id === roommateId);
-                    const isSelected = selectedRoommates.has(roommateId);
-
-                    if (isSelected) {
-                        showConfirmationModal(roommate, true);
-                    } else if (selectedRoommates.size < 3) {
-                        showProfileModal(roommate);
-                    }
-                });
+  
+        // Function to render choose list
+        function renderChooseList() {
+          const chooseList = document.querySelector(".choose-list");
+          chooseList.innerHTML = roommates
+            .map(
+              roommate => `
+                  <div class="choose-item">
+                      <div class="choose-profile">
+                          <img src="${roommate.img}" alt="${
+                roommate.name
+              }" class="choose-avatar">
+                          <div class="choose-info">
+                              <div class="choose-name">${roommate.name}</div>
+                              <div class="choose-traits">${
+                                roommate.traits.split("\n")[0]
+                              }</div>
+                          </div>
+                      </div>
+                      <button class="choose-button" data-id="${
+                        roommate.id
+                      }">Choose</button>
+                  </div>
+              `
+            )
+            .join("");
+  
+          // Add click handlers for choose buttons
+          document.querySelectorAll(".choose-button").forEach(button => {
+            button.addEventListener("click", () => {
+              const roommateId = parseInt(button.getAttribute("data-id"));
+              const roommate = roommates.find(r => r.id === roommateId);
+              showProfileModal(roommate);
             });
+          });
         }
-
-        async function renderChatList() {
-            const chatList = document.querySelector('.chat-list');
-            const filteredRoommates = await filterRoommates();
-
-            // Only show roommates that have active chats
-            const activeRoommates = filteredRoommates.filter(roommate => activeChats.has(roommate.id));
-
-            if (activeRoommates.length === 0) {
-                chatList.innerHTML = `
-            <div style="text-align: center; padding: 40px;">
-                <div style="color: #666; font-size: 18px; margin-bottom: 10px;">
-                    No Active Chats
-                </div>
-                <div style="color: #999; font-size: 14px;">
-                    Start a Chat by clicking the chat button on a Roommate's Profile
-                </div>
-            </div>
-        `;
-                return;
-            }
-
-            chatList.innerHTML = activeRoommates.map(roommate => `
-        <div class="chat-item">
-            <img src="${roommate.img}" alt="${roommate.name}" class="chat-avatar">
-            <div class="chat-info">
-                <div class="chat-name">${roommate.name}</div>
-                <div class="chat-preview">Click to continue chat</div>
-            </div>
-        </div>
-    `).join('');
-        }
-
-
+  
         // Navigation functionality
-        document.querySelectorAll('.sub-nav-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.querySelectorAll('.sub-nav-item').forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                const sectionId = item.getAttribute('href').substring(1) + '-section';
-                document.getElementById(sectionId).classList.add('active');
-            });
+        document.querySelectorAll(".sub-nav-item").forEach(item => {
+          item.addEventListener("click", e => {
+            e.preventDefault();
+            document
+              .querySelectorAll(".sub-nav-item")
+              .forEach(i => i.classList.remove("active"));
+            item.classList.add("active");
+  
+            document
+              .querySelectorAll(".section")
+              .forEach(s => s.classList.remove("active"));
+            const sectionId = item.getAttribute("href").substring(1) + "-section";
+            document.getElementById(sectionId).classList.add("active");
+          });
         });
-
+  
+        // Function to render chat list
+        function renderChatList() {
+          const chatList = document.querySelector(".chat-list");
+          chatList.innerHTML = roommates
+            .map(
+              roommate => `
+                  <div class="chat-item">
+                      <img src="${roommate.img}" alt="${roommate.name}" class="chat-avatar">
+                      <div class="chat-info">
+                          <div class="chat-name">${roommate.name}</div>
+                          <div class="chat-preview">Click to continue chat</div>
+                      </div>
+                  </div>
+              `
+            )
+            .join("");
+        }
+  
         // Close modals when clicking outside
-        window.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal')) {
-                e.target.classList.remove('show');
-            }
+        window.addEventListener("click", e => {
+          if (e.target.classList.contains("modal")) {
+            e.target.classList.remove("show");
+          }
         });
-
+  
         // Initial render
-        renderRoommateCards();
-        renderChatList();
-        renderChooseList();
-
+        //   renderRoommateCards();
+        //   renderChatList();
+        //   renderChooseList();
 
         // Modified DOMContentLoaded event listener
         document.addEventListener("DOMContentLoaded", async function () {
@@ -1399,19 +1046,19 @@
                 return;
             }
 
-            try {
-                // Initialize gender preference
-                await getUserPreference();
+            // try {
+            //     // Initialize gender preference
+            //     // await getUserPreference();
 
-                // Initial renders
-                await renderRoommateCards();
-                await renderChooseList();
-                await renderChatList();
-                renderSelectionLimit();
+            //     // Initial renders
+            //     // await renderRoommateCards();
+            //     // await renderChooseList();
+            //     // await renderChatList();
+            //     // renderSelectionLimit();
 
-            } catch (error) {
-                console.error('Error during initialization:', error);
-            }
+            // } catch (error) {
+            //     console.error('Error during initialization:', error);
+            // }
         });
 
         // check if logged in
