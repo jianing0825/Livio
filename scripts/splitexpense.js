@@ -77,6 +77,13 @@ const app = createApp({
           this.form.expenseSplit[this.user.id] = amountPerPerson;
           this.form.expenseSplit[participant] = amountPerPerson;
         });
+      }else {
+        const totalAmount = this.form.amount;
+        let totalPaidByParticipants = 0;
+       Object.values(this.form.expenseSplit).forEach(item=>{
+          totalPaidByParticipants += item;
+       });
+       this.form.expenseSplit[this.user.id] = totalAmount - totalPaidByParticipants;
       }
       console.log("Expense Split:", this.form.expenseSplit);
     },

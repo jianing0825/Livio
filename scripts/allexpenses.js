@@ -123,6 +123,7 @@ $(document).ready(async function () {
     const currentMonthExpenses = monthlyExpenses[currentMonth];
     const expensesByCategory = {};
     currentMonthExpenses.forEach(expense => {
+      console.log(expense.data.category,"Cate")
       if (!expensesByCategory[expense.data.category]) {
         expensesByCategory[expense.data.category] = [];
       }
@@ -138,7 +139,7 @@ $(document).ready(async function () {
         (prev, curr) => prev + curr.data.expenseSplit[userId],
         0
       ) || 0,
-      expensesByCategory["Transportation"]?.reduce(
+      expensesByCategory["Transport"]?.reduce(
         (prev, curr) => prev + curr.data.expenseSplit[userId],
         0
       ) || 0,
