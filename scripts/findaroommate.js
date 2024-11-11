@@ -20,7 +20,7 @@ const app = createApp({
       chatters: [],
       loading: true,
       partnerConfirmed: false, // New flag to track if partner is confirmed
-
+      partnerSelected:false,
     };
   },
   methods: {
@@ -59,10 +59,21 @@ const app = createApp({
     // },
     async getPartners() {
       // Retrieve partners excluding the current user
-      const partnersQuerySnapshot = await getDocs(
+      const userPartnersQuerySnapshot = await getDocs(
         query(
           collection(db, "partners"),
-          where("partners", "array-contains", this.userId)
+          where("partners","array-contains",this.userId)
+        )
+      );
+      
+      if(userPartnersQuerySnapshot.docs.length>0) {
+        this.partnerSelected = true;
+        this.changeTab("Chats")
+      }
+
+      const partnersQuerySnapshot = await getDocs(
+        query(
+          collection(db, "partners")
         )
       );
       partnersQuerySnapshot.docs.map(doc => {
@@ -147,9 +158,15 @@ const app = createApp({
       const exploreElem = document.getElementById("sub-nav-item-explore");
       if (tab === "Chats") {
         chatElem.classList.add("active");
-        chooseElem.classList.remove("active");
-        exploreElem.classList.remove("active");
-      } else if (tab === "Choose your roommate") {
+        if(this.partnerSelected){
+          chooseElem.remove();
+          exploreElem.remove();
+        }else{
+          chooseElem.classList.remove("active");
+          exploreElem.classList.remove("active");
+  
+        }
+        } else if (tab === "Choose your roommate") {
         chooseElem.classList.add("active");
         chatElem.classList.remove("active");
         exploreElem.classList.remove("active");

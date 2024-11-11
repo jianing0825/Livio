@@ -1,275 +1,315 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Housing Listings - Livio</title>
     <!-- Firebase and Firestore -->
     <!-- <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js"></script> -->
 
     <!-- Bootstrap and other styles -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles/nav.css">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/nav.css" />
     <!-- Vue 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
-            overflow-x: hidden;
-        }
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f0f2f5;
+        color: #333;
+        overflow-x: hidden;
+      }
 
-        .navbar {
-            background-color: #001F3F;
-        }
+      .navbar {
+        background-color: #001f3f;
+      }
 
-        .navbar.sticky-top {
-            position: sticky;
-            top: 0;
-            z-index: 1020;
-        }
+      .navbar.sticky-top {
+        position: sticky;
+        top: 0;
+        z-index: 1020;
+      }
 
-        .nav-link {
-            color: white !important;
-        }
+      .nav-link {
+        color: white !important;
+      }
 
-        .navbar-toggler-icon {
-            background-color: white;
-        }
+      .navbar-toggler-icon {
+        background-color: white;
+      }
 
-        #search-section {
-            background-color: #F1F5F9;
-            padding: 60px 0;
-            border-radius: 12px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 40px;
-            background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(250, 250, 250, 0.5));
-        }
+      #search-section {
+        background-color: #f1f5f9;
+        padding: 60px 0;
+        border-radius: 12px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+        background-image: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(250, 250, 250, 0.5)
+        );
+      }
 
-        h2 {
-            font-weight: 600;
-            color: #1E3A8A;
-        }
+      h2 {
+        font-weight: 600;
+        color: #1e3a8a;
+      }
 
-        .form-control,
-        .form-select {
-            border-radius: 8px;
-            padding: 10px;
-            border: 1px solid #1E3A8A;
-            transition: all 0.3s ease-in-out;
-        }
+      .form-control,
+      .form-select {
+        border-radius: 8px;
+        padding: 10px;
+        border: 1px solid #1e3a8a;
+        transition: all 0.3s ease-in-out;
+      }
 
-        .form-control:focus,
-        .form-select:focus {
-            box-shadow: 0 0 8px rgba(30, 58, 138, 0.3);
-        }
+      .form-control:focus,
+      .form-select:focus {
+        box-shadow: 0 0 8px rgba(30, 58, 138, 0.3);
+      }
 
-        .btn-primary {
-            background-color: #1E3A8A;
-            border-color: #1E3A8A;
-            transition: all 0.3s ease-in-out;
-        }
+      .btn-primary {
+        background-color: #1e3a8a;
+        border-color: #1e3a8a;
+        transition: all 0.3s ease-in-out;
+      }
 
-        .card {
-            transition: all 0.4s ease-in-out;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            border: none;
-            border-radius: 12px;
-            overflow: hidden;
-        }
+      .card {
+        transition: all 0.4s ease-in-out;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+      }
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
+      .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
 
-        .card-title {
-            color: #1E3A8A;
-            font-weight: 600;
-        }
+      .card-title {
+        color: #1e3a8a;
+        font-weight: 600;
+      }
 
-        .rating {
-            display: flex;
-            align-items: center;
-        }
+      .rating {
+        display: flex;
+        align-items: center;
+      }
 
-        .rating i {
-            color: #FFD700;
-        }
+      .rating i {
+        color: #ffd700;
+      }
 
+      /* rent button */
+      .btn-rent {
+        background-color: #4caf50;
+        color: white;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+      }
 
-        /* rent button */
-        .btn-rent {
-            background-color: #4CAF50;
-            color: white;
-            margin-left: 10px;
-            transition: all 0.3s ease;
-        }
+      .btn-rent:hover {
+        background-color: #45a049;
+        color: white;
+        transform: translateY(-2px);
+      }
 
-        .btn-rent:hover {
-            background-color: #45a049;
-            color: white;
-            transform: translateY(-2px);
-        }
+      .modal-header {
+        background-color: #1e3a8a;
+        color: white;
+      }
 
-        .modal-header {
-            background-color: #1E3A8A;
-            color: white;
-        }
+      .modal-title {
+        font-weight: 600;
+      }
 
-        .modal-title {
-            font-weight: 600;
-        }
+      .form-label {
+        font-weight: 500;
+      }
 
-        .form-label {
-            font-weight: 500;
-        }
+      .text-primary {
+        color: #1e3a8a !important;
+      }
 
-        .text-primary {
-            color: #1E3A8A !important;
-        }
+      .invalid-feedback {
+        font-size: 0.875rem;
+      }
 
-        .invalid-feedback {
-            font-size: 0.875rem;
-        }
-
-        .modal-footer {
-            border-top: 1px solid #dee2e6;
-            padding: 1rem;
-        }
+      .modal-footer {
+        border-top: 1px solid #dee2e6;
+        padding: 1rem;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body id="app">
     <!-- Navbar -->
-    <div id="app">
-        <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-            <div class="container-fluid">
-                <a class="navbar-brand ms-4" href="#">Livio</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="index.html">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="housinglisting.html">Housing Listing</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="findaroommate.html">Find A Roommate</a>
-                        </li>
-                        <li class="nav-item dropdown" v-if="hasSubmitted=='true'">
-                            <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">Expenses</a>
-                            <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
-                                <li><a class="dropdown-item" href="expense.html">Expenses</a></li>
-                                <li><a class="dropdown-item" href="allexpenses.html">All Expenses</a></li>
-                                <li><a class="dropdown-item" href="splitexpense.html">Split Expense</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="places.html">Places</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="profile.html">Profile</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" id="logoutBtn">Logout</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+    <div>
+      <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+          <a class="navbar-brand ms-4" href="#">Livio</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="housinglisting.html"
+                  >Housing Listing</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="findaroommate.html"
+                  >Find A Roommate</a
+                >
+              </li>
+              <li class="nav-item dropdown" v-if="hasSubmitted=='true'">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="expensesDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  >Expenses</a
+                >
+                <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
+                  <li>
+                    <a class="dropdown-item" href="expense.html">Expenses</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="allexpenses.html"
+                      >All Expenses</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="splitexpense.html"
+                      >Split Expense</a
+                    >
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="places.html">Places</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="profile.html">Profile</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" id="logoutBtn">Logout</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     </div>
 
     <!-- Search Section -->
     <section id="search-section" class="py-5">
-        <div class="container">
-            <h2 class="text-center">Search Housing Listings</h2>
-            <form id="search-form" class="row g-3 justify-content-center mt-4">
-                <div class="col-md-4">
-                    <select id="country" class="form-select">
-                        <option selected value="">Select Location</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <input type="number" id="maxPrice" class="form-control" placeholder="Max Price">
-                </div>
-                <div class="col-md-4">
-                    <select id="roommateCount" class="form-select">
-                        <option selected value="">Number of Roommates Allowed</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3+</option>
-                    </select>
-                </div>
-                <div class="col-md-4 text-center">
-                    <button type='submit' class='btn btn-primary'>Search</button>
-                </div>
-            </form>
-        </div>
+      <div class="container">
+        <h2 class="text-center">Search Housing Listings</h2>
+        <form id="search-form" class="row g-3 justify-content-center mt-4">
+          <div class="col-md-4">
+            <select id="country" class="form-select">
+              <option selected value="">Select Location</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <input
+              type="number"
+              id="maxPrice"
+              class="form-control"
+              placeholder="Max Price"
+            />
+          </div>
+          <div class="col-md-4">
+            <select id="roommateCount" class="form-select">
+              <option selected value="">Number of Roommates Allowed</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3+</option>
+            </select>
+          </div>
+          <div class="col-md-4 text-center">
+            <button type="submit" class="btn btn-primary">Search</button>
+          </div>
+        </form>
+      </div>
     </section>
 
     <!-- Listings Section -->
     <section id="listings" class="py-5 bg-white">
-        <div class="container">
-            <h2 class="text-center">Available Listings</h2>
-            <div class="row mt-4 justify-content-center" id="listingsContainer"></div>
-        </div>
+      <div class="container">
+        <h2 class="text-center">Available Listings</h2>
+        <div
+          class="row mt-4 justify-content-center"
+          id="listingsContainer"
+        ></div>
+      </div>
     </section>
 
+    <script src="./scripts/houseListing.js" type="module"></script>
 
-    <script>
+    <script type="module">
+      // <div id='app'></div>
 
-        // <div id='app'></div>
-        const appVue = Vue.createApp({
-            data() {
-                return {
-                    hasSubmitted: localStorage.getItem("hasSubmitted")  // key: value
-                };
-            }, // data
-
-        });
-        const vm = appVue.mount('#app');
-        document.addEventListener('DOMContentLoaded', function () {
-            // Pet details toggle
-            const hasPetsSelect = document.getElementById('hasPets');
-            if (hasPetsSelect) {
-                hasPetsSelect.addEventListener('change', function () {
-                    const petDetailsField = document.getElementById('petDetailsField');
-                    if (petDetailsField) {
-                        petDetailsField.style.display = this.value === 'yes' ? 'block' : 'none';
-                        if (this.value === 'no') {
-                            const petDetails = document.getElementById('petDetails');
-                            if (petDetails) {
-                                petDetails.value = '';
-                            }
-                        }
-                    }
-                });
+      document.addEventListener("DOMContentLoaded", function () {
+        // Pet details toggle
+        const hasPetsSelect = document.getElementById("hasPets");
+        if (hasPetsSelect) {
+          hasPetsSelect.addEventListener("change", function () {
+            const petDetailsField = document.getElementById("petDetailsField");
+            if (petDetailsField) {
+              petDetailsField.style.display =
+                this.value === "yes" ? "block" : "none";
+              if (this.value === "no") {
+                const petDetails = document.getElementById("petDetails");
+                if (petDetails) {
+                  petDetails.value = "";
+                }
+              }
             }
+          });
+        }
 
-            // Dynamic roommate fields
-            const numberOfRoommates = document.getElementById('numberOfRoommates');
-            if (numberOfRoommates) {
-                numberOfRoommates.addEventListener('change', function () {
-                    const roommateFields = document.getElementById('roommateFields');
-                    if (roommateFields) {
-                        roommateFields.innerHTML = ''; // Clear existing fields
+        // Dynamic roommate fields
+        const numberOfRoommates = document.getElementById("numberOfRoommates");
+        if (numberOfRoommates) {
+          numberOfRoommates.addEventListener("change", function () {
+            const roommateFields = document.getElementById("roommateFields");
+            if (roommateFields) {
+              roommateFields.innerHTML = ""; // Clear existing fields
 
-                        const count = parseInt(this.value);
-                        if (!isNaN(count)) {
-                            for (let i = 1; i <= count; i++) {
-                                const html = `
+              const count = parseInt(this.value);
+              if (!isNaN(count)) {
+                for (let i = 1; i <= count; i++) {
+                  const html = `
                             <div class="row g-3 mb-3">
                                 <h6 class="text-secondary">Roommate ${i}</h6>
                                 <div class="col-md-6">
@@ -284,379 +324,453 @@
                                 </div>
                             </div>
                         `;
-                                roommateFields.insertAdjacentHTML('beforeend', html);
-                            }
-                        }
-                    }
-                });
+                  roommateFields.insertAdjacentHTML("beforeend", html);
+                }
+              }
             }
+          });
+        }
 
-            // Form validation
-            const rentalForm = document.getElementById('rentalForm');
-            if (rentalForm) {
-                rentalForm.addEventListener('submit', function (event) {
-                    if (!this.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    this.classList.add('was-validated');
-                });
+        // Form validation
+        const rentalForm = document.getElementById("rentalForm");
+        if (rentalForm) {
+          rentalForm.addEventListener("submit", function (event) {
+            if (!this.checkValidity()) {
+              event.preventDefault();
+              event.stopPropagation();
             }
-        })
+            this.classList.add("was-validated");
+          });
+        }
+      });
     </script>
 
     <script type="module">
+      // check if logged in
+      if (localStorage.getItem("isLoggedIn") === null)
+        window.location.href = "loginpage.html";
 
-        // check if logged in
-        if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
-
-        // Add logout functionality
-        document.getElementById('logoutBtn').addEventListener('click', function () {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('userId');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('userFirstName');
-            localStorage.removeItem('userLastName');
-            window.location.href = 'loginpage.html';
+      // Add logout functionality
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", function () {
+          localStorage.removeItem("isLoggedIn");
+          localStorage.removeItem("userId");
+          localStorage.removeItem("userEmail");
+          localStorage.removeItem("userFirstName");
+          localStorage.removeItem("userLastName");
+          window.location.href = "loginpage.html";
         });
 
-        // Import Firebase functions
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import {
-            getFirestore,
-            collection,
-            getDocs,
-            query,
-            where,
-            orderBy,
-            doc,
-            getDoc,
-            addDoc,
-            updateDoc
-        } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+      // Import Firebase functions
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+        query,
+        where,
+        orderBy,
+        doc,
+        getDoc,
+        addDoc,
+        updateDoc,
+      } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+      import { db } from "./src/firebase.js";
 
+      //update the openRentalForm function to include error handling
+      window.openRentalForm = function (listingId) {
+        try {
+          const listingIdInput = document.getElementById("listingId");
+          const modalElement = document.getElementById("rentalFormModal");
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBzWcOPasd5_KEcRodDRVtJA_wUn_-35N8",
-            authDomain: "livio-e4af5.firebaseapp.com",
-            databaseURL: "https://livio-e4af5-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "livio-e4af5",
-            storageBucket: "livio-e4af5.appspot.com",
-            messagingSenderId: "641180735040",
-            appId: "1:641180735040:web:b95b1bcf4f53f4d519f1a5"
-        };
+          if (!listingIdInput || !modalElement) {
+            throw new Error("Required modal elements not found");
+          }
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+          listingIdInput.value = listingId;
+          window.selectedRoom = listingId;
+          const modal = new bootstrap.Modal(modalElement);
+          modal.show();
+        } catch (error) {
+          console.error("Error opening rental form:", error);
+          alert(
+            "There was an error opening the rental form. Please try again."
+          );
+        }
+      };
+      const originalSubmitRentalForm = window.submitRentalForm;
+      window.submitRentalForm = async function (event) {
+        if (event) {
+          event.preventDefault();
+        }
+        if(window.alreadyBooked) return;
 
-        //update the openRentalForm function to include error handling
-        window.openRentalForm = function (listingId) {
-            try {
-                const listingIdInput = document.getElementById('listingId');
-                const modalElement = document.getElementById('rentalFormModal');
-
-                if (!listingIdInput || !modalElement) {
-                    throw new Error('Required modal elements not found');
-                }
-
-                listingIdInput.value = listingId;
-                const modal = new bootstrap.Modal(modalElement);
-                modal.show();
-            } catch (error) {
-                console.error('Error opening rental form:', error);
-                alert('There was an error opening the rental form. Please try again.');
-            }
-        };
-        const originalSubmitRentalForm = window.submitRentalForm;
-        window.submitRentalForm = async function (event) {
-            if (event) {
-                event.preventDefault();
-            }
-
-            const form = document.getElementById('rentalForm');
-            if (!form || !form.checkValidity()) {
-                if (form) {
-                    form.classList.add('was-validated');
-                }
-                return;
-            }
-
-            try {
-                const partnerId = document.getElementById('partnerId').value;
-                if (!partnerId) {
-                    throw new Error('Partner selection is required');
-                }
-
-                // Collect all form data
-                const formData = {
-                    listingId: document.getElementById('listingId').value,
-                    firstName: document.getElementById('firstName').value,
-                    lastName: document.getElementById('lastName').value,
-                    email: document.getElementById('email').value,
-                    phone: document.getElementById('phone').value,
-                    partnerId: partnerId,
-                    hasPets: document.getElementById('hasPets').value,
-                    petDetails: document.getElementById('hasPets').value === 'yes' ?
-                        document.getElementById('petDetails').value : null,
-                    lifestyle: document.getElementById('lifestyle').value,
-                    cleaningPreferences: document.getElementById('cleaningPreferences').value,
-                    moveInDate: document.getElementById('moveInDate').value,
-                    leaseDuration: document.getElementById('leaseDuration').value,
-                    comments: document.getElementById('comments').value,
-                    timestamp: new Date(),
-                    status: 'pending'
-                };
-
-                // Submit the form data
-                const rentalApplicationsRef = collection(db, 'rentalApplications');
-                await addDoc(rentalApplicationsRef, formData);
-                await updateDoc(doc(db, "users", localStorage.userId), {
-                    hasSubmitted: true
-                });
-                localStorage.setItem("hasSubmitted", "true");
-                try {
-                    await updateDoc(doc(db, "users", partnerId), {
-                        hasSubmitted: true
-                    });
-                } catch (error) {
-                    console.log("error updating partner info: " + error);
-                }
-
-                // Show success message and reset form
-                alert('Your rental application has been submitted successfully!');
-                const modal = bootstrap.Modal.getInstance(document.getElementById('rentalFormModal'));
-                if (modal) {
-                    modal.hide();
-                }
-                form.reset();
-                form.classList.remove('was-validated');
-
-            } catch (error) {
-                console.error('Error submitting rental application:', error);
-                alert('There was an error submitting your application. Please try again.');
-            }
-        };
-
-        // Add the event listener for form submission
-
-
-        document.addEventListener('submitRentalApplication', async (event) => {
-            try {
-                const formData = {
-                    ...event.detail,
-                    timestamp: new Date(),
-                    status: 'pending'
-                };
-
-                // Add to Firestore
-                const rentalApplicationsRef = collection(db, 'rentalApplications');
-                await addDoc(rentalApplicationsRef, formData);
-
-                // Show success message
-                alert('Your rental application has been submitted successfully!');
-
-                // Close modal and reset form
-                const modal = bootstrap.Modal.getInstance(document.getElementById('rentalFormModal'));
-                modal.hide();
-                document.getElementById('rentalForm').reset();
-                document.getElementById('rentalForm').classList.remove('was-validated');
-            } catch (error) {
-                console.error('Error submitting rental application:', error);
-                alert('There was an error submitting your application. Please try again.');
-            }
-        });
-
-        // Populate location dropdown function remains the same
-        async function populateCountryDropdown() {
-            const countrySelect = document.getElementById("country");
-            try {
-                const querySnapshot = await getDocs(collection(db, "rooms"));
-                const countries = new Set();
-                querySnapshot.forEach((doc) => {
-                    const listing = doc.data();
-                    if (listing.country) { // Use 'country' field instead
-                        countries.add(listing.country);
-                    }
-                });
-                countries.forEach(country => {
-                    const option = document.createElement("option");
-                    option.value = country;
-                    option.textContent = country;
-                    countrySelect.appendChild(option);
-                });
-            } catch (error) {
-                console.error("Error fetching location:", error);
-            }
+        const form = document.getElementById("rentalForm");
+        if (!form || !form.checkValidity()) {
+          if (form) {
+            form.classList.add("was-validated");
+          }
+          return;
         }
 
-        // Function to render stars based on rating
-        function renderStars(rating) {
-            rating = parseFloat(rating);
-            let starsHTML = '';
-            for (let i = 1; i <= 5; i++) {
-                if (i <= Math.floor(rating)) {
-                    starsHTML += '<i class="fas fa-star"></i>';
-                } else if (i - 0.5 <= rating) {
-                    starsHTML += '<i class="fas fa-star-half-alt"></i>';
-                } else {
-                    starsHTML += '<i class="far fa-star"></i>';
-                }
-            }
-            return starsHTML;
+        try {
+            console.log(window.selectedRoom)
+           const userId =  localStorage.getItem("userId");
+          const partnerId = document.getElementById("partnerId").value;
+          console.log(partnerId)
+          if (!partnerId) {
+            throw new Error("Partner selection is required");
+          }
+
+          // Collect all form data
+          const formData = {
+            listingId: document.getElementById("listingId").value,
+            firstName: document.getElementById("firstName").value,
+            lastName: document.getElementById("lastName").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            partnerId: partnerId,
+            hasPets: document.getElementById("hasPets").value,
+            petDetails:
+              document.getElementById("hasPets").value === "yes"
+                ? document.getElementById("petDetails").value
+                : null,
+            lifestyle: document.getElementById("lifestyle").value,
+            cleaningPreferences: document.getElementById("cleaningPreferences")
+              .value,
+            moveInDate: document.getElementById("moveInDate").value,
+            leaseDuration: document.getElementById("leaseDuration").value,
+            comments: document.getElementById("comments").value,
+            timestamp: new Date(),
+            status: "pending",
+
+            roommates:[userId,partnerId],
+          };
+
+          // Submit the form data
+          const rentalApplicationsRef = collection(db, "rentalApplications");
+          await addDoc(rentalApplicationsRef, formData);
+          await updateDoc(doc(db, "users", userId), {
+            hasSubmitted: true,
+          });
+          await updateDoc(doc(db,"rooms",document.getElementById("listingId").value),{
+            roommates: [userId,partnerId]
+          })
+          localStorage.setItem("hasSubmitted", "true");
+          try {
+            await updateDoc(doc(db, "users", partnerId), {
+              hasSubmitted: true,
+            });
+          } catch (error) {
+            console.log("error updating partner info: " + error);
+          }
+
+          // Show success message and reset form
+          alert("Your rental application has been submitted successfully!");
+          window.location.reload()
+          return         
+          const modal = bootstrap.Modal.getInstance(
+            document.getElementById("rentalFormModal")
+          );
+          if (modal) {
+            modal.hide();
+          }
+          form.reset();
+          form.classList.remove("was-validated");
+        } catch (error) {
+          console.error("Error submitting rental application:", error);
+          alert(
+            "There was an error submitting your application. Please try again."
+          );
         }
+      };
 
-        // Function to fetch ratings for a specific listing
-        async function fetchRatingForListing(listingNumber) {
-            try {
-                // Get ratings from the correct collection path
-                const feedbackQuery = query(
-                    collection(db, 'feedbacks', 'feedback', `houselisting${listingNumber}`),
-                    orderBy('timestamp', 'desc')
-                );
-                const querySnapshot = await getDocs(feedbackQuery);
+      // Add the event listener for form submission
 
-                let totalRating = 0;
-                let count = 0;
+      document.addEventListener("submitRentalApplication", async event => {
+        try {
+          const formData = {
+            ...event.detail,
+            timestamp: new Date(),
+            status: "pending",
+          };
 
-                querySnapshot.forEach(doc => {
-                    const feedback = doc.data();
-                    if (feedback.rating) {
-                        totalRating += parseFloat(feedback.rating);
-                        count++;
-                    }
-                });
+          // Add to Firestore
+          const rentalApplicationsRef = collection(db, "rentalApplications");
+          await addDoc(rentalApplicationsRef, formData);
 
-                // Calculate average rating
-                const averageRating = count > 0 ? totalRating / count : 0;
-                return averageRating;
-            } catch (error) {
-                console.error(`Error fetching ratings for listing ${listingNumber}:`, error);
-                return 0;
-            }
+          // Show success message
+          alert("Your rental application has been submitted successfully!");
+
+
+ // Close modal and reset form
+          const modal = bootstrap.Modal.getInstance(
+            document.getElementById("rentalFormModal")
+          );
+          modal.hide();
+          document.getElementById("rentalForm").reset();
+          document
+            .getElementById("rentalForm")
+            .classList.remove("was-validated");
+        } catch (error) {
+          console.error("Error submitting rental application:", error);
+          alert(
+            "There was an error submitting your application. Please try again."
+          );
         }
+      });
 
+      // Populate location dropdown function remains the same
+      async function populateCountryDropdown() {
+        const querySnapshot = await getDocs(collection(db, "rooms"));
+        const countrySelect = document.getElementById("country");
+        try {
+          
+          const countries = new Set();
+          querySnapshot.forEach(doc => {
+            const listing = doc.data();
+            if (listing.country) {
+              // Use 'country' field instead
+              countries.add(listing.country);
+            }
+          });
+          countries.forEach(country => {
+            const option = document.createElement("option");
+            option.value = country;
+            option.textContent = country;
+            countrySelect.appendChild(option);
+          });
+        } catch (error) {
+          console.error("Error fetching location:", error);
+        }
+      }
 
-        async function applyFilters(event) {
-            event.preventDefault();
-            const listingsContainer = document.getElementById("listingsContainer");
-            listingsContainer.innerHTML = "";
+      // Function to render stars based on rating
+      function renderStars(rating) {
+        rating = parseFloat(rating);
+        let starsHTML = "";
+        for (let i = 1; i <= 5; i++) {
+          if (i <= Math.floor(rating)) {
+            starsHTML += '<i class="fas fa-star"></i>';
+          } else if (i - 0.5 <= rating) {
+            starsHTML += '<i class="fas fa-star-half-alt"></i>';
+          } else {
+            starsHTML += '<i class="far fa-star"></i>';
+          }
+        }
+        return starsHTML;
+      }
 
-            try {
-                // Get reference to rooms collection
-                const roomsRef = collection(db, "rooms");
-                console.log("Fetching room listings...");
+      // Function to fetch ratings for a specific listing
+      async function fetchRatingForListing(listingNumber) {
+        try {
+          // Get ratings from the correct collection path
+          const feedbackQuery = query(
+            collection(
+              db,
+              "feedbacks",
+              "feedback",
+              `houselisting${listingNumber}`
+            ),
+            orderBy("timestamp", "desc")
+          );
+          const querySnapshot = await getDocs(feedbackQuery);
 
-                const querySnapshot = await getDocs(roomsRef);
-                console.log(`Found ${querySnapshot.size} listings`);
+          let totalRating = 0;
+          let count = 0;
 
-                if (querySnapshot.empty) {
-                    listingsContainer.innerHTML = "<p>No listings available.</p>";
-                    return;
-                }
+          querySnapshot.forEach(doc => {
+            const feedback = doc.data();
+            if (feedback.rating) {
+              totalRating += parseFloat(feedback.rating);
+              count++;
+            }
+          });
 
-                // Apply filters
-                const country = document.getElementById("country").value;
-                const maxPrice = parseFloat(document.getElementById("maxPrice").value);
-                const roommateCount = document.getElementById("roommateCount").value;
+          // Calculate average rating
+          const averageRating = count > 0 ? totalRating / count : 0;
+          return averageRating;
+        } catch (error) {
+          console.error(
+            `Error fetching ratings for listing ${listingNumber}:`,
+            error
+          );
+          return 0;
+        }
+      }
 
-                // Process each listing
-                for (const docu of querySnapshot.docs) {
-                    const listing = { ...docu.data(), id: docu.id };
-                    console.log("Processing listing:", listing);
+      async function applyFilters(event) {
+        event.preventDefault();
+        const listingsContainer = document.getElementById("listingsContainer");
+        listingsContainer.innerHTML = "";
+        try {
+            const userId = localStorage.getItem("userId");
+	    console.log("Fetching info");
+	    const applicationsQuerySnapshot = await getDocs(query( collection(db, "rentalApplications"), where("roommates", "array-contains", userId) ));
+	    console.log(applicationsQuerySnapshot.docs);
+        const listingIDstoFilter = [];
 
-                    // Skip if filters don't match
-                    if (country && listing.country !== country) continue;
-                    if (!isNaN(maxPrice) && listing.pricePerMonth > maxPrice) continue;
+        applicationsQuerySnapshot.forEach(doc => listingIDstoFilter.push(doc.data().listingId));
+	    console.log(listingIDstoFilter.length)
+        window.alreadyBooked = listingIDstoFilter.length>0;
+          // Get reference to rooms collection
+          const roomsRef = collection(db, "rooms");
 
-                    // Roommate count filter logic
-                    if (roommateCount) {
-                        const selectedCount = parseInt(roommateCount);
-                        if (roommateCount === "3+") {
-                            // Include listings allowing 3 or more roommates
-                            if (listing.roommateCount < 3) continue;
-                        } else {
-                            // Ensure exact match for roommate count
-                            if (listing.roommateCount !== selectedCount) continue;
-                        }
-                    }
+          const querySnapshot = await getDocs(roomsRef);
 
-                    // Extract house number
-                    let houseNumber;
-                    if (listing.linkUrl) {
-                        if (listing.linkUrl.includes('listing1.html')) houseNumber = '1';
-                        else if (listing.linkUrl.includes('listing2.html')) houseNumber = '2';
-                        else if (listing.linkUrl.includes('listing3.html')) houseNumber = '3';
-                        else if (listing.linkUrl.includes('listing4.html')) houseNumber = '4';
-                        else if (listing.title.includes('Penthouse in Beverly Hills')) {
-                            houseNumber = '10'
-                        } else if (listing.title.includes('Cozy Studio Near Riverfront')) {
-                            houseNumber = '11'
-                        } else if (listing.title.includes('Spacious Loft in Manhattan')) {
-                            houseNumber = '12'
-                        } else if (listing.title.includes('Beachfront Condo in Miami')) {
-                            houseNumber = '13'
-                        } else if (listing.title.includes('Modern 2-Bedroom Apartment in Downtown')) {
-                            houseNumber = '14'
-                        } else if (listing.title.includes('Luxurious 3-Bedroom Condo with Sea View')) {
-                            houseNumber = '15'
-                        } else if (listing.title.includes('Spacious 4-Bedroom House with Backyard')) {
-                            houseNumber = '16'
-                        } else if (listing.title.includes('Charming 1-Bedroom Loft')) {
-                            houseNumber = '17'
-                        } else if (listing.title.includes('Elegant 2-Bedroom Villa with Private Pool')) {
-                            houseNumber = '18'
-                        } else if (listing.title.includes('Modern Apartment with City View')) {
-                            houseNumber = '19'
-                        } else if (listing.title.includes('Cozy 2-Bedroom Flat in Downtown Paris')) {
-                            houseNumber = '20'
-                        } else if (listing.title.includes('Luxury Condo in Berlin')) {
-                            houseNumber = '21'
-                        } else if (listing.title.includes('Villa with Garden in Tuscany')) {
-                            houseNumber = '22'
-                        } else if (listing.title.includes('Stylish Flat near Sagrada Familia')) {
-                            houseNumber = '23'
-                        } else if (listing.title.includes('Elegant Apartment near Eiffel Tower')) {
-                            houseNumber = '24'
-                        } else if (listing.title.includes('Historic Home in Munich')) {
-                            houseNumber = '25'
-                        } else if (listing.title.includes('Rustic Cottage in Amalfi Coast')) {
-                            houseNumber = '26'
-                        } else if (listing.title.includes('Bright Flat in Madrid City Center')) {
-                            houseNumber = '27'
-                        } else if (listing.title.includes('Chic Apartment in Lyon')) {
-                            houseNumber = '28'
-                        } else if (listing.title.includes('Modern Flat in Frankfurt')) {
-                            houseNumber = '29'
-                        } else if (listing.title.includes('Charming Apartment in Romes Historic Center')) {
-                            houseNumber = '30'
-                        } else if (listing.title.includes('Modern 2-Bedroom Apartment Near the Beach')) {
-                            houseNumber = '5'
-                        } else if (listing.title.includes('Luxury 5-Bedroom Penthouse')) {
-                            houseNumber = '6'
-                        } else if (listing.title.includes('Charming 3-Bedroom Condo')) {
-                            houseNumber = '7'
-                        } else if (listing.title.includes('Cozy 1-Bedroom Apartment')) {
-                            houseNumber = '8'
-                        } else if (listing.title.includes('Affordable Studio Apartment')) {
-                            houseNumber = '9'
-                        };
-                    }
+          if (querySnapshot.empty) {
+            listingsContainer.innerHTML = "<p>No listings available.</p>";
+            return;
+          }
 
-                    if (houseNumber) {
-                        console.log(`Found house number ${houseNumber} from linkUrl:`, listing.linkUrl);
-                    } else {
-                        console.log("No house number found in linkUrl:", listing.linkUrl);
-                    }
+          // Apply filters
+          const country = document.getElementById("country").value;
+          const maxPrice = parseFloat(
+            document.getElementById("maxPrice").value
+          );
+          const roommateCount = document.getElementById("roommateCount").value;
 
+          // Process each listing
+          for (const docu of querySnapshot.docs) {
+            const listing = { ...docu.data(), id: docu.id };
 
-                    const rating = await fetchRatingForListing(houseNumber);
-                    const starRating = renderStars(parseFloat(rating));
-                    const imageUrl = listing.imageUrl?.trim() || 'default-image.jpg';
+            // Skip if filters don't match
+            if (country && listing.country !== country) continue;
+            if (!isNaN(maxPrice) && listing.pricePerMonth > maxPrice) continue;
+            console.log(listingIDstoFilter,listing.id)
+            if(listingIDstoFilter.includes(listing.id)) continue;
 
-                    // Update the listingCard template in your applyFilters function to include the Rent Now button
-                    const listingCard = `
+            // Roommate count filter logic
+            if (roommateCount) {
+              const selectedCount = parseInt(roommateCount);
+              if (roommateCount === "3+") {
+                // Include listings allowing 3 or more roommates
+                if (listing.roommateCount < 3) continue;
+              } else {
+                // Ensure exact match for roommate count
+                if (listing.roommateCount !== selectedCount) continue;
+              }
+            }
+
+            // Extract house number
+            let houseNumber;
+            if (listing.linkUrl) {
+              if (listing.linkUrl.includes("listing1.html")) houseNumber = "1";
+              else if (listing.linkUrl.includes("listing2.html"))
+                houseNumber = "2";
+              else if (listing.linkUrl.includes("listing3.html"))
+                houseNumber = "3";
+              else if (listing.linkUrl.includes("listing4.html"))
+                houseNumber = "4";
+              else if (listing.title.includes("Penthouse in Beverly Hills")) {
+                houseNumber = "10";
+              } else if (
+                listing.title.includes("Cozy Studio Near Riverfront")
+              ) {
+                houseNumber = "11";
+              } else if (listing.title.includes("Spacious Loft in Manhattan")) {
+                houseNumber = "12";
+              } else if (listing.title.includes("Beachfront Condo in Miami")) {
+                houseNumber = "13";
+              } else if (
+                listing.title.includes("Modern 2-Bedroom Apartment in Downtown")
+              ) {
+                houseNumber = "14";
+              } else if (
+                listing.title.includes(
+                  "Luxurious 3-Bedroom Condo with Sea View"
+                )
+              ) {
+                houseNumber = "15";
+              } else if (
+                listing.title.includes("Spacious 4-Bedroom House with Backyard")
+              ) {
+                houseNumber = "16";
+              } else if (listing.title.includes("Charming 1-Bedroom Loft")) {
+                houseNumber = "17";
+              } else if (
+                listing.title.includes(
+                  "Elegant 2-Bedroom Villa with Private Pool"
+                )
+              ) {
+                houseNumber = "18";
+              } else if (
+                listing.title.includes("Modern Apartment with City View")
+              ) {
+                houseNumber = "19";
+              } else if (
+                listing.title.includes("Cozy 2-Bedroom Flat in Downtown Paris")
+              ) {
+                houseNumber = "20";
+              } else if (listing.title.includes("Luxury Condo in Berlin")) {
+                houseNumber = "21";
+              } else if (
+                listing.title.includes("Villa with Garden in Tuscany")
+              ) {
+                houseNumber = "22";
+              } else if (
+                listing.title.includes("Stylish Flat near Sagrada Familia")
+              ) {
+                houseNumber = "23";
+              } else if (
+                listing.title.includes("Elegant Apartment near Eiffel Tower")
+              ) {
+                houseNumber = "24";
+              } else if (listing.title.includes("Historic Home in Munich")) {
+                houseNumber = "25";
+              } else if (
+                listing.title.includes("Rustic Cottage in Amalfi Coast")
+              ) {
+                houseNumber = "26";
+              } else if (
+                listing.title.includes("Bright Flat in Madrid City Center")
+              ) {
+                houseNumber = "27";
+              } else if (listing.title.includes("Chic Apartment in Lyon")) {
+                houseNumber = "28";
+              } else if (listing.title.includes("Modern Flat in Frankfurt")) {
+                houseNumber = "29";
+              } else if (
+                listing.title.includes(
+                  "Charming Apartment in Romes Historic Center"
+                )
+              ) {
+                houseNumber = "30";
+              } else if (
+                listing.title.includes(
+                  "Modern 2-Bedroom Apartment Near the Beach"
+                )
+              ) {
+                houseNumber = "5";
+              } else if (listing.title.includes("Luxury 5-Bedroom Penthouse")) {
+                houseNumber = "6";
+              } else if (listing.title.includes("Charming 3-Bedroom Condo")) {
+                houseNumber = "7";
+              } else if (listing.title.includes("Cozy 1-Bedroom Apartment")) {
+                houseNumber = "8";
+              } else if (
+                listing.title.includes("Affordable Studio Apartment")
+              ) {
+                houseNumber = "9";
+              }
+            }
+
+            if (houseNumber) {
+              //   console.log(
+              //     `Found house number ${houseNumber} from linkUrl:`,
+              //     listing.linkUrl
+              //   );
+            } else {
+              console.log("No house number found in linkUrl:", listing.linkUrl);
+            }
+
+            const rating = await fetchRatingForListing(houseNumber);
+            const starRating = renderStars(parseFloat(rating));
+            const imageUrl = listing.imageUrl?.trim() || "default-image.jpg";
+
+            // Update the listingCard template in your applyFilters function to include the Rent Now button
+            const listingCard = `
     <div class="col-md-4 mb-4">
         <div class="card">
             <img src="${imageUrl}" class="card-img-top" alt="Listing Image" style="height: 200px; object-fit: cover;">
@@ -666,342 +780,455 @@
                     ${starRating} 
                     <span class="ms-2">(${rating})</span>
                 </div>
-                <p>Location: ${listing.location || 'Not specified'}</p>
-                <p>Number of Roommates Allowed: ${listing.roommateCount || 'Not specified'}</p>
+                <p>Location: ${listing.location || "Not specified"}</p>
+                <p>Number of Roommates Allowed: ${
+                  listing.roommateCount || "Not specified"
+                }</p>
                 <p>Price: $${listing.pricePerMonth || 0}/month</p>
-                <p>Start Date: ${listing.startDate || 'Not specified'}</p>
-                <p>End Date: ${listing.endDate || 'Not specified'}</p>
+                <p>Start Date: ${listing.startDate || "Not specified"}</p>
+                <p>End Date: ${listing.endDate || "Not specified"}</p>
                 <div class="d-flex">
-                    <a href="${listing.linkUrl || '#'}" class="btn btn-outline-primary">View Details</a>
-                    <button class="btn btn-rent" onclick="openRentalForm('${listing.id}')">Rent Now</button>
+                    <a href="${
+                      listing.linkUrl || "#"
+                    }" class="btn btn-outline-primary">View Details</a>
+                    <button class="btn btn-rent" ${listingIDstoFilter.length>0 ? "disabled":""}  onclick="openRentalForm('${
+                      listing.id
+                    }')">Rent Now</button>
                 </div>
             </div>
         </div>
     </div>
 `;
-                    listingsContainer.insertAdjacentHTML("beforeend", listingCard);
-                    console.log("Added listing card for:", listing.title);
-                }
+            listingsContainer.insertAdjacentHTML("beforeend", listingCard);
+            // console.log("Added listing card for:", listing.title);
+          }
 
-                // If no listings were displayed after filtering
-                if (listingsContainer.children.length === 0) {
-                    listingsContainer.innerHTML = "<p>No listings match your search criteria.</p>";
-                }
-
-            } catch (error) {
-                console.error("Error fetching room listings:", error);
-                listingsContainer.innerHTML = "<p>Error loading listings. Please try again later.</p>";
-            }
+          // If no listings were displayed after filtering
+          if (listingsContainer.children.length === 0) {
+            listingsContainer.innerHTML =
+              "<p>No listings match your search criteria.</p>";
+          }
+        } catch (error) {
+          console.error("Error fetching room listings:", error);
+          listingsContainer.innerHTML =
+            "<p>Error loading listings. Please try again later.</p>";
         }
+      }
 
+      // Add event listeners
+      document
+        .getElementById("search-form")
+        .addEventListener("submit", applyFilters);
+      window.addEventListener("load", () => {
+        populateCountryDropdown();
+        applyFilters(new Event("submit"));
+      });
 
-        // Add event listeners
-        document.getElementById('search-form').addEventListener('submit', applyFilters);
-        window.addEventListener("load", () => {
-            populateCountryDropdown();
-            applyFilters(new Event('submit'));
-        });
+      console.log("Full listing data:", JSON.stringify(listing, null, 2));
 
+      // // Function to populate partner dropdown
+      // async function populatePartnerDropdown() {
+      //     try {
+      //         console.log('Starting populatePartnerDropdown function');
 
-        console.log("Full listing data:", JSON.stringify(listing, null, 2));
+      //         const partnerSelect = document.getElementById('partnerId');
+      //         if (!partnerSelect) {
+      //             console.error('Partner select element not found');
+      //             return;
+      //         }
 
+      //         // Clear existing options except the first one
+      //         while (partnerSelect.options.length > 1) {
+      //             partnerSelect.remove(1);
+      //         }
 
-        // // Function to populate partner dropdown
-        // async function populatePartnerDropdown() {
-        //     try {
-        //         console.log('Starting populatePartnerDropdown function');
+      //         // Get the current user's ID
+      //         const userId = localStorage.getItem('userId');
+      //         console.log('Current user ID:', userId);
 
-        //         const partnerSelect = document.getElementById('partnerId');
-        //         if (!partnerSelect) {
-        //             console.error('Partner select element not found');
-        //             return;
-        //         }
+      //         // Get document from partners collection
+      //         const partnerDoc = await getDoc(doc(db, 'partners', userId));
+      //         console.log('Looking for partners document with ID:', userId);
 
-        //         // Clear existing options except the first one
-        //         while (partnerSelect.options.length > 1) {
-        //             partnerSelect.remove(1);
-        //         }
+      //         if (!partnerDoc.exists()) {
+      //             console.log('No partner document found for current user');
+      //             const docRef = doc(db, 'partners', 'mrzqKGWMCvfD3hzTh3ec');
+      //             const fallbackDoc = await getDoc(docRef);
 
-        //         // Get the current user's ID
-        //         const userId = localStorage.getItem('userId');
-        //         console.log('Current user ID:', userId);
+      //             if (fallbackDoc.exists()) {
+      //                 const data = fallbackDoc.data();
+      //                 console.log('Found fallback document:', data);
 
-        //         // Get document from partners collection
-        //         const partnerDoc = await getDoc(doc(db, 'partners', userId));
-        //         console.log('Looking for partners document with ID:', userId);
+      //                 if (data.partners && Array.isArray(data.partners)) {
+      //                     for (const partnerId of data.partners) {
+      //                         // Try to get user info for each partner
+      //                         try {
+      //                             const userDoc = await getDoc(doc(db, 'users', partnerId));
+      //                             const userData = userDoc.exists() ? userDoc.data() : null;
 
-        //         if (!partnerDoc.exists()) {
-        //             console.log('No partner document found for current user');
-        //             const docRef = doc(db, 'partners', 'mrzqKGWMCvfD3hzTh3ec');
-        //             const fallbackDoc = await getDoc(docRef);
+      //                             const option = document.createElement('option');
+      //                             option.value = partnerId;
 
-        //             if (fallbackDoc.exists()) {
-        //                 const data = fallbackDoc.data();
-        //                 console.log('Found fallback document:', data);
+      //                             if (userData && userData.firstName) {
+      //                                 option.textContent = `${userData.firstName} ${userData.lastName || ''}`;
+      //                             } else {
+      //                                 option.textContent = `Partner ID: ${partnerId}`;
+      //                             }
 
-        //                 if (data.partners && Array.isArray(data.partners)) {
-        //                     for (const partnerId of data.partners) {
-        //                         // Try to get user info for each partner
-        //                         try {
-        //                             const userDoc = await getDoc(doc(db, 'users', partnerId));
-        //                             const userData = userDoc.exists() ? userDoc.data() : null;
+      //                             partnerSelect.appendChild(option);
+      //                             console.log('Added partner option:', option.textContent);
+      //                         } catch (error) {
+      //                             console.error('Error getting user data for partner:', partnerId, error);
+      //                         }
+      //                     }
+      //                 }
+      //             }
+      //         } else {
+      //             const data = partnerDoc.data();
+      //             console.log('Found user partner document:', data);
 
-        //                             const option = document.createElement('option');
-        //                             option.value = partnerId;
+      //             if (data.partners && Array.isArray(data.partners)) {
+      //                 for (const partnerId of data.partners) {
+      //                     const option = document.createElement('option');
+      //                     option.value = partnerId;
+      //                     option.textContent = `Partner: ${partnerId}`;
+      //                     partnerSelect.appendChild(option);
+      //                 }
+      //             }
+      //         }
 
-        //                             if (userData && userData.firstName) {
-        //                                 option.textContent = `${userData.firstName} ${userData.lastName || ''}`;
-        //                             } else {
-        //                                 option.textContent = `Partner ID: ${partnerId}`;
-        //                             }
+      //         // If no options were added, show the "no partners" message
+      //         if (partnerSelect.options.length === 1) {
+      //             const option = document.createElement('option');
+      //             option.value = "";
+      //             option.textContent = "No partners selected yet - please select partners in Find A Roommate page";
+      //             option.disabled = true;
+      //             partnerSelect.appendChild(option);
+      //             console.log('Added no partners message');
+      //         }
 
-        //                             partnerSelect.appendChild(option);
-        //                             console.log('Added partner option:', option.textContent);
-        //                         } catch (error) {
-        //                             console.error('Error getting user data for partner:', partnerId, error);
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         } else {
-        //             const data = partnerDoc.data();
-        //             console.log('Found user partner document:', data);
+      //     } catch (error) {
+      //         console.error('Error in populatePartnerDropdown:', error);
+      //         const option = document.createElement('option');
+      //         option.value = "";
+      //         option.textContent = "Error loading partners";
+      //         option.disabled = true;
+      //         partnerSelect.appendChild(option);
+      //     }
+      // }
 
-        //             if (data.partners && Array.isArray(data.partners)) {
-        //                 for (const partnerId of data.partners) {
-        //                     const option = document.createElement('option');
-        //                     option.value = partnerId;
-        //                     option.textContent = `Partner: ${partnerId}`;
-        //                     partnerSelect.appendChild(option);
-        //                 }
-        //             }
-        //         }
+      // Call this function when the modal is shown
+      document
+        .getElementById("rentalFormModal")
+        .addEventListener("show.bs.modal", populatePartnerDropdown);
 
-        //         // If no options were added, show the "no partners" message
-        //         if (partnerSelect.options.length === 1) {
-        //             const option = document.createElement('option');
-        //             option.value = "";
-        //             option.textContent = "No partners selected yet - please select partners in Find A Roommate page";
-        //             option.disabled = true;
-        //             partnerSelect.appendChild(option);
-        //             console.log('Added no partners message');
-        //         }
+      // async function testFirebaseConnection() {
+      //     try {
+      //         console.log('Testing Firebase connection...');
 
-        //     } catch (error) {
-        //         console.error('Error in populatePartnerDropdown:', error);
-        //         const option = document.createElement('option');
-        //         option.value = "";
-        //         option.textContent = "Error loading partners";
-        //         option.disabled = true;
-        //         partnerSelect.appendChild(option);
-        //     }
-        // }
+      //         // Test basic Firebase initialization
+      //         console.log('Firebase app:', app);
+      //         console.log('Firestore instance:', db);
 
+      //         // Test partners collection access
+      //         const partnersRef = collection(db, 'partners');
+      //         console.log('Partners collection reference:', partnersRef);
 
-        // Call this function when the modal is shown
-        document.getElementById('rentalFormModal').addEventListener('show.bs.modal', populatePartnerDropdown);
+      //         // Try to get the specific document we saw
+      //         const docRef = doc(db, 'partners', 'mrzqKGWMCvfD3hzTh3ec');
+      //         const docSnap = await getDoc(docRef);
 
-        // async function testFirebaseConnection() {
-        //     try {
-        //         console.log('Testing Firebase connection...');
+      //         if (docSnap.exists()) {
+      //             console.log('Found document data:', docSnap.data());
+      //         } else {
+      //             console.log('Document not found');
+      //         }
 
-        //         // Test basic Firebase initialization
-        //         console.log('Firebase app:', app);
-        //         console.log('Firestore instance:', db);
+      //         // Test querying the collection
+      //         const querySnapshot = await getDocs(partnersRef);
+      //         console.log('Number of documents in partners collection:', querySnapshot.size);
 
-        //         // Test partners collection access
-        //         const partnersRef = collection(db, 'partners');
-        //         console.log('Partners collection reference:', partnersRef);
+      //         querySnapshot.forEach((doc) => {
+      //             console.log('Document ID:', doc.id, 'Data:', doc.data());
+      //         });
 
-        //         // Try to get the specific document we saw
-        //         const docRef = doc(db, 'partners', 'mrzqKGWMCvfD3hzTh3ec');
-        //         const docSnap = await getDoc(docRef);
+      //     } catch (error) {
+      //         console.error('Firebase test error:', error);
+      //     }
+      // }
 
-        //         if (docSnap.exists()) {
-        //             console.log('Found document data:', docSnap.data());
-        //         } else {
-        //             console.log('Document not found');
-        //         }
-
-        //         // Test querying the collection
-        //         const querySnapshot = await getDocs(partnersRef);
-        //         console.log('Number of documents in partners collection:', querySnapshot.size);
-
-        //         querySnapshot.forEach((doc) => {
-        //             console.log('Document ID:', doc.id, 'Data:', doc.data());
-        //         });
-
-        //     } catch (error) {
-        //         console.error('Firebase test error:', error);
-        //     }
-        // }
-
-        // // Call the test function when the page loads
-        // window.addEventListener('load', testFirebaseConnection);
-
-
+      // // Call the test function when the page loads
+      // window.addEventListener('load', testFirebaseConnection);
     </script>
 
     <!-- ChatBot -->
-    <script src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js" async></script>
+    <script
+      src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js"
+      async
+    ></script>
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-
-
     <!-- Add this modal HTML right before the closing body tag -->
-    <div class="modal fade" id="rentalFormModal" tabindex="-1" aria-labelledby="rentalFormModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="rentalFormModalLabel">Rental Application Form</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div
+      class="modal fade"
+      id="rentalFormModal"
+      tabindex="-1"
+      aria-labelledby="rentalFormModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="rentalFormModalLabel">
+              Rental Application Form
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="rentalForm" class="needs-validation" novalidate>
+              <input type="hidden" id="listingId" />
+
+              <!-- Personal Information -->
+              <div class="mb-4">
+                <h6 class="text-primary mb-3">Personal Information</h6>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="firstName"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Please provide your first name.
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="lastName"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Please provide your last name.
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Please provide a valid email.
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input
+                      type="tel"
+                      class="form-control"
+                      id="phone"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Please provide your phone number.
+                    </div>
+                  </div>
                 </div>
-                <div class="modal-body">
-                    <form id="rentalForm" class="needs-validation" novalidate>
-                        <input type="hidden" id="listingId">
+              </div>
 
-                        <!-- Personal Information -->
-                        <div class="mb-4">
-                            <h6 class="text-primary mb-3">Personal Information</h6>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="firstName" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="firstName" required>
-                                    <div class="invalid-feedback">Please provide your first name.</div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="lastName" class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="lastName" required>
-                                    <div class="invalid-feedback">Please provide your last name.</div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" required>
-                                    <div class="invalid-feedback">Please provide a valid email.</div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="phone" class="form-label">Phone Number</label>
-                                    <input type="tel" class="form-control" id="phone" required>
-                                    <div class="invalid-feedback">Please provide your phone number.</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Shared Parties Information -->
-                        <div class="mb-4">
-                            <h6 class="text-primary mb-3">Shared Parties Information</h6>
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <label for="partnerId" class="form-label">Select Partner</label>
-                                    <select class="form-select" id="partnerId" required>
-                                        <option value="">Select a partner</option>
-                                        <!-- Partner options will be populated dynamically -->
-                                    </select>
-                                    <div class="invalid-feedback">Please select a partner.</div>
-                                </div>
-                                <div class="col-12" id="roommateFields">
-                                    <!-- Roommate fields will be added dynamically -->
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Additional Details -->
-                        <div class="mb-4">
-                            <h6 class="text-primary mb-3">Additional Details</h6>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="hasPets" class="form-label">Do you have pets?</label>
-                                    <select class="form-select" id="hasPets" required>
-                                        <option value="">Select an option</option>
-                                        <option value="no">No</option>
-                                        <option value="yes">Yes</option>
-                                    </select>
-                                    <div class="invalid-feedback">Please indicate if you have pets.</div>
-                                </div>
-                                <div class="col-md-6" id="petDetailsField" style="display: none;">
-                                    <label for="petDetails" class="form-label">Pet Details</label>
-                                    <input type="text" class="form-control" id="petDetails"
-                                        placeholder="Type, breed, number of pets">
-                                </div>
-                                <div class="col-12">
-                                    <label for="lifestyle" class="form-label">Lifestyle Preferences</label>
-                                    <select class="form-select" id="lifestyle" required>
-                                        <option value="">Select your lifestyle preference</option>
-                                        <option value="early">Early bird (Early morning routine)</option>
-                                        <option value="night">Night owl (Late night routine)</option>
-                                        <option value="mixed">Mixed schedule</option>
-                                    </select>
-                                    <div class="invalid-feedback">Please select your lifestyle preference.</div>
-                                </div>
-                                <div class="col-12">
-                                    <label for="cleaningPreferences" class="form-label">Cleaning Preferences</label>
-                                    <select class="form-select" id="cleaningPreferences" required>
-                                        <option value="">Select cleaning preference</option>
-                                        <option value="daily">Daily cleaning</option>
-                                        <option value="weekly">Weekly cleaning</option>
-                                        <option value="biweekly">Bi-weekly cleaning</option>
-                                        <option value="monthly">Monthly deep cleaning</option>
-                                    </select>
-                                    <div class="invalid-feedback">Please select your cleaning preference.</div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <!-- Additional Information -->
-                        <div class="mb-4">
-                            <h6 class="text-primary mb-3">Additional Information</h6>
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <label for="moveInDate" class="form-label">Desired Move-in Date</label>
-                                    <input type="date" class="form-control" id="moveInDate" required>
-                                    <div class="invalid-feedback">Please select a move-in date.</div>
-                                    <div class="col-md-6">
-                                        <label for="leaseDuration" class="form-label">Preferred Lease Duration</label>
-                                        <select class="form-control" id="leaseDuration" required>
-                                            <option value="">Select lease duration</option>
-                                            <option value="6">6 months</option>
-                                            <option value="12">1 year</option>
-                                            <option value="24">2 years</option>
-                                        </select>
-                                        <div class="invalid-feedback">Please select your preferred lease duration.</div>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <label for="comments" class="form-label">Additional Comments</label>
-                                    <textarea class="form-control" id="comments" rows="3"></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Terms and Conditions -->
-                        <div class="mb-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="termsCheck" required>
-                                <label class="form-check-label" for="termsCheck">
-                                    I agree to the terms and conditions, and I certify that all information provided is
-                                    true and accurate.
-                                </label>
-                                <div class="invalid-feedback">
-                                    You must agree before submitting.
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+              <!-- Shared Parties Information -->
+              <div class="mb-4">
+                <h6 class="text-primary mb-3">Shared Parties Information</h6>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label for="partnerId" class="form-label"
+                      >Select Partner</label
+                    >
+                    <select class="form-select" id="partnerId" required>
+                      <option value="">Select a partner</option>
+                      <option :value="partner.id" v-for="partner in partners">
+                        {{partner.data.firstName || ""}} {{partner.data.lastName
+                        || ""}}
+                      </option>
+                      <!-- Partner options will be populated dynamically -->
+                    </select>
+                    <div class="invalid-feedback">Please select a partner.</div>
+                  </div>
+                  <div class="col-12" id="roommateFields">
+                    <!-- Roommate fields will be added dynamically -->
+                  </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="submitRentalForm(event)">Submit
-                        Application</button>
+              </div>
+
+              <!-- Additional Details -->
+              <div class="mb-4">
+                <h6 class="text-primary mb-3">Additional Details</h6>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="hasPets" class="form-label"
+                      >Do you have pets?</label
+                    >
+                    <select class="form-select" id="hasPets" required>
+                      <option value="">Select an option</option>
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please indicate if you have pets.
+                    </div>
+                  </div>
+                  <div
+                    class="col-md-6"
+                    id="petDetailsField"
+                    style="display: none"
+                  >
+                    <label for="petDetails" class="form-label"
+                      >Pet Details</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="petDetails"
+                      placeholder="Type, breed, number of pets"
+                    />
+                  </div>
+                  <div class="col-12">
+                    <label for="lifestyle" class="form-label"
+                      >Lifestyle Preferences</label
+                    >
+                    <select class="form-select" id="lifestyle" required>
+                      <option value="">Select your lifestyle preference</option>
+                      <option value="early">
+                        Early bird (Early morning routine)
+                      </option>
+                      <option value="night">
+                        Night owl (Late night routine)
+                      </option>
+                      <option value="mixed">Mixed schedule</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please select your lifestyle preference.
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <label for="cleaningPreferences" class="form-label"
+                      >Cleaning Preferences</label
+                    >
+                    <select
+                      class="form-select"
+                      id="cleaningPreferences"
+                      required
+                    >
+                      <option value="">Select cleaning preference</option>
+                      <option value="daily">Daily cleaning</option>
+                      <option value="weekly">Weekly cleaning</option>
+                      <option value="biweekly">Bi-weekly cleaning</option>
+                      <option value="monthly">Monthly deep cleaning</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please select your cleaning preference.
+                    </div>
+                  </div>
                 </div>
-            </div>
+              </div>
+
+              <!-- Additional Information -->
+              <div class="mb-4">
+                <h6 class="text-primary mb-3">Additional Information</h6>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label for="moveInDate" class="form-label"
+                      >Desired Move-in Date</label
+                    >
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="moveInDate"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Please select a move-in date.
+                    </div>
+                    <div class="col-md-6">
+                      <label for="leaseDuration" class="form-label"
+                        >Preferred Lease Duration</label
+                      >
+                      <select class="form-control" id="leaseDuration" required>
+                        <option value="">Select lease duration</option>
+                        <option value="6">6 months</option>
+                        <option value="12">1 year</option>
+                        <option value="24">2 years</option>
+                      </select>
+                      <div class="invalid-feedback">
+                        Please select your preferred lease duration.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <label for="comments" class="form-label"
+                      >Additional Comments</label
+                    >
+                    <textarea
+                      class="form-control"
+                      id="comments"
+                      rows="3"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Terms and Conditions -->
+              <div class="mb-4">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="termsCheck"
+                    required
+                  />
+                  <label class="form-check-label" for="termsCheck">
+                    I agree to the terms and conditions, and I certify that all
+                    information provided is true and accurate.
+                  </label>
+                  <div class="invalid-feedback">
+                    You must agree before submitting.
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="submitRentalForm(event)"
+            >
+              Submit Application
+            </button>
+          </div>
         </div>
+      </div>
     </div>
-
-
-</body>
-
+  </body>
 </html>

@@ -43,9 +43,11 @@ const app = createApp({
         roomId: this.room.id,
       };
 
+      this.form.participants.push(this.user.id);
       this.form.participants.forEach(participant => {
         data.paymentStatuses[participant] = "pending";
       });
+      
       this.roommates.forEach(roommate => {
         if (roommate.id !== this.user.id) {
           data.roommates[
@@ -54,6 +56,9 @@ const app = createApp({
         }
       });
 
+      data.roommates[this.user.id] = `${this.user.firstName} ${this.user.lastName}`;
+      data.participants.push(this.user.id)
+
       try {
         this.loading = true;
         const docRef = await addDoc(collection(db, "expenses"), data);
@@ -61,13 +66,7 @@ const app = createApp({
       } catch (error) {
         console.error("Error adding document: ", error);
       } finally {
-        this.loading = false;
-        this.form.description = "";
-        this.form.amount = "";
-        this.form.category = "Rent";
-        this.form.participants = [];
-        this.form.splitType = "equal";
-        this.form.expenseSplit = {};
+        window.location.reload()
       }
     },
     handleExpenseSplit() {
@@ -75,6 +74,7 @@ const app = createApp({
         const amountPerPerson =
           this.form.amount / (this.form.participants.length + 1);
         this.form.participants.forEach(participant => {
+          this.form.expenseSplit[this.user.id] = amountPerPerson;
           this.form.expenseSplit[participant] = amountPerPerson;
         });
       }
@@ -95,15 +95,18 @@ const app = createApp({
 
       const data = [];
       expenses.forEach(expense => {
-        expense.participants.forEach(participant => {
+        const participants = expense.participants;
+        for(let i=0;i<participants.length;i++){
+          if(participants[i] === userId) continue;
           data.push({
             expenseId: expense.id,
             description: expense.description,
-            pendingAmount: expense.expenseSplit[participant],
-            status: expense.paymentStatuses[participant],
-            participant: expense.roommates[participant],
+            pendingAmount: expense.expenseSplit[participants[i]],
+            status: expense.paymentStatuses[participants[i]],
+            participant: expense.roommates[participants[i]],
           });
-        });
+        }
+        
       });
 
       this.pendingPaymentsByOthers = data;
