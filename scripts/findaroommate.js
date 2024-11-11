@@ -191,6 +191,42 @@ const app = createApp({
     async renderCards() {
       if (this.tab === "Explore") {
         console.log("Current User ID on Explore page:", this.userId); // Print current user’s ID
+        // Arrays of placeholder images for each gender
+  const femaleImages = [
+    "https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?w=500&auto=format&fit=crop&q=60", // Female 1
+    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&auto=format&fit=crop&q=60", // Female 2
+    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60", // Female 3
+    "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&auto=format&fit=crop&q=60", // Female 4
+    "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=500&auto=format&fit=crop&q=60", // Female 5
+    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=60", // Female 6
+    "https://images.unsplash.com/photo-1531251445707-1f000e1e87d0?w=500&auto=format&fit=crop&q=60", // Female 7
+    "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&auto=format&fit=crop&q=60", // Female 8
+    "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&auto=format&fit=crop&q=60", // Female 9
+    "https://images.unsplash.com/photo-1554151228-14d9def656e4?w=500&auto=format&fit=crop&q=60",// Female 10
+    "https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=500&auto=format&fit=crop&q=60",// Female 11
+    "https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=500&auto=format&fit=crop&q=60"
+
+  ];
+
+
+      
+        const maleImages = [
+          "https://images.unsplash.com/photo-1504593811423-6dd665756598?w=500&auto=format&fit=crop&q=60", // Male 1
+          "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=500&auto=format&fit=crop&q=60", // Male 3
+          "https://plus.unsplash.com/premium_photo-1672239496412-ab605befa53f?w=500&auto=format&fit=crop&q=60", // Male 4
+          "https://images.unsplash.com/photo-1484515991647-c5760fcecfc7?w=500&auto=format&fit=crop&q=60", // Male 5
+          "https://images.unsplash.com/photo-1541577141970-eebc83ebe30e?w=500&auto=format&fit=crop&q=60", // Male 6
+          "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=500&auto=format&fit=crop&q=60", // Male 7
+          "https://images.unsplash.com/photo-1534030347209-467a5b0ad3e6?w=500&auto=format&fit=crop&q=60", // Male 8
+          "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=500&auto=format&fit=crop&q=60",
+          "https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=500&auto=format&fit=crop&q=60",
+          "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&auto=format&fit=crop&q=60"
+
+        ];
+
+        // Counters to track the next image for each gender
+        let femaleImageIndex = 0;
+        let maleImageIndex = 0;
 
         const parentContainer = document.querySelector(".roommate-grid");
         parentContainer.classList.remove("chat-grid");
@@ -198,8 +234,19 @@ const app = createApp({
         this.users.forEach(user => {
           const container = document.createElement("div");
           container.classList.add("roommate-card");
+            // Choose the image based on the user's gender
+    let userImage;
+    if (user.data.gender === "female") {
+      userImage = femaleImages[femaleImageIndex];
+      femaleImageIndex = (femaleImageIndex + 1) % femaleImages.length; // Loop back if reaching the end
+    } else if (user.data.gender === "male") {
+      userImage = maleImages[maleImageIndex];
+      maleImageIndex = (maleImageIndex + 1) % maleImages.length; // Loop back if reaching the end
+    } else {
+      userImage = "https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=500&auto=format&fit=crop&q=60"; // Default image
+    }
           container.innerHTML = `
-      <img src="${user.data.profileImage || 'default-profile.jpg'}" alt="${user.data.firstName || ''} ${user.data.lastName || ''}'s profile" class="profile-photo">
+      <img src="${userImage}" alt="${user.data.firstName || ''} ${user.data.lastName || ''}'s profile" class="profile-photo">
       <div class="roommate-info">
         <div class="roommate-header">
           <h3 class="roommate-name">${user.data.firstName || ""} ${user.data.lastName || ""}</h3>
