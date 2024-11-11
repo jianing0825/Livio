@@ -261,15 +261,7 @@
   </div>
 
   <!-- Footer -->
-  <footer class="text-center">
-    <div>&copy; 2024 Livio. All Rights Reserved.</div>
-    <div class="social mt-3">
-      <a href="#" class="fab fa-facebook-f"></a>
-      <a href="#" class="fab fa-twitter"></a>
-      <a href="#" class="fab fa-instagram"></a>
-      <a href="#" class="fab fa-linkedin"></a>
-    </div>
-  </footer>
+
 
   <!-- jQuery and DataTables Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -285,14 +277,17 @@
       // check if logged in
       if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
       // Add logout functionality
-      document.getElementById('logoutBtn').addEventListener('click', function () {
-          localStorage.removeItem('isLoggedIn');
-          localStorage.removeItem('userId');
-          localStorage.removeItem('userEmail');
-          localStorage.removeItem('userFirstName');
-          localStorage.removeItem('userLastName');
-          window.location.href = 'loginpage.html';
-      });
+      document
+            .getElementById("logoutBtn")
+            .addEventListener("click", function () {
+                localStorage.removeItem("isLoggedIn");
+                localStorage.removeItem("userId");
+                localStorage.removeItem("userEmail");
+                localStorage.removeItem("userFirstName");
+                localStorage.removeItem("userLastName");
+                window.location.href = "loginpage.html";
+            });
+
     // JavaScript to change the navbar title dynamically
     document.addEventListener("DOMContentLoaded", function () {
       // Get the current URL path
@@ -317,6 +312,27 @@
         window.location.href = "changeBudget.html";
       }
     </script>
-    
+<script type="module">
+  // Import initialization functions
+  import { initFooter } from './scripts/footer.js';
+  import { initLogout } from './scripts/logout.js';
+
+  document.addEventListener("DOMContentLoaded", function() {
+      // Initialize logout functionality
+      initLogout();
+
+      // Initialize footer
+      initFooter();
+
+      // Activate current page link
+      const currentPath = window.location.pathname;
+      const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+      navLinks.forEach(link => {
+          if (link.getAttribute("href") === currentPath) {
+              link.classList.add("active");
+          }
+      });
+  });
+</script>
   </body>
 </html>

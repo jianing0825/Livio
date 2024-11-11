@@ -1,473 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Head content -->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Splitwise - Expense and Budget</title>
 
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+<head>
+  <!-- Head content -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Splitwise - Expense and Budget</title>
 
-    <!-- FontAwesome for icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <!-- DataTables CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"
-    />
-    <!-- Select2 CSS for better dropdowns -->
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css"
-      rel="stylesheet"
-    />
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- Vue  -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <!-- Removed older version of Vue.js -->
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+  <!-- Select2 CSS for better dropdowns -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="styles/nav.css" />
-    <link rel="stylesheet" href="styles/general.css" />
-    <style>
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-      }
+  <!-- Vue  -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Removed older version of Vue.js -->
 
-      body {
-        display: flex;
-        flex-direction: column;
-        font-family: "Poppins", sans-serif;
-      }
+  <link rel="stylesheet" href="styles/nav.css" />
+  <link rel="stylesheet" href="styles/general.css" />
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
 
-      .main-content {
-        flex: 1;
-        padding: 20px;
-      }
+    body {
+      display: flex;
+      flex-direction: column;
+      font-family: "Poppins", sans-serif;
+    }
 
-      .footer {
-        background-color: #f8f9fa;
-        padding: 20px 0;
-      }
+    .main-content {
+      flex: 1;
+      padding: 20px;
+    }
 
-      .splitwise-section {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border-radius: 10px;
-        margin-top: 20px;
-      }
+    .footer {
+      background-color: #f8f9fa;
+      padding: 20px 0;
+    }
 
-      .splitwise-section h5 {
-        font-weight: bold;
-        color: #6c757d;
-        text-align: center;
-        margin-bottom: 20px;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="app">
-      <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-          <a class="navbar-brand ms-4" href="#">Livio</a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="index.html">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="housinglisting.html"
-                  >Housing Listing</a
-                >
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="findaroommate.html"
-                  >Find A Roommate</a
-                >
-              </li>
-              <li class="nav-item dropdown"  v-if="hasSubmitted=='true' || roomBooked">
-                <a
-                  class="nav-link dropdown-toggle active"
-                  href="#"
-                  id="expensesDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Expenses
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
-                  <li>
-                    <a class="dropdown-item" href="expense.html">Expenses</a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="allexpenses.html"
-                      >All Expenses</a
-                    >
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="splitexpense.html"
-                      >Split Expense</a
-                    >
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="places.html">Places</a>
+    .splitwise-section {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .splitwise-section h5 {
+      font-weight: bold;
+      color: #6c757d;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand ms-4" href="#">Livio</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
             </li>
-              <li class="nav-item">
-                <a class="nav-link" href="profile.html">Profile</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#" id="logoutBtn">Logout</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-
-      <!-- Main Content Area -->
-      <div class="main-content container">
-        <!-- Tabs Navigation -->
-        <ul class="nav nav-tabs" id="splitwiseTab" role="tablist">
-          <li class="nav-item">
-            <a
-              class="nav-link active"
-              id="add-expense-tab"
-              data-bs-toggle="tab"
-              href="#addExpense"
-              role="tab"
-              aria-controls="addExpense"
-              aria-selected="true"
-              >Add Expense</a
-            >
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              id="pending-expenses-tab"
-              data-bs-toggle="tab"
-              href="#pendingExpenses"
-              role="tab"
-              aria-controls="pendingExpenses"
-              aria-selected="false"
-              >Pending Payments from Others</a
-            >
-          </li>
-        </ul>
-
-        <!-- Tabs Content -->
-        <div class="tab-content" id="splitwiseTabContent" v-if="!loading">
-          <!-- Add Expense Section -->
-          <div
-            class="tab-pane fade show active"
-            id="addExpense"
-            role="tabpanel"
-            aria-labelledby="add-expense-tab"
-          >
-            <div class="splitwise-section">
-              <h5>Split Expense</h5>
-
-              <form id="splitForm" @submit.prevent="handleSubmit">
-                <div class="mb-3">
-                  <label for="description" class="form-label"
-                    >Expense Description</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="description"
-                    placeholder="Enter expense description"
-                    v-model="form.description"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="amount" class="form-label">Total Amount</label>
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="amount"
-                    placeholder="Enter total amount"
-                    v-model="form.amount"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="category" class="form-label">Category</label>
-                  <select
-                    class="form-control"
-                    id="category"
-                    v-model="form.category"
-                  >
-                    <option value="Rent">Rent</option>
-                    <option value="Grocery">Grocery</option>
-                    <option value="Transport">Transport</option>
-                    <option value="Utilities">Utilities</option>
-                    <option value="Entertainment">Entertainment</option>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="participants" class="form-label"
-                    >Select Participants</label
-                  >
-                  <select
-                    class="form-control"
-                    id="participants"
-                    multiple="multiple"
-                    v-model="form.participants"
-                    @input="logParticipants"
-                    required
-                  >
-                    <option
-                      v-for="roommate in roommates"
-                      :key="roommate.id"
-                      :value="roommate.id"
-                    >
-                      {{ roommate.firstName + " " + roommate.lastName }}
-                    </option>
-                  </select>
-                </div>
-
-                <div class="mb-3">
-                  <label for="splitType" class="form-label">Split Type</label>
-                  <select
-                    class="form-control"
-                    id="splitType"
-                    v-model="form.splitType"
-                  >
-                    <option value="equal">Split Equally</option>
-                    <option value="manual">Split Manually</option>
-                  </select>
-                </div>
-                <div
-                  id="manualSplitFields"
-                  class="mb-3"
-                  v-if="form.splitType === 'manual'"
-                >
-                  <label class="form-label"
-                    >Enter Amount for Each Participant</label
-                  >
-                  <div
-                    v-for="participant in form.participants"
-                    :key="participant"
-                    class="input-group mb-2"
-                  >
-                    <span class="input-group-text"
-                      >{{ getParticipantName(participant) }}</span
-                    >
-                    <input
-                      type="number"
-                      class="form-control"
-                      :placeholder="'Amount for ' + getParticipantName(participant)"
-                      v-model="form.expenseSplit[participant]"
-                      required
-                    />
-                  </div>
-                  <!-- <div id="manualFieldsContainer"></div> -->
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
-            </div>
-          </div>
-
-          <!-- Pending Expenses Section -->
-          <div
-            class="tab-pane fade"
-            id="pendingExpenses"
-            role="tabpanel"
-            aria-labelledby="pending-expenses-tab"
-          >
-            <div class="splitwise-section">
-              <h5>Pending Payments from Others</h5>
-              <table
-                id="pendingExpensesTable"
-                class="display table table-striped"
-                style="width: 100%"
-              >
-                <thead>
-                  <tr>
-                    <th>Description</th>
-                    <th>Pending Amount</th>
-                    <th>Participant</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="payment in pendingPaymentsByOthers"
-                    :key="payment.id"
-                  >
-                    <td>{{ payment.description }}</td>
-                    <td>${{ payment.pendingAmount }}</td>
-                    <td>{{ payment.participant }}</td>
-                    <td>{{ payment.status?.toUpperCase() }}</td>
-                  </tr>
-
-                  <!-- Additional rows as needed -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div v-else class="loaderContainer">
-          <span class="loaderr"></span>
+            <li class="nav-item">
+              <a class="nav-link" href="housinglisting.html">Housing Listing</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="findaroommate.html">Find A Roommate</a>
+            </li>
+            <li class="nav-item dropdown" v-if="hasSubmitted=='true' || roomBooked">
+              <a class="nav-link dropdown-toggle active" href="#" id="expensesDropdown" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                Expenses
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
+                <li>
+                  <a class="dropdown-item" href="expense.html">Expenses</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="allexpenses.html">All Expenses</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="splitexpense.html">Split Expense</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="places.html">Places</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="profile.html">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="logoutBtn">Logout</a>
+            </li>
+          </ul>
         </div>
       </div>
+    </nav>
 
-      <!-- Footer -->
-      <footer class="text-center">
-        <div>&copy; 2024 Livio. All Rights Reserved.</div>
-        <div class="social mt-3">
-          <a href="#" class="fab fa-facebook-f"></a>
-          <a href="#" class="fab fa-twitter"></a>
-          <a href="#" class="fab fa-instagram"></a>
-          <a href="#" class="fab fa-linkedin"></a>
+    <!-- Main Content Area -->
+    <div class="main-content container">
+      <!-- Tabs Navigation -->
+      <ul class="nav nav-tabs" id="splitwiseTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="add-expense-tab" data-bs-toggle="tab" href="#addExpense" role="tab"
+            aria-controls="addExpense" aria-selected="true">Add Expense</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pending-expenses-tab" data-bs-toggle="tab" href="#pendingExpenses" role="tab"
+            aria-controls="pendingExpenses" aria-selected="false">Pending Payments from Others</a>
+        </li>
+      </ul>
+
+      <!-- Tabs Content -->
+      <div class="tab-content" id="splitwiseTabContent" v-if="!loading">
+        <!-- Add Expense Section -->
+        <div class="tab-pane fade show active" id="addExpense" role="tabpanel" aria-labelledby="add-expense-tab">
+          <div class="splitwise-section">
+            <h5>Split Expense</h5>
+
+            <form id="splitForm" @submit.prevent="handleSubmit">
+              <div class="mb-3">
+                <label for="description" class="form-label">Expense Description</label>
+                <input type="text" class="form-control" id="description" placeholder="Enter expense description"
+                  v-model="form.description" required />
+              </div>
+              <div class="mb-3">
+                <label for="amount" class="form-label">Total Amount</label>
+                <input type="number" class="form-control" id="amount" placeholder="Enter total amount"
+                  v-model="form.amount" required />
+              </div>
+              <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-control" id="category" v-model="form.category">
+                  <option value="Rent">Rent</option>
+                  <option value="Grocery">Grocery</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Utilities">Utilities</option>
+                  <option value="Entertainment">Entertainment</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="participants" class="form-label">Select Participants</label>
+                <select class="form-control" id="participants" multiple="multiple" v-model="form.participants"
+                  @input="logParticipants" required>
+                  <option v-for="roommate in roommates" :key="roommate.id" :value="roommate.id">
+                    {{ roommate.firstName + " " + roommate.lastName }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="splitType" class="form-label">Split Type</label>
+                <select class="form-control" id="splitType" v-model="form.splitType">
+                  <option value="equal">Split Equally</option>
+                  <option value="manual">Split Manually</option>
+                </select>
+              </div>
+              <div id="manualSplitFields" class="mb-3" v-if="form.splitType === 'manual'">
+                <label class="form-label">Enter Amount for Each Participant</label>
+                <div v-for="participant in form.participants" :key="participant" class="input-group mb-2">
+                  <span class="input-group-text">{{ getParticipantName(participant) }}</span>
+                  <input type="number" class="form-control"
+                    :placeholder="'Amount for ' + getParticipantName(participant)"
+                    v-model="form.expenseSplit[participant]" required />
+                </div>
+                <!-- <div id="manualFieldsContainer"></div> -->
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
         </div>
-      </footer>
+
+        <!-- Pending Expenses Section -->
+        <div class="tab-pane fade" id="pendingExpenses" role="tabpanel" aria-labelledby="pending-expenses-tab">
+          <div class="splitwise-section">
+            <h5>Pending Payments from Others</h5>
+            <table id="pendingExpensesTable" class="display table table-striped" style="width: 100%">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Pending Amount</th>
+                  <th>Participant</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="payment in pendingPaymentsByOthers" :key="payment.id">
+                  <td>{{ payment.description }}</td>
+                  <td>${{ payment.pendingAmount }}</td>
+                  <td>{{ payment.participant }}</td>
+                  <td>{{ payment.status?.toUpperCase() }}</td>
+                </tr>
+
+                <!-- Additional rows as needed -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div v-else class="loaderContainer">
+        <span class="loaderr"></span>
+      </div>
     </div>
-    <!-- jQuery and DataTables Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
-    <!-- Bootstrap and FontAwesome Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <!-- Footer -->
 
-    <!-- Select2 JavaScript for enhanced dropdowns -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+  </div>
+  <!-- jQuery and DataTables Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+  <!-- Bootstrap and FontAwesome Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 
-    <script type="module" src="./scripts/splitexpense.js"></script>
+  <!-- Select2 JavaScript for enhanced dropdowns -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
 
-    <!-- ChatBot -->
-    <script src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js" async></script>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 
-    <script>
-      // check if logged in
-      if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
+  <script type="module" src="./scripts/splitexpense.js"></script>
 
-      // Add logout functionality
-      document.getElementById('logoutBtn').addEventListener('click', function () {
-          localStorage.removeItem('isLoggedIn');
-          localStorage.removeItem('userId');
-          localStorage.removeItem('userEmail');
-          localStorage.removeItem('userFirstName');
-          localStorage.removeItem('userLastName');
-          window.location.href = 'loginpage.html';
+  <!-- ChatBot -->
+  <script src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js" async></script>
+
+  <script>
+    // check if logged in
+    if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
+
+    // Add logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', function () {
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userFirstName');
+      localStorage.removeItem('userLastName');
+      window.location.href = 'loginpage.html';
+    });
+
+    $(document).ready(function () {
+      // Initialize Select2 for the participants dropdown
+      $("#participants").select2({
+        placeholder: "Select participants",
+        width: "100%",
       });
 
-      $(document).ready(function () {
-        // Initialize Select2 for the participants dropdown
-        $("#participants").select2({
-          placeholder: "Select participants",
-          width: "100%",
-        });
+      // Show/hide manual split fields based on split type selection
+      $("#splitType").change(function () {
+        if ($(this).val() === "manual") {
+          $("#manualSplitFields").show();
+          generateManualFields();
+        } else {
+          $("#manualSplitFields").hide();
+          $("#manualFieldsContainer").empty();
+        }
+      });
 
-        // Show/hide manual split fields based on split type selection
-        $("#splitType").change(function () {
-          if ($(this).val() === "manual") {
-            $("#manualSplitFields").show();
-            generateManualFields();
-          } else {
-            $("#manualSplitFields").hide();
-            $("#manualFieldsContainer").empty();
-          }
-        });
+      // Generate manual input fields for each selected participant
+      $("#participants").change(function () {
+        if ($("#splitType").val() === "manual") {
+          generateManualFields();
+        }
+      });
 
-        // Generate manual input fields for each selected participant
-        $("#participants").change(function () {
-          if ($("#splitType").val() === "manual") {
-            generateManualFields();
-          }
-        });
-
-        function generateManualFields() {
-          const participants = $("#participants").select2("data");
-          const container = $("#manualFieldsContainer");
-          container.empty();
-          participants.forEach(participant => {
-            const inputGroup = `
+      function generateManualFields() {
+        const participants = $("#participants").select2("data");
+        const container = $("#manualFieldsContainer");
+        container.empty();
+        participants.forEach(participant => {
+          const inputGroup = `
                         <div class="input-group mb-2">
                             <span class="input-group-text">${participant.text}</span>
                             <input type="number" class="form-control" placeholder="Amount for ${participant.text}">
                         </div>`;
-            container.append(inputGroup);
-          });
-        }
-
-        // Handle form submission
-        $("#splitForm").submit(function (e) {
-          e.preventDefault();
-          alert("Split details have been submitted.");
+          container.append(inputGroup);
         });
+      }
 
-        // Initialize DataTable for pending expenses
-        $("#pendingExpensesTable").DataTable({
-          responsive: true,
-          paging: true,
-          searching: true,
-          ordering: true,
-          language: {
-            search: "_INPUT_",
-            searchPlaceholder: "Search expenses...",
-          },
-        });
+      // Handle form submission
+      $("#splitForm").submit(function (e) {
+        e.preventDefault();
+        alert("Split details have been submitted.");
       });
-      document.addEventListener("DOMContentLoaded", function () {
-        // Get the current URL path
-        let currentPath = window.location.pathname;
 
-        // Select all navbar links
-        let navLinks = document.querySelectorAll(
-          ".navbar-nav .nav-link, .dropdown-menu .dropdown-item"
-        );
+      // Initialize DataTable for pending expenses
+      $("#pendingExpensesTable").DataTable({
+        responsive: true,
+        paging: true,
+        searching: true,
+        ordering: true,
+        language: {
+          search: "_INPUT_",
+          searchPlaceholder: "Search expenses...",
+        },
+      });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+      // Get the current URL path
+      let currentPath = window.location.pathname;
 
-        navLinks.forEach(link => {
-          if (link.getAttribute("href") === currentPath) {
-            link.classList.add("active");
-          }
-        });
+      // Select all navbar links
+      let navLinks = document.querySelectorAll(
+        ".navbar-nav .nav-link, .dropdown-menu .dropdown-item"
+      );
 
-        // Get the dropdown toggle link
-        let expensesDropdown = document.getElementById("expensesDropdown");
-
-        // Change the dropdown title based on the current page
-        if (currentPath.includes("allexpenses.html")) {
-          expensesDropdown.textContent = "All Expenses";
-        } else if (currentPath.includes("splitexpense.html")) {
-          expensesDropdown.textContent = "Split Expense";
-        } else if (currentPath.includes("paypending.html")) {
-          expensesDropdown.textContent = "Pay Pending Payments";
-        } else if (currentPath.includes("expense.html")) {
-          expensesDropdown.textContent = "Expenses";
+      navLinks.forEach(link => {
+        if (link.getAttribute("href") === currentPath) {
+          link.classList.add("active");
         }
       });
-    </script>
-  </body>
+
+      // Get the dropdown toggle link
+      let expensesDropdown = document.getElementById("expensesDropdown");
+
+      // Change the dropdown title based on the current page
+      if (currentPath.includes("allexpenses.html")) {
+        expensesDropdown.textContent = "All Expenses";
+      } else if (currentPath.includes("splitexpense.html")) {
+        expensesDropdown.textContent = "Split Expense";
+      } else if (currentPath.includes("paypending.html")) {
+        expensesDropdown.textContent = "Pay Pending Payments";
+      } else if (currentPath.includes("expense.html")) {
+        expensesDropdown.textContent = "Expenses";
+      }
+    });
+  </script>
+
+
+  <script type="module">
+    import { initFooter } from './scripts/footer.js';
+    initFooter();
+  </script>
+</body>
+
 </html>
-
