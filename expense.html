@@ -209,10 +209,10 @@
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
+              aria-expanded="false" v-if="hasSubmitted=='true' || roomBooked">
               Expenses
             </a>
-            <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
+            <ul class="dropdown-menu" aria-labelledby="expensesDropdown" v-if="hasSubmitted=='true' || roomBooked">
               <li><a class="dropdown-item" href="expense.html">Expenses</a></li>
               <li><a class="dropdown-item" href="allexpenses.html">All Expenses</a></li>
               <li><a class="dropdown-item" href="splitexpense.html">Split Expense</a></li>
