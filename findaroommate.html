@@ -592,6 +592,15 @@
                 grid-template-columns: 1fr;
                 padding: 15px;
             }
+
+            .interest-tags {
+                gap: 6px;
+            }
+
+            .interest-tag {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
         }
 
 
@@ -731,30 +740,12 @@
             margin-left: auto;
             margin-right: auto;
         }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .roommate-grid {
-                grid-template-columns: 1fr;
-                padding: 1rem;
-                gap: 1.5rem;
-            }
-
-            .interest-tags {
-                gap: 6px;
-            }
-
-            .interest-tag {
-                padding: 6px 12px;
-                font-size: 13px;
-            }
-        }
     </style>
 </head>
 
-<body id="app">
-    <!-- Navbar -->
+<body>
     <div id="app">
+        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
             <div class="container-fluid">
                 <a class="navbar-brand ms-4" href="#">Livio</a>
@@ -797,81 +788,83 @@
                 </div>
             </div>
         </nav>
-    </div>
 
-    <!-- Hero Section -->
-    <div class="hero-section">
-        <h1>Find Your Perfect Exchange Student Roommate</h1>
-        <p>Connect with like-minded students from around the world</p>
-    </div>
 
-    <!-- Sub Navigation -->
-    <div class="sub-nav" style="background-color: #001F3F;">
-        <span class="sub-nav-item active" id="sub-nav-item-explore" @click="changeTab('Explore')"
-            style="color:white">Explore</span>
-        <span class="sub-nav-divider">|</span>
-        <span class="sub-nav-item" id="sub-nav-item-chat" @click="changeTab('Chats')" style="color:white">Chats</span>
-        <span class="sub-nav-divider">|</span>
-        <span class="sub-nav-item" id="sub-nav-item-choose" @click="changeTab('Choose your roommate')"
-            style="color:white">Choose your roommate</span>
-    </div>
-
-    <!-- Explore Section -->
-    <div id="explore-section" class="section active">
-        <div class="roommate-grid" id="roommate-grid">
-            <!-- Roommate cards will be dynamically inserted here -->
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>Find Your Perfect Exchange Student Roommate</h1>
+            <p>Connect with like-minded students from around the world</p>
         </div>
-    </div>
 
-    <!-- Chats Section -->
-    <div id="chats-section" class="section">
-        <div class="chat-list">
-            <!-- Chat list will be dynamically inserted here -->
+        <!-- Sub Navigation -->
+        <div class="sub-nav" style="background-color: #001F3F;">
+            <span class="sub-nav-item active" id="sub-nav-item-explore" @click="changeTab('Explore')"
+                style="color:white">Explore</span>
+            <span class="sub-nav-divider">|</span>
+            <span class="sub-nav-item" id="sub-nav-item-chat" @click="changeTab('Chats')"
+                style="color:white">Chats</span>
+            <span class="sub-nav-divider">|</span>
+            <span class="sub-nav-item" id="sub-nav-item-choose" @click="changeTab('Choose your roommate')"
+                style="color:white">Choose your roommate</span>
         </div>
-    </div>
 
-    <!-- Choose Section -->
-    <div id="choose-section" class="section">
-        <div class="choose-list">
-            <!-- Choose list will be dynamically inserted here -->
-        </div>
-    </div>
-
-    <!-- Profile Modal -->
-    <div id="profileModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Roommate Profile</h3>
-                <button class="modal-close">&times;</button>
+        <!-- Explore Section -->
+        <div id="explore-section" class="section active">
+            <div class="roommate-grid" id="roommate-grid">
+                <!-- Roommate cards will be dynamically inserted here -->
             </div>
-            <div class="modal-body">
-                <div class="profile-detail">
-                    <img class="profile-image" src="" alt="Profile Image" />
-                    <div class="profile-info">
-                        <h3></h3>
-                        <p class="traits"></p>
+        </div>
+
+        <!-- Chats Section -->
+        <div id="chats-section" class="section">
+            <div class="chat-list">
+                <!-- Chat list will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Choose Section -->
+        <div id="choose-section" class="section">
+            <div class="choose-list">
+                <!-- Choose list will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Profile Modal -->
+        <div id="profileModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Roommate Profile</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="profile-detail">
+                        <img class="profile-image" src="" alt="Profile Image" />
+                        <div class="profile-info">
+                            <h3></h3>
+                            <p class="traits"></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-button cancel-button">Cancel</button>
-                <button class="modal-button confirm-button">Confirm Choice</button>
+                <div class="modal-footer">
+                    <button class="modal-button cancel-button">Cancel</button>
+                    <button class="modal-button confirm-button">Confirm Choice</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Confirmation Modal -->
-    <div id="confirmationModal" class="modal confirmation-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title"></h3>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- Content will be dynamically inserted -->
-            </div>
-            <div class="modal-footer">
-                <button class="modal-button confirm-button">OK</button>
+        <!-- Confirmation Modal -->
+        <div id="confirmationModal" class="modal confirmation-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title"></h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Content will be dynamically inserted -->
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-button confirm-button">OK</button>
+                </div>
             </div>
         </div>
     </div>
