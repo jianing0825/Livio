@@ -22,7 +22,7 @@ const appVue = Vue.createApp({
   methods: {
     async getPartners() {
       const userId = localStorage.getItem("userId");
-      alert("Making a request!");
+      // alert("Making a request!");
       // Retrieve partners excluding the current user
       const userPartnersQuerySnapshot = await getDocs(
         query(
