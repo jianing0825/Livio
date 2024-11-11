@@ -19,6 +19,8 @@ const app = createApp({
     pastTransactions: [],
     loading: true,
     user: null,
+    roomBooked:false,
+
     budget: 0,
   }),
   methods: {
@@ -57,10 +59,19 @@ const app = createApp({
       });
       this.loading = false;
     },
+    async validateBookedRomm(){
+      const userId =  localStorage.getItem("userId")
+        const applicationsQuerySnapshot = await getDocs(query( collection(db, "rentalApplications"), where("roommates", "array-contains", userId) ));
+        console.log(applicationsQuerySnapshot.docs);
+        this.roomBooked = applicationsQuerySnapshot.docs.length>0;
+        
+      }
   },
   mounted() {
     this.getUserById(this.userId);
     this.getPastPaidTransactions(this.userId);
+    this.validateBookedRomm()
+
   },
 });
 

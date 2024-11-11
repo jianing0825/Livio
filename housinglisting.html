@@ -189,7 +189,7 @@
                   >Find A Roommate</a
                 >
               </li>
-              <li class="nav-item dropdown" v-if="hasSubmitted=='true'">
+              <li class="nav-item dropdown" v-if="hasSubmitted=='true' || roomBooked">
                 <a
                   class="nav-link dropdown-toggle"
                   href="#"
@@ -638,7 +638,6 @@
             // Skip if filters don't match
             if (country && listing.country !== country) continue;
             if (!isNaN(maxPrice) && listing.pricePerMonth > maxPrice) continue;
-            console.log(listingIDstoFilter,listing.id)
             if(listingIDstoFilter.includes(listing.id)) continue;
 
             // Roommate count filter logic

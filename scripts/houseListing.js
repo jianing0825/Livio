@@ -15,6 +15,7 @@ const appVue = Vue.createApp({
   data() {
     return {
       partners: [],
+      roomBooked:false,
       hasSubmitted: localStorage.getItem("hasSubmitted"), // key: value
     };
   },
@@ -45,8 +46,16 @@ const appVue = Vue.createApp({
 
       console.log(this.partners);
     },
+   async validateBookedRomm(){
+    const userId =  localStorage.getItem("userId")
+      const applicationsQuerySnapshot = await getDocs(query( collection(db, "rentalApplications"), where("roommates", "array-contains", userId) ));
+	    console.log(applicationsQuerySnapshot.docs);
+      this.roomBooked = applicationsQuerySnapshot.docs.length>0;
+      console.log(this.roomBooked)
+    }
   },
   mounted() {
+    this.validateBookedRomm()
     this.getPartners();
   },
 });

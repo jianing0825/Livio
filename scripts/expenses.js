@@ -13,9 +13,18 @@ const app = createApp({
       pendingPayments: [],
       userId: localStorage.getItem('userId')      ,
       loading: true,
+      roomBooked:false,
+
     };
   },
   methods: {
+    async validateBookedRomm(){
+      const userId =  localStorage.getItem("userId")
+        const applicationsQuerySnapshot = await getDocs(query( collection(db, "rentalApplications"), where("roommates", "array-contains", userId) ));
+        console.log(applicationsQuerySnapshot.docs);
+        this.roomBooked = applicationsQuerySnapshot.docs.length>0;
+        
+      },
     async fetchExpensesByParticipantId(participantId) {
       // Query documents where paymentStatuses contains the given participant ID
       const q = query(
@@ -60,9 +69,12 @@ const app = createApp({
         console.error("Error processing payment:", error);
       }
     },
+    
   },
   mounted() {
     this.fetchExpensesByParticipantId(this.userId);
+    this.validateBookedRomm()
+
   },
 });
 

@@ -21,10 +21,20 @@ const app = createApp({
       loading: true,
       partnerConfirmed: false, // New flag to track if partner is confirmed
       partnerSelected:false,
-      hasSubmitted: localStorage.getItem("hasSubmitted")
+      hasSubmitted: localStorage.getItem("hasSubmitted"),
+      roomBooked:false,
+
+
     };
   },
   methods: {
+    async validateBookedRomm(){
+      const userId =  localStorage.getItem("userId")
+        const applicationsQuerySnapshot = await getDocs(query( collection(db, "rentalApplications"), where("roommates", "array-contains", userId) ));
+        console.log(applicationsQuerySnapshot.docs);
+        this.roomBooked = applicationsQuerySnapshot.docs.length>0;
+        console.log(this.roomBooked)
+      },
     async getUserById(userId) {
       const userDoc = await getDoc(doc(db, "users", userId));
       this.user = { id: userDoc.id, data: userDoc.data() };
@@ -263,6 +273,8 @@ const app = createApp({
     },
   },
   async mounted() {
+    this.validateBookedRomm()
+
     const userID = localStorage.getItem("userId");
     if (!userID) return (window.location.href = "/loginpage.html");
     this.userId = userID;

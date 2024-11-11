@@ -12,6 +12,8 @@ const app = createApp({
     loading: true,
     userId: localStorage.getItem('userId') ,
     user: null,
+    roomBooked:false,
+
   }),
   methods: {
     async handleSubmit() {
@@ -30,9 +32,18 @@ const app = createApp({
       this.budget = this.user.budget;
       this.loading = false;
     },
+    async validateBookedRomm(){
+      const userId =  localStorage.getItem("userId")
+        const applicationsQuerySnapshot = await getDocs(query( collection(db, "rentalApplications"), where("roommates", "array-contains", userId) ));
+        console.log(applicationsQuerySnapshot.docs);
+        this.roomBooked = applicationsQuerySnapshot.docs.length>0;
+        
+      }
   },
   mounted() {
     this.getUserById(this.userId);
+    this.validateBookedRomm()
+
   },
 });
 

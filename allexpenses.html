@@ -150,7 +150,7 @@
               >
                 Expenses
               </a>
-              <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
+              <ul class="dropdown-menu " v-if="hasSubmitted=='true' || roomBooked" aria-labelledby="expensesDropdown ">
                 <li>
                   <a class="dropdown-item" href="expense.html">Expenses</a>
                 </li>

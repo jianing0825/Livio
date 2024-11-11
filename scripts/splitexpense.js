@@ -18,6 +18,8 @@ const app = createApp({
       user: null,
       room: null,
       roommates: [],
+      roomBooked:false,
+
       pendingPaymentsByOthers: [],
       form: {
         description: "",
@@ -28,10 +30,19 @@ const app = createApp({
         expenseSplit: {},
         paymentStatuses: {},
         roommates: {},
+        
       },
     };
   },
   methods: {
+    async validateBookedRomm(){
+      const userId =  localStorage.getItem("userId")
+        const applicationsQuerySnapshot = await getDocs(query( collection(db, "rentalApplications"), where("roommates", "array-contains", userId) ));
+        console.log(applicationsQuerySnapshot.docs);
+        this.roomBooked = applicationsQuerySnapshot.docs.length>0;
+        console.log(this.roomBooked)
+      },
+
     async handleSubmit() {
       // Split Expense
       this.handleExpenseSplit();
@@ -145,6 +156,9 @@ const app = createApp({
       );
       return participant.firstName + " " + participant.lastName;
     },
+  },
+  mounted() {
+    this.validateBookedRomm()
   },
   async created() {
     const loggedInUserId = localStorage.getItem('userId');    ;

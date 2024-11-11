@@ -8,7 +8,9 @@ const app = Vue.createApp({
         return {
             result: {},
             open: null,
-            hasSubmitted: localStorage.getItem("hasSubmitted") // key: value
+            roomBooked:false,
+            hasSubmitted: localStorage.getItem("hasSubmitted") // key: value,
+            
         };
     }, // data
     computed: {
@@ -20,7 +22,19 @@ const app = Vue.createApp({
             }
             return openingHours;
         }
-    }
+    },
+    methods:{
+        async validateBookedRomm(){
+            const userId =  localStorage.getItem("userId")
+              const applicationsQuerySnapshot = await getDocs(query( collection(db, "rentalApplications"), where("roommates", "array-contains", userId) ));
+              console.log(applicationsQuerySnapshot.docs);
+              this.roomBooked = applicationsQuerySnapshot.docs.length>0;
+              
+            }
+    },
+    mounted() {
+        this.validateBookedRomm()
+      }
 
 });
 const vm = app.mount('#app');

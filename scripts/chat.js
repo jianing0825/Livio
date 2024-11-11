@@ -24,6 +24,8 @@ const app = createApp({
       users: [],
       usersIds: [],
       loading: true,
+      roomBooked:false,
+
     };
   },
   methods: {
@@ -109,8 +111,17 @@ const app = createApp({
       }));
       this.loading = false;
     },
+    async validateBookedRomm(){
+      const userId =  localStorage.getItem("userId")
+        const applicationsQuerySnapshot = await getDocs(query( collection(db, "rentalApplications"), where("roommates", "array-contains", userId) ));
+        console.log(applicationsQuerySnapshot.docs);
+        this.roomBooked = applicationsQuerySnapshot.docs.length>0;
+        
+      }
   },
   async mounted() {
+    this.validateBookedRomm()
+
     const userID = localStorage.getItem("userId");
     if (!userID) return (window.location.href = "/loginpage.html");
     this.userId = userID;
