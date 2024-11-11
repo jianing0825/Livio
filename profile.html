@@ -733,8 +733,12 @@
                     const logoutBtn = document.getElementById('logoutBtn');
                     if (logoutBtn) {
                         logoutBtn.addEventListener('click', function () {
-                            localStorage.clear();
-                            window.location.href = 'loginpage.html';
+                            localStorage.removeItem("isLoggedIn");
+                            localStorage.removeItem("userId");
+                            localStorage.removeItem("userEmail");
+                            localStorage.removeItem("userFirstName");
+                            localStorage.removeItem("userLastName");
+                            window.location.href = "loginpage.html";
                         });
                     }
                 }
@@ -744,9 +748,20 @@
         }
 
         // Check login status immediately
-        if (localStorage.getItem("isLoggedIn") === null) {
+        if (localStorage.getItem("isLoggedIn") === null)
             window.location.href = "loginpage.html";
-        }
+
+        // Add logout functionality
+        document
+            .getElementById("logoutBtn")
+            .addEventListener("click", function () {
+                localStorage.removeItem("isLoggedIn");
+                localStorage.removeItem("userId");
+                localStorage.removeItem("userEmail");
+                localStorage.removeItem("userFirstName");
+                localStorage.removeItem("userLastName");
+                window.location.href = "loginpage.html";
+            });
 
         // Initialize when DOM is ready
         document.addEventListener("DOMContentLoaded", initializePage);
@@ -758,6 +773,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+
+    <!-- Add this before closing body tag -->
+    <script type="module">
+        import { initFooter } from './scripts/footer.js';
+        initFooter();
+    </script>
 
 </body>
 

@@ -748,13 +748,36 @@
                 padding: 6px 12px;
                 font-size: 13px;
             }
+
+            .footer {
+                background-color: #001F3F;
+                color: white;
+                padding: 20px 0;
+                text-align: center;
+            }
+
+            .footer .social {
+                margin-top: 15px;
+            }
+
+            .footer .social a {
+                color: white;
+                margin: 0 10px;
+                font-size: 18px;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+            .footer .social a:hover {
+                color: #ccc;
+            }
         }
     </style>
 </head>
 
 <body>
     <div id="app">
-    <!-- Navbar -->
+        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
             <div class="container-fluid">
                 <a class="navbar-brand ms-4" href="#">Livio</a>
@@ -797,85 +820,92 @@
                 </div>
             </div>
         </nav>
-    
 
-    <!-- Hero Section -->
-    <div class="hero-section">
-        <h1>Find Your Perfect Exchange Student Roommate</h1>
-        <p>Connect with like-minded students from around the world</p>
-    </div>
 
-    <!-- Sub Navigation -->
-    <div class="sub-nav" style="background-color: #001F3F;">
-        <span class="sub-nav-item active" id="sub-nav-item-explore" @click="changeTab('Explore')"
-            style="color:white">Explore</span>
-        <span class="sub-nav-divider">|</span>
-        <span class="sub-nav-item" id="sub-nav-item-chat" @click="changeTab('Chats')" style="color:white">Chats</span>
-        <span class="sub-nav-divider">|</span>
-        <span class="sub-nav-item" id="sub-nav-item-choose" @click="changeTab('Choose your roommate')"
-            style="color:white">Choose your roommate</span>
-    </div>
-
-    <!-- Explore Section -->
-    <div id="explore-section" class="section active">
-        <div class="roommate-grid" id="roommate-grid">
-            <!-- Roommate cards will be dynamically inserted here -->
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>Find Your Perfect Exchange Student Roommate</h1>
+            <p>Connect with like-minded students from around the world</p>
         </div>
-    </div>
 
-    <!-- Chats Section -->
-    <div id="chats-section" class="section">
-        <div class="chat-list">
-            <!-- Chat list will be dynamically inserted here -->
+        <!-- Sub Navigation -->
+        <div class="sub-nav" style="background-color: #001F3F;">
+            <span class="sub-nav-item active" id="sub-nav-item-explore" @click="changeTab('Explore')"
+                style="color:white">Explore</span>
+            <span class="sub-nav-divider">|</span>
+            <span class="sub-nav-item" id="sub-nav-item-chat" @click="changeTab('Chats')"
+                style="color:white">Chats</span>
+            <span class="sub-nav-divider">|</span>
+            <span class="sub-nav-item" id="sub-nav-item-choose" @click="changeTab('Choose your roommate')"
+                style="color:white">Choose your roommate</span>
         </div>
-    </div>
 
-    <!-- Choose Section -->
-    <div id="choose-section" class="section">
-        <div class="choose-list">
-            <!-- Choose list will be dynamically inserted here -->
-        </div>
-    </div>
-
-    <!-- Profile Modal -->
-    <div id="profileModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Roommate Profile</h3>
-                <button class="modal-close">&times;</button>
+        <!-- Explore Section -->
+        <div id="explore-section" class="section active">
+            <div class="roommate-grid" id="roommate-grid">
+                <!-- Roommate cards will be dynamically inserted here -->
             </div>
-            <div class="modal-body">
-                <div class="profile-detail">
-                    <img class="profile-image" src="" alt="Profile Image" />
-                    <div class="profile-info">
-                        <h3></h3>
-                        <p class="traits"></p>
+        </div>
+
+        <!-- Chats Section -->
+        <div id="chats-section" class="section">
+            <div class="chat-list">
+                <!-- Chat list will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Choose Section -->
+        <div id="choose-section" class="section">
+            <div class="choose-list">
+                <!-- Choose list will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Profile Modal -->
+        <div id="profileModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Roommate Profile</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="profile-detail">
+                        <img class="profile-image" src="" alt="Profile Image" />
+                        <div class="profile-info">
+                            <h3></h3>
+                            <p class="traits"></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-button cancel-button">Cancel</button>
-                <button class="modal-button confirm-button">Confirm Choice</button>
+                <div class="modal-footer">
+                    <button class="modal-button cancel-button">Cancel</button>
+                    <button class="modal-button confirm-button">Confirm Choice</button>
+                </div>
             </div>
         </div>
+
+        <!-- Confirmation Modal -->
+        <div id="confirmationModal" class="modal confirmation-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title"></h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Content will be dynamically inserted -->
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-button confirm-button">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Make sure you have these in your head section -->
+        <!-- Font Awesome for the social icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     </div>
 
-    <!-- Confirmation Modal -->
-    <div id="confirmationModal" class="modal confirmation-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title"></h3>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- Content will be dynamically inserted -->
-            </div>
-            <div class="modal-footer">
-                <button class="modal-button confirm-button">OK</button>
-            </div>
-        </div>
-    </div>
-    </div>
+
     <script src="./scripts/findaroommate.js" type="module"></script>
     <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -1085,38 +1115,22 @@
 
         // Modified DOMContentLoaded event listener
         document.addEventListener("DOMContentLoaded", async function () {
-            if (localStorage.getItem('isLoggedIn') !== 'true') {
-                window.location.href = 'loginpage.html';
-                return;
-            }
-
-            // try {
-            //     // Initialize gender preference
-            //     // await getUserPreference();
-
-            //     // Initial renders
-            //     // await renderRoommateCards();
-            //     // await renderChooseList();
-            //     // await renderChatList();
-            //     // renderSelectionLimit();
-
-            // } catch (error) {
-            //     console.error('Error during initialization:', error);
-            // }
-        });
-
-        // check if logged in
-        if (localStorage.getItem("isLoggedIn") === null) window.location.href = "loginpage.html";
+            if (localStorage.getItem("isLoggedIn") === null)
+            window.location.href = "loginpage.html";
 
         // Add logout functionality
-        document.getElementById('logoutBtn').addEventListener('click', function () {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('userId');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('userFirstName');
-            localStorage.removeItem('userLastName');
-            window.location.href = 'loginpage.html';
-        });
+        document
+            .getElementById("logoutBtn")
+            .addEventListener("click", function () {
+                localStorage.removeItem("isLoggedIn");
+                localStorage.removeItem("userId");
+                localStorage.removeItem("userEmail");
+                localStorage.removeItem("userFirstName");
+                localStorage.removeItem("userLastName");
+                window.location.href = "loginpage.html";
+            });
+        })
+
     </script>
 
     <!-- ChatBot -->
@@ -1124,7 +1138,10 @@
 
     <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script type="module">
+        import { initFooter } from './scripts/footer.js';
+        initFooter();
+    </script>
 
 </body>
 
