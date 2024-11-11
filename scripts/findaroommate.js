@@ -19,118 +19,46 @@ const app = createApp({
       tab: "Explore",
       chatters: [],
       loading: true,
-      selectedUser: null,
-      showConfirmModal: false,
+      partnerConfirmed: false, // New flag to track if partner is confirmed
+
     };
   },
   methods: {
-    showConfirmation(user) {
-      this.selectedUser = user;
-      const modal = document.getElementById("profileModal");
-      modal.classList.add("show");
-      
-      // Update modal content with user data
-      const profileImage = modal.querySelector(".profile-image");
-      const profileName = modal.querySelector(".profile-info h3");
-      const profileTraits = modal.querySelector(".profile-info .traits");
-      
-      profileImage.src = user.data.profileImage || 'default-profile.jpg';
-      profileName.textContent = `${user.data.firstName} ${user.data.lastName}`;
-      profileTraits.innerHTML = `
-        <div class="traits-section">
-          <p><strong>Interests:</strong> ${user.data.interests.join(", ")}</p>
-          <p><strong>Preferences:</strong> ${user.data.preference || "Not specified"}</p>
-          <p><strong>Environment:</strong> ${user.data.environment || "Not specified"}</p>
-        </div>
-      `;
-      
-      // Add event listeners for the confirm and cancel buttons
-      const confirmButton = modal.querySelector(".confirm-button");
-      const cancelButton = modal.querySelector(".cancel-button");
-      
-      // Remove any existing event listeners
-      confirmButton.replaceWith(confirmButton.cloneNode(true));
-      cancelButton.replaceWith(cancelButton.cloneNode(true));
-      
-      // Get the new buttons after replacement
-      const newConfirmButton = modal.querySelector(".confirm-button");
-      const newCancelButton = modal.querySelector(".cancel-button");
-      
-      // Add new event listeners
-      newConfirmButton.addEventListener("click", () => this.confirmPartnerChoice());
-      newCancelButton.addEventListener("click", () => this.closeConfirmation());
-    },
-
-    closeConfirmation() {
-      const modal = document.getElementById("profileModal");
-      modal.classList.remove("show");
-      this.selectedUser = null;
-    },
-
-    async confirmPartnerChoice() {
-      if (!this.selectedUser) {
-        console.log("No selected user");
-        return;
-      }
-      
-      const confirmationModal = document.getElementById("confirmationModal");
-      const modalTitle = confirmationModal.querySelector(".modal-title");
-      const modalBody = confirmationModal.querySelector(".modal-body");
-      const okButton = confirmationModal.querySelector(".confirm-button");
-      
-      try {
-        console.log("Starting partner confirmation for user:", this.selectedUser.id);
-        // Close the initial confirmation modal
-        this.closeConfirmation();
-        
-        // Add the partner
-        await this.partnerUp(this.selectedUser.id);
-        console.log("Partner successfully added");
-        
-        // Show success confirmation
-        modalTitle.textContent = "Success!";
-        modalTitle.style.color = "#15803d";
-        modalBody.innerHTML = `
-          <div class="text-center">
-            <i class="fas fa-check-circle" style="color: #15803d; font-size: 48px; margin-bottom: 16px;"></i>
-            <p>You have successfully chosen <strong>${this.selectedUser.data.firstName} ${this.selectedUser.data.lastName}</strong> as your roommate!</p>
-          </div>
-        `;
-        
-        // Add event listener for the OK button
-        okButton.onclick = () => {
-          confirmationModal.classList.remove("show");
-          window.location.reload();
-        };
-        
-        // Show the confirmation modal
-        confirmationModal.classList.add("show");
-        
-      } catch (error) {
-        console.error("Error in confirmPartnerChoice:", error);
-        modalTitle.textContent = "Error";
-        modalTitle.style.color = "#dc2626";
-        modalBody.innerHTML = `
-          <div class="text-center">
-            <i class="fas fa-exclamation-circle" style="color: #dc2626; font-size: 48px; margin-bottom: 16px;"></i>
-            <p>There was an error processing your choice. Please try again.</p>
-          </div>
-        `;
-        
-        okButton.onclick = () => {
-          confirmationModal.classList.remove("show");
-        };
-        
-        confirmationModal.classList.add("show");
-      }
-    },
-
     async getUserById(userId) {
       const userDoc = await getDoc(doc(db, "users", userId));
       this.user = { id: userDoc.id, data: userDoc.data() };
-    },
 
+    },
+    // async getPartners() {
+    //   const partnersQuerySnapshot = await getDocs(
+    //     query(
+    //       collection(db, "partners"),
+    //       where("partners", "array-contains", this.userId)
+    //     )
+    //   );
+    //   partnersQuerySnapshot.docs.map(doc => {
+    //     doc.data().partners.forEach(partner => {
+    //       if (partner !== this.userId) {
+    //         this.partners.push(partner);
+    //       }
+    //     });
+    //   });
+
+    //   const usersQuerySnapshot = await getDocs(
+    //     query(collection(db, "users"), where("movedIn", "==", false))
+    //   );
+
+    //   this.users = usersQuerySnapshot.docs
+    //     .filter(
+    //       doc =>
+    //         // !this.partners.includes(doc.id) &&
+    //         doc.id !== this.userId &&
+    //         doc.data().gender === this.user.data.gender
+    //     )
+    //     .map(doc => ({ id: doc.id, data: doc.data() }));
+    // },
     async getPartners() {
+      // Retrieve partners excluding the current user
       const partnersQuerySnapshot = await getDocs(
         query(
           collection(db, "partners"),
@@ -145,23 +73,21 @@ const app = createApp({
         });
       });
 
+      // Query users of the same gender as the current user
       const usersQuerySnapshot = await getDocs(
-        query(collection(db, "users"), where("movedIn", "==", false))
+        query(
+          collection(db, "users"),
+          where("gender", "==", this.user.data.gender)
+        )
       );
 
+      // Filter out partners and the current user, then map results to `this.users`
       this.users = usersQuerySnapshot.docs
-        .filter(
-          doc =>
-            doc.id !== this.userId &&
-            doc.data().gender === this.user.data.gender
-        )
+        .filter(doc => doc.id !== this.userId && !this.partners.includes(doc.id))
         .map(doc => ({ id: doc.id, data: doc.data() }));
-    },
-
-    chat(partnerId) {
+    }, chat(partnerId) {
       window.location = `chat.html?with=${partnerId}`;
     },
-
     async getChatters() {
       const chatsQuerySnapshot = await getDocs(
         query(
@@ -172,46 +98,49 @@ const app = createApp({
       let userIds = [];
       chatsQuerySnapshot.docs.map(doc => {
         doc.data().users.forEach(user => {
+          console.log(user);
           if (user !== this.userId) {
             userIds.push(user);
           }
         });
       });
 
+      // Get users where Ids are from usersIds
+
       if (userIds.length === 0) return (this.loading = false);
       const usersRef = collection(db, "users");
       const q = query(usersRef, where("__name__", "in", userIds));
       const querySnapshot = await getDocs(q);
+      doc.id !== this.userId  // Exclude the current user here
 
       this.chatters = querySnapshot.docs.map(doc => ({
         id: doc.id,
         data: doc.data(),
       }));
-    },
 
+    }
+    ,
     async partnerUp(partnerId) {
+      console.log(partnerId);
+      // Show confirmation dialog
+      const confirmChoice = window.confirm("Confirm choosing this person as your partner?");
+      if (!confirmChoice) return; // Exit if user cancels
+
+      const partnersData = {
+        partners: [this.userId, partnerId],
+        timestamp: new Date(),
+      };
       try {
-        console.log("Starting partnerUp with partnerId:", partnerId);
-        const partnersData = {
-          partners: [this.userId, partnerId],
-          timestamp: new Date(),
-        };
-        console.log("Partners data:", partnersData);
-        
-        // Add the document to Firestore
-        const docRef = await addDoc(collection(db, "partners"), partnersData);
-        console.log("Document added with ID:", docRef.id);
-        
-        if (docRef.id) {
-          return true;
-        }
-        return false;
-      } catch (error) {
-        console.error("Error in partnerUp:", error);
-        throw error; // Propagate the error to be handled by the caller
+        await addDoc(collection(db, "partners"), partnersData);
+        alert("Added as partner successfully!");
+        this.partnerConfirmed = true;
+        this.tab = "Chats";
+
+        window.location.reload();
+      } catch (e) {
+        console.error("Error adding partners: ", e);
       }
     },
-
     changeTab(tab) {
       const chatElem = document.getElementById("sub-nav-item-chat");
       const chooseElem = document.getElementById("sub-nav-item-choose");
@@ -231,9 +160,10 @@ const app = createApp({
       }
       this.tab = tab;
     },
-
     async renderCards() {
       if (this.tab === "Explore") {
+        console.log("Current User ID on Explore page:", this.userId); // Print current user’s ID
+
         const parentContainer = document.querySelector(".roommate-grid");
         parentContainer.classList.remove("chat-grid");
         parentContainer.innerHTML = "";
@@ -241,26 +171,26 @@ const app = createApp({
           const container = document.createElement("div");
           container.classList.add("roommate-card");
           container.innerHTML = `
-            <img src="${user.data.profileImage || 'default-profile.jpg'}" alt="${user.data.firstName || ''} ${user.data.lastName || ''}'s profile" class="profile-photo">
-            <div class="roommate-info">
-              <div class="roommate-header">
-                <h3 class="roommate-name">${user.data.firstName || ""} ${user.data.lastName || ""}</h3>
-                <div class="gender-badge">
-                  <i class="fas fa-user"></i> ${user.data.gender || "N/A"}
-                </div>
-              </div>
-              <div class="interest-tags">
-                ${user.data.interests
-                  .map((interest) => `<span class="interest-tag">${interest}</span>`)
-                  .join("")}
-              </div>
-              <div class="roommate-details">
-                <p>${user.data.preference || "Looking for roommate in downtown area"}</p>
-                <p>${user.data.environment || "Prefers quiet environment"}</p>
-              </div>
-              <button class="chat-button">Chat</button>
-            </div>
-          `;
+      <img src="${user.data.profileImage || 'default-profile.jpg'}" alt="${user.data.firstName || ''} ${user.data.lastName || ''}'s profile" class="profile-photo">
+      <div class="roommate-info">
+        <div class="roommate-header">
+          <h3 class="roommate-name">${user.data.firstName || ""} ${user.data.lastName || ""}</h3>
+          <div class="gender-badge">
+            <i class="fas fa-user"></i> ${user.data.gender || "N/A"}
+          </div>
+        </div>
+        <div class="interest-tags">
+          ${user.data.interests
+              .map((interest) => `<span class="interest-tag">${interest}</span>`)
+              .join("")}
+        </div>
+        <div class="roommate-details">
+          <p>${user.data.preference || "Looking for roommate in downtown area"}</p>
+          <p>${user.data.environment || "Prefers quiet environment"}</p>
+        </div>
+        <button class="chat-button">Chat</button>
+      </div>
+    `;
           container
             .querySelector(".chat-button")
             .addEventListener("click", () => this.chat(user.id));
@@ -268,21 +198,20 @@ const app = createApp({
           parentContainer.appendChild(container);
         });
       } else if (this.tab === "Chats") {
+        await this.getChatters();
+
         const parentContainer = document.querySelector(".roommate-grid");
         parentContainer.classList.remove("chat-grid");
         parentContainer.innerHTML = "";
+        // add class to parent container
         parentContainer.classList.add("chat-grid");
-        this.users.forEach(user => {
+        this.chatters.forEach(user => {
           const container = document.createElement("div");
           container.classList.add("chat-item");
           container.addEventListener("click", () => this.chat(user.id));
-          container.innerHTML = `
-            <img src="${user.data.profileImage || 'default-profile.jpg'}" alt="Profile Picture" class="chat-avatar">
-            <div class="chat-info">
-              <div class="chat-name">${user.data.firstName || ""} ${user.data.lastName || ""}</div>
-              <div class="chat-preview">Click to continue chat</div>
-            </div>
-          `;
+          container.innerHTML = ` <img src="https://images.unsplash.com/photo-1719937206498-b31844530a96?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxfHx8ZW58MHx8fHx8" alt="Profile Picture" class="chat-avatar"> <div class="chat-info"> <div class="chat-name">${user.data.firstName || ""
+            } ${user.data.lastName || ""
+            }</div> <div class="chat-preview">Click to continue chat</div> </div> `;
           parentContainer.appendChild(container);
         });
       } else if (this.tab === "Choose your roommate") {
@@ -292,53 +221,36 @@ const app = createApp({
         const parentContainer = document.querySelector(".roommate-grid");
         parentContainer.classList.remove("chat-grid");
         parentContainer.innerHTML = "";
-        
         this.chatters.forEach(user => {
           const container = document.createElement("div");
           container.classList.add("choose-item");
-          container.innerHTML = `
-            <div class="choose-profile">
-              <img src="${user.data.profileImage || 'default-profile.jpg'}" alt="Profile Image" class="choose-avatar">
-              <div class="choose-info">
-                <div class="choose-name">${user.data.firstName || ""} ${user.data.lastName || ""}</div>
-                <div class="choose-traits">${user.data.interests.join(", ")}</div>
-              </div>
-            </div>
-            <button class="choose-button" data-id="${user.id}">Choose</button>
-          `;
-          
+          container.innerHTML = `<div class="choose-profile">
+                        <img src="https://images.unsplash.com/photo-1685903772095-f07172808761?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="https://images.unsplash.com/photo-1685903772095-f07172808761?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="choose-avatar">
+                        <div class="choose-info">
+                            <div class="choose-name">${user.data.firstName || ""
+            } ${user.data.lastName || ""}</div>
+                            <div class="choose-traits">${user.data.interests
+              .map(trait => trait.split("\n").join("<br />"))
+              .join(", ")}</div>
+                        </div>
+                    </div>
+                    <button class="choose-button" data-id="${user.id
+            }">Choose</button>`;
           container
             .querySelector(".choose-button")
-            .addEventListener("click", () => this.showConfirmation(user));
-          
+            .addEventListener("click", () => this.partnerUp(user.id));
           parentContainer.appendChild(container);
         });
       }
     },
   },
-
   async mounted() {
     const userID = localStorage.getItem("userId");
     if (!userID) return (window.location.href = "/loginpage.html");
     this.userId = userID;
     await this.getUserById(userID);
     await this.getPartners();
-
-    // Set up modal close handlers
-    document.querySelectorAll(".modal-close").forEach(button => {
-      button.addEventListener("click", () => {
-        button.closest(".modal").classList.remove("show");
-      });
-    });
-    
-    // Close modals when clicking outside
-    window.addEventListener("click", e => {
-      if (e.target.classList.contains("modal")) {
-        e.target.classList.remove("show");
-      }
-    });
   },
-
   watch: {
     tab() {
       this.renderCards();
@@ -346,6 +258,7 @@ const app = createApp({
     users() {
       this.renderCards();
     },
+    
   },
 });
 
