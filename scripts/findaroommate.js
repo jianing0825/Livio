@@ -21,6 +21,7 @@ const app = createApp({
       loading: true,
       partnerConfirmed: false, // New flag to track if partner is confirmed
       partnerSelected:false,
+      hasSubmitted: localStorage.getItem("hasSubmitted")
     };
   },
   methods: {
