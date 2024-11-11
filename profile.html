@@ -9,10 +9,10 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> 
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
     <style>
-        
         * {
             margin: 0;
             padding: 0;
@@ -48,18 +48,21 @@
         .navbar .navbar-brand:hover {
             color: #f0f0f0;
         }
+
         /* Navbar Link Hover Effect */
         .navbar .navbar-nav .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1); 
-            border-radius: 5px; 
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
         }
 
         /* Underline the Active Page Link */
-        .navbar .navbar-nav .nav-link.active ,.navbar .dropdown-item.active{
+        .navbar .navbar-nav .nav-link.active,
+        .navbar .dropdown-item.active {
             border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 0.5rem 1rem;
             border-radius: 4px;
         }
+
         /* Add specific styling to underline both main link and dropdown links */
         .navbar .navbar-nav .dropdown-toggle.active {
             border-bottom: 2px solid #fff;
@@ -314,7 +317,8 @@
                         <a class="nav-link" href="findaroommate.html">Find A Roommate</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="expensesDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             Expenses
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="expensesDropdown">
@@ -357,7 +361,11 @@
                     <span class="badge">Looking for roommate</span>
                 </h1>
                 <p class="bio">hello, i am a girl</p>
+                <button id="editProfileBtn" class="btn btn-primary mt-3">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
             </div>
+
         </div>
 
 
@@ -403,10 +411,88 @@
         </div>
     </div>
 
+    <!-- Profile Edit Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel"
+        aria-hidden="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProfileForm">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstName" name="firstName">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" name="lastName">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="bio" class="form-label">Bio</label>
+                            <textarea class="form-control" id="bio" name="bio" rows="3"></textarea>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="age" name="age">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="form-control" id="gender" name="gender">
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="non-binary">Non-binary</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="roommateGender" class="form-label">Preferred Roommate Gender</label>
+                                <select class="form-control" id="roommateGender" name="roommateGender">
+                                    <option value="any">Any</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="budget" class="form-label">Budget ($/month)</label>
+                                <input type="number" class="form-control" id="budget" name="budget">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="moveInDate" class="form-label">Move-in Date</label>
+                            <input type="date" class="form-control" id="moveInDate" name="moveInDate">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="interests" class="form-label">Interests (comma-separated)</label>
+                            <input type="text" class="form-control" id="interests" name="interests"
+                                placeholder="e.g. music, art, sports">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveProfileBtn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript to modify navbar based on login status -->
     <script type="module">
         import { db } from "./db.js";
-        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+        import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
         // Helper function to capitalize first letter
         function capitalizeFirstLetter(string) {
@@ -513,6 +599,65 @@
             }
         }
 
+        // Add this to your existing script
+        async function initializeEditProfile() {
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            const saveProfileBtn = document.getElementById('saveProfileBtn');
+            const editProfileModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+
+            editProfileBtn.addEventListener('click', async () => {
+                try {
+                    const userId = localStorage.getItem('userId');
+                    const userDoc = await getDoc(doc(db, "users", userId));
+                    const userData = userDoc.data();
+
+                    // Populate form fields with current user data
+                    document.getElementById('firstName').value = userData.firstName || '';
+                    document.getElementById('lastName').value = userData.lastName || '';
+                    document.getElementById('bio').value = userData.bio || '';
+                    document.getElementById('age').value = userData.age || '';
+                    document.getElementById('gender').value = userData.gender || '';
+                    document.getElementById('roommateGender').value = userData.roommateGender || 'any';
+                    document.getElementById('budget').value = userData.budget || '';
+                    document.getElementById('moveInDate').value = userData.moveInDate || '';
+                    document.getElementById('interests').value = userData.interests ? userData.interests.join(', ') : '';
+
+                    editProfileModal.show();
+                } catch (error) {
+                    console.error('Error loading user data for edit:', error);
+                }
+            });
+
+            saveProfileBtn.addEventListener('click', async () => {
+                try {
+                    const userId = localStorage.getItem('userId');
+                    const userData = {
+                        firstName: document.getElementById('firstName').value,
+                        lastName: document.getElementById('lastName').value,
+                        bio: document.getElementById('bio').value,
+                        age: document.getElementById('age').value,
+                        gender: document.getElementById('gender').value,
+                        roommateGender: document.getElementById('roommateGender').value,
+                        budget: document.getElementById('budget').value,
+                        moveInDate: document.getElementById('moveInDate').value,
+                        interests: document.getElementById('interests').value
+                            .split(',')
+                            .map(item => item.trim())
+                            .filter(item => item !== '')
+                    };
+
+                    await updateDoc(doc(db, "users", userId), userData);
+                    editProfileModal.hide();
+                    await loadUserProfile(); // Refresh the profile display
+                } catch (error) {
+                    console.error('Error saving profile:', error);
+                }
+            });
+        }
+
+        // Add this line to your initializePage function
+        await initializeEditProfile();
+
         // Main initialization
         async function initializePage() {
             try {
@@ -582,7 +727,7 @@
                     </li>
                 `;
                     }
-                    
+
 
                     // Add logout handler
                     const logoutBtn = document.getElementById('logoutBtn');
@@ -610,8 +755,10 @@
     <!-- ChatBot -->
     <script src="https://code.tidio.co/qo6vz8osrgu4gk4gqa6dmrpx1nvskwsq.js" async></script>
     <!-- Bootstrap JS bundle to be placed before the closing </body> tag -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> 
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
 </body>
 
 </html>
